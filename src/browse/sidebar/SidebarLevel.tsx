@@ -1,19 +1,11 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { Collapse, List, ListItem, ListItemText } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { Level } from './Sidebar';
 import SideBarSide from './SideBarSide'
 
-const useStyles = makeStyles((theme) => ({
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
-}));
-
 export default (props: { level: Level }) => {
   const [open, setOpen] = React.useState(false);
-  const classes = useStyles();
 
   const handleClick = () => {
     setOpen(!open);

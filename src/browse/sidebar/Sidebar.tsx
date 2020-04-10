@@ -57,7 +57,6 @@ const levels: Level[] = [
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    maxWidth: '360px',
     height: '100vh',
     backgroundColor: theme.palette.background.paper,
   },
@@ -69,7 +68,7 @@ export default () => {
   return (
     <List
       className={ classes.root }
-      aria-labeledby='nested-list-subheader'
+      aria-labelledby='nested-list-subheader'
       subheader={
         <ListSubheader component='div' id='nested-list-subheader'>
           Chapters
