@@ -2,7 +2,6 @@ import { Model } from 'objection';
 import Account from './Account';
 import Tag from './Tag';
 import Comment from './Comment';
-import NicknameSuggestion from './NicknameSuggestion';
 
 export default class Clip extends Model {
   id!: number;

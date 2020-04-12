@@ -19,3 +19,6 @@ module.exports = {
   development: herokuConnection,
   production: herokuConnection,
 };
+
+// Typescript expects a module
+export {}
