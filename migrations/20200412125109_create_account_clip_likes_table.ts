@@ -2,7 +2,7 @@ import * as Knex from "knex";
 
 const tableName = 'account_clip_likes';
 
-export async function up(knex: Knex): Promise<any> {
+exports.up = (knex: Knex): Promise<any> => {
   return knex.schema.createTable(tableName, (table) => {
     table
       .increments();
@@ -25,6 +25,6 @@ export async function up(knex: Knex): Promise<any> {
   });
 }
 
-export async function down(knex: Knex): Promise<any> {
+exports.down = (knex: Knex): Promise<any> => {
   return knex.schema.dropTable(tableName);
 }

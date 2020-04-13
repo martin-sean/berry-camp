@@ -2,16 +2,16 @@ import * as Knex from "knex";
 
 const tableName = 'nickname_suggestion_likes';
 
-export async function up(knex: Knex): Promise<any> {
-  knex.schema.createTable(tableName, (table) => {
+exports.up = (knex: Knex): Promise<any> => {
+  return knex.schema.createTable(tableName, (table) => {
     table
       .increments();
     table
-      .integer('name_suggestion_id')
+      .integer('nickname_suggestion_id')
       .unsigned()
       .notNullable()
       .references('id')
-      .inTable('name_suggestion')
+      .inTable('nickname_suggestion')
       .index();
     table
       .integer('account_id')
@@ -25,6 +25,6 @@ export async function up(knex: Knex): Promise<any> {
   });
 }
 
-export async function down(knex: Knex): Promise<any> {
-  knex.schema.dropTable(tableName);
+exports.down = (knex: Knex): Promise<any> => {
+  return knex.schema.dropTable(tableName);
 }

@@ -1,20 +1,23 @@
 import * as Knex from "knex";
 
-const tableName = 'chapter';
+const tableName = 'checkpoint';
 
 exports.up = (knex: Knex): Promise<any> => {
   return knex.schema.createTable(tableName, (table) => {
     table
       .increments();
     table
-      .integer('chapter_no')
-      .index()
-    table
-      .string('name', 24)
+      .integer('side_id')
+      .unsigned()
       .notNullable()
+      .references('id')
+      .inTable('side')
       .index();
     table
-      .boolean('official')
+      .string('name', 24)
+      .index();
+    table
+      .string('abbreviation', 3)
       .notNullable()
       .index();
     table
@@ -25,4 +28,3 @@ exports.up = (knex: Knex): Promise<any> => {
 exports.down = (knex: Knex): Promise<any> => {
   return knex.schema.dropTable(tableName);
 }
-

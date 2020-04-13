@@ -2,8 +2,8 @@ import * as Knex from "knex";
 
 const tableName = 'clip_tags'
 
-export async function up(knex: Knex): Promise<any> {
-  knex.schema.createTable(tableName, (table) => {
+exports.up = (knex: Knex): Promise<any> => {
+  return knex.schema.createTable(tableName, (table) => {
     table
       .increments();
     table
@@ -25,6 +25,6 @@ export async function up(knex: Knex): Promise<any> {
   })
 }
 
-export async function down(knex: Knex): Promise<any> {
-  knex.schema.dropTable(tableName);
+exports.down = (knex: Knex): Promise<any> => {
+  return knex.schema.dropTable(tableName);
 }
