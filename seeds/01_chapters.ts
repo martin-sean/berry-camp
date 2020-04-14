@@ -1,4 +1,4 @@
-import * as Knex from 'knex';
+import * as Knex from '../../migrations/knex';
 
 const tableName = 'chapter';
 

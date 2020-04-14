@@ -1,6 +1,4 @@
 import { Model } from 'objection';
-import Chapter from './Chapter';
-import Side from './Side';
 import Checkpoint from './Checkpoint';
 
 export default class Room extends Model {
@@ -25,36 +23,6 @@ export default class Room extends Model {
   }
 
   static relationMappings = () => ({
-    // Chapter this room belongs to
-    chapter: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: Chapter,
-      join: {
-        from: 'room.checkpoint_id',
-        through: {
-          from: 'checkpoint.id',
-          through: {
-            from: 'checkpoint.side_id',
-            to: 'side.id',
-          },
-          to: 'side.chapter_id',
-        },
-        to: 'chapter.id',
-      },
-    },
-    // Side this room belongs to
-    side: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: Side,
-      join: {
-        from: 'room.checkpoint_id',
-        through: {
-          from: 'checkpoint.id',
-          to: 'checkpoint.side_id',
-        },
-        to: 'side.id',
-      },
-    },
     // Checkpoint this room belongs to
     checkpoint: {
       relation: Model.BelongsToOneRelation,

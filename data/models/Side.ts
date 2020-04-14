@@ -1,7 +1,6 @@
 import { Model } from 'objection';
 import Chapter from './Chapter';
 import Checkpoint from './Checkpoint';
-import Room from './Room';
 
 export default class Side extends Model {
   id!: number;
@@ -39,19 +38,6 @@ export default class Side extends Model {
       join: {
         from: 'side.id',
         to: 'checkpoint.side_id',
-      },
-    },
-    // Rooms this side has
-    rooms: {
-      relation: Model.HasManyRelation,
-      modelClass: Room,
-      join: {
-        from: 'side.id',
-        through: {
-          from: 'checkpoint.side_id',
-          to: 'checkpoint.id',
-        },
-        to: 'room.checkpoint_id',
       },
     },
   });

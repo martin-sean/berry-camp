@@ -1,8 +1,5 @@
 import React from 'react';
 
-// Environment Variables
-require('dotenv').config();
-
 import './App.css';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';

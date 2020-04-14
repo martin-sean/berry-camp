@@ -1,8 +1,10 @@
-require('dotenv').config();
-require('pg').defaults.ssl=true;
+import dotenv from 'dotenv';
+import pg from 'pg';
 
-// Update with your config settings.
-const herokuConnection = {
+dotenv.config();
+pg.defaults.ssl = true;
+
+export default {
   client: "pg",
   connection: process.env.DATABASE_URL + '?sslmode=require',
   pool: {
@@ -11,14 +13,6 @@ const herokuConnection = {
   },
   migrations: {
     tableName: "knex_migrations",
-    // extension: 'ts',
+    extension: 'ts',
   }
 }
-
-module.exports = {
-  development: herokuConnection,
-  production: herokuConnection,
-};
-
-// Typescript expects a module
-export {}
