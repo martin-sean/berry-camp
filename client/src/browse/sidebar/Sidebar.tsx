@@ -1,58 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { List, ListSubheader } from '@material-ui/core';
-import SideBarLevel from './SidebarLevel';
-
-export interface Level {
-  name: string,
-  sides: Side[],
-}
-
-export interface Side {
-  name: string,
-  rooms: string[],
-}
-
-const levels: Level[] = [
-  {
-    name: 'Chapter 7',
-    sides: [
-      {
-        name: 'A side',
-        rooms: [
-          "0m",
-          "500m",
-          "1000m",
-          "1500m",
-          "2000m",
-          "2500m",
-          "3000m",
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Chapter 9',
-    sides: [
-      {
-        name: 'A side',
-        rooms: [
-          "Start",
-          "Singular",
-          "Power Source",
-          "Remembered",
-          "Event Horizon",
-          "Determination",
-          "Stubbornness",
-          "Reconcilliation",
-          "Farewell",
-          "Golden Room",
-        ],
-      },
-    ],
-  },
-];
+import { List, ListItem, ListSubheader, CircularProgress } from '@material-ui/core';
+import { Chapter } from '../../api/ChapterTree';
+import ItemChapter from './ItemChapter';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,11 +11,26 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     backgroundColor: theme.palette.background.paper,
   },
+  flexItem: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  progress: {
+
+  },
 }));
 
 export default () => {
   const classes = useStyles();
+  const [chapterTree, setChapterTree] = useState<Chapter[]>([]);
 
+  useEffect(() => {
+    fetch('/api/chaptertree')
+      .then((res) => res.json())
+      .then((chapterTree: Chapter[]) => setChapterTree(chapterTree));
+  },[chapterTree]);
+
+  
   return (
     <List
       className={ classes.root }
@@ -76,10 +42,21 @@ export default () => {
       }
     >
       {
-        levels.map((level) => (
-          <SideBarLevel level={ level } />
-        ))
+        chapterTree.length > 0 ?
+          chapterTree.map((chapter: Chapter, index: number) => (
+            <ItemChapter chapter={ chapter } key={ index } />
+          ))
+        :
+          <React.Fragment>
+            <ListItem className={ classes.flexItem }>
+              <CircularProgress className={ classes.progress } />
+            </ListItem>
+          </React.Fragment>
+      }
+      {
+        
       }
     </List>
   );
+
 }

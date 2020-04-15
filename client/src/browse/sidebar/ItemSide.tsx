@@ -3,17 +3,14 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Collapse, List, ListItem, ListItemText } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
-import { Side } from './Sidebar';
+import { Side, Checkpoint } from '../../api/ChapterTree';
+import ItemCheckpoint from './ItemCheckpoint';
 
 const useStyles = makeStyles((theme) => ({
-  side: {
+  spacing: {
     paddingLeft: theme.spacing(4),
     backgroundColor: theme.palette.background.paper,
   },
-  room: {
-    paddingLeft: theme.spacing(6),
-    backgroundColor: theme.palette.background.paper,
-  }
 }));
 
 export default (props: { side: Side }) => {
@@ -24,23 +21,33 @@ export default (props: { side: Side }) => {
     setOpen(!open);
   }
 
+  if (props.side.name) {
+    return (
+      <React.Fragment>
+        <ListItem button className={ classes.spacing } onClick={ handleClick }>
+          <ListItemText primary={ props.side.name } />
+          { open ? <ExpandLess /> : <ExpandMore /> }
+        </ListItem>
+        <Collapse in={ open } timeout='auto' unmountOnExit>
+          <Checkpoints side={ props.side } />
+        </Collapse>
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <Checkpoints side={ props.side } />
+    );
+  }
+}
+
+const Checkpoints = (props: { side: Side }) => {
   return (
-    <React.Fragment>
-      <ListItem button className={ classes.side } onClick={ handleClick }>
-        <ListItemText primary={ props.side.name } />
-        { open ? <ExpandLess /> : <ExpandMore /> }
-      </ListItem>
-      <Collapse in={ open } timeout='auto' unmountOnExit>
-        <List component='div' disablePadding>
-          {
-            props.side.rooms.map((room, index) => (
-              <ListItem button className={ classes.room } key={ index }>
-                <ListItemText primary={ room } />
-              </ListItem>
-            ))
-          }
-        </List>
-      </Collapse>
-    </React.Fragment>
+    <List component='div' disablePadding>
+      {
+        props.side.checkpoints.map((checkpoint: Checkpoint, index: number) => (
+          <ItemCheckpoint checkpoint={ checkpoint } key={ index } />
+        ))
+      }
+    </List>
   );
 }

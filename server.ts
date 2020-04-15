@@ -35,9 +35,8 @@ router.get('/chapters/:chapter_id', async (req, res) => {
   res.json(await Chapter.query().findById(req.params.chapter_id));
 });
 
-router.get('/chapter/:chapter_id/sides', async (req, res) => {
+router.get('/chapters/:chapter_id/sides', async (req, res) => {
   res.json(await Chapter.relatedQuery('sides').for(req.params.chapter_id));
-  // res.json(await Side.query().where('chapter_id', '=', req.params.chapter_id));
 });
 
 router.get('/sides/:side_id', async (req, res) => {
@@ -60,7 +59,7 @@ router.get('/rooms/:room_id', async (req, res) => {
   res.json(await Room.query().findById(req.params.room_id));
 });
 
-router.get('/chaptersidecheckpointrooms', async (req, res) => {
+router.get('/chaptertree', async (req, res) => {
   res.json(await Chapter.query().withGraphFetched('sides.[checkpoints.[rooms]]'));
 });
 
@@ -72,5 +71,5 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/../client/build/index.html'));
 });
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 app.listen(port);
