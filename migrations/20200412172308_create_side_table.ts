@@ -1,4 +1,4 @@
-import * as Knex from "./knex";
+import * as Knex from "knex";
 
 const tableName = 'side';
 
@@ -15,6 +15,12 @@ exports.up = (knex: Knex): Promise<any> => {
       .index();
     table
       .string('name', 12)
+      .notNullable()
+      .index();
+    table
+      .integer('side_no')
+      .notNullable()
+      .unsigned()
       .index();
     table
       .boolean('official')

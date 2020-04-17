@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListSubheader, CircularProgress } from '@material-ui/core';
-import { Chapter } from '../../api/ChapterTree';
-import ItemChapter from './ItemChapter';
+import SidebarItem from './SidebarItem';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,17 +19,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export interface MenuItem {
+  id: number;
+  name: string;
+  chapter_no?: number;
+  debug_id?: string;
+  children?: MenuItem[];
+}
+
 export default () => {
   const classes = useStyles();
-  const [chapterTree, setChapterTree] = useState<Chapter[]>([]);
+  const [chapterTree, setChapterTree] = useState<MenuItem[]>([]);
 
   useEffect(() => {
     fetch('/api/chaptertree')
       .then((res) => res.json())
-      .then((chapterTree: Chapter[]) => setChapterTree(chapterTree));
+      .then((chapterTree: MenuItem[]) => setChapterTree(chapterTree));
   },[chapterTree]);
 
-  
   return (
     <List
       className={ classes.root }
@@ -42,19 +48,18 @@ export default () => {
       }
     >
       {
+        // Render sidebar if data is present
         chapterTree.length > 0 ?
-          chapterTree.map((chapter: Chapter, index: number) => (
-            <ItemChapter chapter={ chapter } key={ index } />
+          chapterTree.map((item: MenuItem, index: number) => (
+            <SidebarItem item={ item } key={ index } indent={ 1 } />
           ))
         :
-          <React.Fragment>
-            <ListItem className={ classes.flexItem }>
-              <CircularProgress className={ classes.progress } />
-            </ListItem>
-          </React.Fragment>
-      }
-      {
-        
+        // Otherwise render a progress circle
+        <React.Fragment>
+          <ListItem className={ classes.flexItem }>
+            <CircularProgress className={ classes.progress } />
+          </ListItem>
+        </React.Fragment>
       }
     </List>
   );

@@ -1,4 +1,4 @@
-import * as Knex from "./knex";
+import * as Knex from "knex";
 
 const tableName = 'chapter';
 
@@ -8,6 +8,8 @@ exports.up = (knex: Knex): Promise<any> => {
       .increments();
     table
       .integer('chapter_no')
+      .notNullable()
+      .unsigned()
       .index()
     table
       .string('name', 24)

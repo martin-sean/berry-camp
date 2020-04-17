@@ -60,7 +60,23 @@ router.get('/rooms/:room_id', async (req, res) => {
 });
 
 router.get('/chaptertree', async (req, res) => {
-  res.json(await Chapter.query().withGraphFetched('sides.[checkpoints.[rooms]]'));
+  res.json(
+    await Chapter.query()
+    .select('id', 'chapter_no', 'name')
+    .withGraphFetched(
+      `sides(nameAndId) as children
+      .[checkpoints(nameAndId) as children
+        .[rooms(modifyRoom) as children]
+      ]`
+    ).modifiers({
+      nameAndId(builder) {
+        builder.select('id', 'name');
+      },
+      modifyRoom(builder) {
+        builder.select('id', 'debug_id', 'nickname as name');
+      }
+    })
+  );
 });
 
 // Use router prefix

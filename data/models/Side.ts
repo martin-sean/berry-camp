@@ -5,18 +5,20 @@ import Checkpoint from './Checkpoint';
 export default class Side extends Model {
   id!: number;
   chapter_id!: number;
-  name?: string;
+  name!: string;
+  side_no!: number;
   official!: boolean;
 
   static tableName = 'side';
 
   static jsonSchema = {
     type: 'object',
-    required: ['chapter_id', 'official'],
+    required: ['chapter_id', 'name', 'side_no', 'official'],
     properties: {
       id: { type: 'integer' },
       chapter_id: { type: 'integer' },
       name: { type: 'string', minLength: 0, maxLength: 12 },
+      side_no: { type: 'integer' },
       official: { type: 'boolean' },
     },
   }

@@ -7,6 +7,7 @@ export default class Checkpoint extends Model {
   side_id!: number;
   name?: string;
   abbreviation?: string;
+  checkpoint_no!: number;
 
   static tableName = 'checkpoint';
 
@@ -17,7 +18,7 @@ export default class Checkpoint extends Model {
       id: { type: 'integer' },
       side_id: { type: 'integer' },
       name: { type: 'string', minLength: 1, maxLength: 24 },
-      abbreviation: { type: 'string', minLength: 1, maxLength: 3 },
+      abbreviation: { type: 'string', minLength: 1, maxLength: 5 },
     },
   }
 

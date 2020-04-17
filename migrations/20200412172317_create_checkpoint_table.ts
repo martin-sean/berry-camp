@@ -1,4 +1,4 @@
-import * as Knex from "./knex";
+import * as Knex from "knex";
 
 const tableName = 'checkpoint';
 
@@ -20,6 +20,9 @@ exports.up = (knex: Knex): Promise<any> => {
       .string('abbreviation', 3)
       .notNullable()
       .index();
+    table
+      .integer('checkpoint_no')
+      .index()
     table
       .timestamps(true, true);
   });

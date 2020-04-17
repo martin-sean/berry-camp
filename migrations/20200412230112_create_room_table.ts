@@ -1,4 +1,4 @@
-import * as Knex from "./knex";
+import * as Knex from "knex";
 
 const tableName = 'room';
 
@@ -11,7 +11,7 @@ exports.up = (knex: Knex): Promise<any> => {
       .notNullable()
       .index();
     table
-      .integer('room_number')
+      .integer('room_no')
       .unsigned()
       .notNullable()
       .index();
