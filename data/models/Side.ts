@@ -10,7 +10,8 @@ export default class Side extends Model {
   official!: boolean;
 
   static tableName = 'side';
-
+  static useLimitInFirst = true;
+  
   static jsonSchema = {
     type: 'object',
     required: ['chapter_id', 'side_no', 'official'],

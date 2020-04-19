@@ -9,7 +9,8 @@ export default class Room extends Model {
   nickname?: string;
 
   static tableName = 'room';
-
+  static useLimitInFirst = true;
+  
   static jsonSchema = {
     type: 'object',
     required: ['debug_id', 'room_no', 'checkpoint_id'],

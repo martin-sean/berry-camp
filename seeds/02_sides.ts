@@ -54,6 +54,6 @@ exports.seed = async (knex: Knex) => {
     { id: 82, name: 'C', chapter_id: 'core', side_no: 3, official: true },
 
     // Chapter 9
-    { id: 90, chapter_id: 'core', side_no: 1, official: true },
+    { id: 90, chapter_id: 'farewell', side_no: 1, official: true },
   ]);
 }

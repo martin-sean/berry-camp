@@ -8,7 +8,8 @@ export default class Chapter extends Model {
   offical!: boolean;
 
   static tableName = 'chapter';
-
+  static useLimitInFirst = true;
+  
   static jsonSchema = {
     type: 'object',
     required: ['name', 'official'],

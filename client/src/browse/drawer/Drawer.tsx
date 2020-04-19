@@ -1,12 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
+import { Drawer, Toolbar, Hidden } from '@material-ui/core';
+import { Route, Switch } from 'react-router-dom';
 import Navbar from '../navbar';
-import { List, ListSubheader, Hidden, Drawer, ListItem, CircularProgress, Toolbar } from '@material-ui/core';
-import SidebarItem from './DrawerItem';
 
-const drawerWidthDesktop = 300;
+import ChapterList from './ChapterList';
+import SideList from './SideList';
+import CheckpointList from './CheckpointList';
+import RoomList from './RoomList';
+
+const drawerWidthDesktop = 320;
 const drawerWidthMobile = '100%';
+
+export const Paths = {
+  HOME: '/',
+  CHAPTER: '/chapter/:chapterId',
+  SIDE: '/chapter/:chapterId/side/:sideNo',
+  CHECKPOINT: '/chapter/:chapterId/side/:sideNo/checkpoint/:checkpointNo',
+  ROOM: '/chapter/:chapterId/side/:sideNo/checkpoint/:checkpointNo/room/:roomNo',
+}
 
 const useStyles = makeStyles((theme) => ({
   drawerDesktop: {
@@ -26,51 +39,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export interface MenuItem {
-  id: number;
-  name: string;
-  chapter_no?: number;
-  debug_id?: string;
-  children?: MenuItem[];
-}
-
 export default () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [chapterTree, setChapterTree] = useState<MenuItem[]>([]);
-  
-  useEffect(() => {
-    fetch('/api/chaptertree')
-      .then((res) => res.json())
-      .then((chapterTree: MenuItem[]) => setChapterTree(chapterTree));
-  },[chapterTree]);
 
   const toggleDrawer = () => {
     setOpen(!open);
   }
 
-  const content = (
-    <List
-      aria-labelledby='nested-list-subheader'
-      subheader={
-        <ListSubheader component='div' id='nested-list-subheader'>
-          Chapters
-        </ListSubheader>
-      }
-    >
-      {
-        // Render content if data is present
-        chapterTree.length > 0 ?
-          chapterTree.map((item: MenuItem, index: number) => (
-            <SidebarItem item={ item } key={ index } indent={ 1 } />
-          ))
-        :
-        // Otherwise render a progress circle
-        <ListItem className={ classes.flexItem }>
-          <CircularProgress />
-        </ListItem>
-      }
-    </List>
+  const drawerList = (
+    <React.Fragment>
+      <Toolbar />
+      <div className={ classes.drawerContainer }></div>
+        <Switch>
+          <Route exact path={ Paths.HOME } component={ ChapterList }/>
+          <Route exact path={ Paths.CHAPTER } component={ SideList }/>
+          <Route exact path={ Paths.SIDE } component={ CheckpointList } />
+          <Route path={ Paths.CHECKPOINT } component={ RoomList } />
+        </Switch>
+    </React.Fragment>
   );
 
   return (
@@ -89,10 +76,7 @@ export default () => {
             paper: classes.drawerMobile,
           }}
         >
-          <Toolbar />
-          <div className={ classes.drawerContainer }>
-            { content }
-          </div>
+          { drawerList }
         </Drawer>
       </Hidden>
       <Hidden xsDown>
@@ -105,8 +89,7 @@ export default () => {
             paper: classes.drawerDesktop,
           }}
         >
-          <Toolbar />
-          { content }
+          { drawerList }
         </Drawer>
       </Hidden>
     </React.Fragment>

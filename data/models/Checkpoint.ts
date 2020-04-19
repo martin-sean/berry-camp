@@ -10,7 +10,8 @@ export default class Checkpoint extends Model {
   checkpoint_no!: number;
 
   static tableName = 'checkpoint';
-
+  static useLimitInFirst = true;
+  
   static jsonSchema = {
     type: 'object',
     required: ['side_id'],

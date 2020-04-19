@@ -5,7 +5,10 @@ import Room from '../room';
 
 export const Paths = {
   HOME: '/',
-  ROOM: '/chapter/:id/side/:side_no/room/:room_no',
+  SIDES: '/chaptesr/:id/sides',
+  CHECKPOINTS: '/chapters/:id/sides/:side_no/checkpoints',
+  ROOMS: '/chapters/:id/sides/:side_no/checkpoints/:checkpoint_no/rooms',
+  ROOM: '/chapters/:id/sides/:side_no/checkpoints/:checkpoint_no/rooms/:room_no',
 }
 
 export interface RoutePath {

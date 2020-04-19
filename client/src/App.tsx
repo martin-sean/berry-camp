@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import './App.css';
 
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from './browse/drawer';
-
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const theme = createMuiTheme({
   palette: {
@@ -19,13 +19,15 @@ const theme = createMuiTheme({
 export default () => {
   return (
     <React.Fragment>
-      <ThemeProvider theme={ theme }>
-        <CssBaseline />
-        {/* Navbar is contained in drawer */}
-        <Drawer />
-        {/* <Modal /> */}
-        <footer />
-      </ThemeProvider>
+      <Router>
+        <ThemeProvider theme={ theme }>
+          <CssBaseline />
+          {/* Navbar is contained in drawer */}
+          <Drawer />
+          {/* <Modal /> */}
+          <footer />
+        </ThemeProvider>
+      </Router>
     </React.Fragment>
   );
 }
