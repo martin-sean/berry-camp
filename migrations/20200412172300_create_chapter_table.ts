@@ -8,7 +8,6 @@ exports.up = (knex: Knex): Promise<any> => {
       .increments();
     table
       .integer('chapter_no')
-      .notNullable()
       .unsigned()
       .index()
     table

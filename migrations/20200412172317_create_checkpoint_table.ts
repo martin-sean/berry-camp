@@ -17,8 +17,7 @@ exports.up = (knex: Knex): Promise<any> => {
       .string('name', 24)
       .index();
     table
-      .string('abbreviation', 3)
-      .notNullable()
+      .string('abbreviation', 5)
       .index();
     table
       .integer('checkpoint_no')

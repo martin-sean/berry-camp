@@ -13,7 +13,7 @@ export default class Side extends Model {
 
   static jsonSchema = {
     type: 'object',
-    required: ['chapter_id', 'name', 'side_no', 'official'],
+    required: ['chapter_id', 'side_no', 'official'],
     properties: {
       id: { type: 'integer' },
       chapter_id: { type: 'integer' },

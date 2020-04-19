@@ -15,7 +15,6 @@ exports.up = (knex: Knex): Promise<any> => {
       .index();
     table
       .string('name', 12)
-      .notNullable()
       .index();
     table
       .integer('side_no')

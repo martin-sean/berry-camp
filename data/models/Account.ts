@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model } from 'objection'
 import Clip from './Clip';
 import Comment from './Comment';
 import NicknameSuggestion from './NicknameSuggestion';

@@ -15,6 +15,7 @@ exports.seed = async (knex: Knex) => {
     { id: 55, 		room_no: 5, 		checkpoint_id: 50, 		debug_id: '2', 		      nickname: 'Granny meeting' },
     { id: 56, 		room_no: 6, 		checkpoint_id: 50, 		debug_id: '3', 		      nickname: 'Learn to dash' },
 
+
     // Chapter 1 //
     // 1A //
     { id: 1001, 		room_no: 1, 		checkpoint_id: 100, 		debug_id: '1', 	      nickname: '' },
@@ -30,7 +31,7 @@ exports.seed = async (knex: Knex) => {
     { id: 1010, 		room_no: 2, 		checkpoint_id: 101, 		debug_id: '6z', 		  nickname: '' },
     { id: 1011, 		room_no: 3, 		checkpoint_id: 101, 		debug_id: '6zb', 		  nickname: '' },
     { id: 1012, 		room_no: 4, 		checkpoint_id: 101, 		debug_id: '7zb', 		  nickname: '' },
-    { id: 1011, 		room_no: 5, 		checkpoint_id: 101, 		debug_id: '6a', 		  nickname: '' },
+    { id: 1013, 		room_no: 5, 		checkpoint_id: 101, 		debug_id: '6a', 		  nickname: '' },
     { id: 1014, 		room_no: 6, 		checkpoint_id: 101, 		debug_id: '6b', 		  nickname: '' },
     { id: 1015, 		room_no: 7, 		checkpoint_id: 101, 		debug_id: 's0', 		  nickname: '' },
     { id: 1016, 		room_no: 8, 		checkpoint_id: 101, 		debug_id: 's1', 		  nickname: '' },
@@ -59,7 +60,6 @@ exports.seed = async (knex: Knex) => {
     { id: 1038, 		room_no: 12, 		checkpoint_id: 102, 		debug_id: '12a', 		  nickname: '' },
     { id: 1039, 		room_no: 13, 		checkpoint_id: 102, 		debug_id: 'end', 		  nickname: '' },
 
-
     // 1B
     { id: 1101, 		room_no: 1, 		checkpoint_id: 103, 		debug_id: '00', 	  nickname: '' },
     { id: 1102, 		room_no: 2, 		checkpoint_id: 103, 		debug_id: '01', 		nickname: '' },
@@ -80,11 +80,11 @@ exports.seed = async (knex: Knex) => {
     { id: 1115, 		room_no: 5, 		checkpoint_id: 105, 		debug_id: '11', 		nickname: '' },
     { id: 1116, 		room_no: 6, 		checkpoint_id: 105, 		debug_id: 'end', 		nickname: '' },
 
-
     // 1C //
     { id: 1201, 		room_no: 1, 		checkpoint_id: 106, 		debug_id: '00', 	  nickname: '' },
     { id: 1202, 		room_no: 2, 		checkpoint_id: 106, 		debug_id: '01', 		nickname: '' },
     { id: 1203, 		room_no: 3, 		checkpoint_id: 106, 		debug_id: '02', 	  nickname: '' },
+
 
     // Chapter 2 //
     // 2A //
@@ -139,7 +139,6 @@ exports.seed = async (knex: Knex) => {
     { id: 2047, 		room_no: 11, 		checkpoint_id: 202, 		debug_id: 'end_5', 		nickname: '' },
     { id: 2048, 		room_no: 12, 		checkpoint_id: 202, 		debug_id: 'end_6', 		nickname: '' },
 
-
     // 2B
     { id: 2101, 		room_no: 1, 		checkpoint_id: 203, 		debug_id: 'start', 	nickname: '' },
     { id: 2102, 		room_no: 2, 		checkpoint_id: 203, 		debug_id: '00', 		nickname: '' },
@@ -161,7 +160,6 @@ exports.seed = async (knex: Knex) => {
     { id: 2116, 		room_no: 5, 		checkpoint_id: 205, 		debug_id: '11', 		nickname: '' },
     { id: 2117, 		room_no: 6, 		checkpoint_id: 205, 		debug_id: 'end', 		nickname: '' },
     
-
     // 2C //
     { id: 2201, 		room_no: 1, 		checkpoint_id: 206, 		debug_id: '00', 	  nickname: '' },
     { id: 2202, 		room_no: 2, 		checkpoint_id: 206, 		debug_id: '01', 		nickname: '' },
@@ -240,7 +238,6 @@ exports.seed = async (knex: Knex) => {
     { id: 3065, 		room_no: 9, 		checkpoint_id: 303, 		debug_id: 'roof06', 	nickname: '' },
     { id: 3066, 		room_no: 10, 		checkpoint_id: 303, 		debug_id: 'roof07', 	nickname: '' },
 
-
     // 3B
     { id: 3101, 		room_no: 1, 		checkpoint_id: 304, 		debug_id: '00', 		  nickname: '' },
     { id: 3102, 		room_no: 2, 		checkpoint_id: 304, 		debug_id: '01', 		  nickname: '' },
@@ -268,7 +265,6 @@ exports.seed = async (knex: Knex) => {
     { id: 3121, 		room_no: 5, 		checkpoint_id: 307, 		debug_id: '21', 		  nickname: '' },
     { id: 3122, 		room_no: 6, 		checkpoint_id: 307, 		debug_id: '20', 		  nickname: '' },
     { id: 3123, 		room_no: 7, 		checkpoint_id: 307, 		debug_id: 'end', 	    nickname: '' },
-
 
     // 3C //
     { id: 3201, 		room_no: 1, 		checkpoint_id: 308, 		debug_id: '00', 	    nickname: '' },
@@ -330,7 +326,6 @@ exports.seed = async (knex: Knex) => {
     { id: 4047, 		room_no: 11, 		checkpoint_id: 403, 		debug_id: 'd-09', 		nickname: '' },
     { id: 4048, 		room_no: 12, 		checkpoint_id: 403, 		debug_id: 'd-10', 		nickname: '' },
     
-
     // 4B
     { id: 4101, 		room_no: 1, 		checkpoint_id: 404, 		debug_id: 'a-00', 		nickname: '' },
     { id: 4102, 		room_no: 2, 		checkpoint_id: 404, 		debug_id: 'a-01', 		nickname: '' },
@@ -356,7 +351,6 @@ exports.seed = async (knex: Knex) => {
     { id: 4119, 		room_no: 4, 		checkpoint_id: 407, 		debug_id: 'd-03', 		nickname: '' },
     { id: 4120, 		room_no: 5, 		checkpoint_id: 407, 		debug_id: 'end', 		  nickname: '' },
 
-    
     // 4C //
     { id: 4201, 		room_no: 1, 		checkpoint_id: 408, 		debug_id: '00', 	    nickname: '' },
     { id: 4202, 		room_no: 2, 		checkpoint_id: 408, 		debug_id: '01', 		  nickname: '' },
@@ -441,7 +435,6 @@ exports.seed = async (knex: Knex) => {
     { id: 5071, 		room_no: 13, 		checkpoint_id: 503, 		debug_id: 'd-19', 		nickname: '' },
     { id: 5072, 		room_no: 14, 		checkpoint_id: 503, 		debug_id: 'd-19b', 		nickname: '' },
     { id: 5073, 		room_no: 15, 		checkpoint_id: 503, 		debug_id: 'd-20', 		nickname: '' },
-
     { id: 5074, 		room_no: 1, 		checkpoint_id: 504, 		debug_id: 'e-00', 		nickname: '' },
     { id: 5075, 		room_no: 2, 		checkpoint_id: 504, 		debug_id: 'e-01', 		nickname: '' },
     { id: 5076, 		room_no: 3, 		checkpoint_id: 504, 		debug_id: 'e-02', 		nickname: '' },
@@ -454,7 +447,6 @@ exports.seed = async (knex: Knex) => {
     { id: 5083, 		room_no: 10, 		checkpoint_id: 504, 		debug_id: 'e-09', 		nickname: '' },
     { id: 5084, 		room_no: 11, 		checkpoint_id: 504, 		debug_id: 'e-10', 		nickname: '' },
     { id: 5085, 		room_no: 12, 		checkpoint_id: 504, 		debug_id: 'e-11', 		nickname: '' },
-
 
     // 5B
     { id: 5201, 		room_no: 1, 		checkpoint_id: 505, 		debug_id: 'start', 		nickname: '' },
@@ -486,7 +478,6 @@ exports.seed = async (knex: Knex) => {
     { id: 5224, 		room_no: 5, 		checkpoint_id: 508, 		debug_id: 'd-04', 		nickname: '' },
     { id: 5225, 		room_no: 6, 		checkpoint_id: 508, 		debug_id: 'd-05', 		nickname: '' },
     
-
     // 5C //
     { id: 5301, 		room_no: 1, 		checkpoint_id: 509, 		debug_id: '00', 	    nickname: '' },
     { id: 5302, 		room_no: 2, 		checkpoint_id: 509, 		debug_id: '01', 		  nickname: '' },
@@ -565,7 +556,6 @@ exports.seed = async (knex: Knex) => {
     { id: 6063, 		room_no: 7, 		checkpoint_id: 605, 		debug_id: 'after-02', 		nickname: '' },
     { id: 6064, 		room_no: 8, 		checkpoint_id: 605, 		debug_id: 'after-03', 		nickname: '' },
     
-
     // 6B //
     { id: 6201, 		room_no: 1, 		checkpoint_id: 606, 		debug_id: 'a-00', 	  nickname: '' },
     { id: 6202, 		room_no: 2, 		checkpoint_id: 606, 		debug_id: 'a-01', 		nickname: '' },
@@ -604,6 +594,7 @@ exports.seed = async (knex: Knex) => {
     { id: 6302, 		room_no: 2, 		checkpoint_id: 610, 		debug_id: '01', 		  nickname: 'Falling' },
     { id: 6303, 		room_no: 3, 		checkpoint_id: 610, 		debug_id: '02', 	    nickname: 'Falling for Kevin' },
     { id: 6304, 		room_no: 4, 		checkpoint_id: 610, 		debug_id: '02', 	    nickname: 'Heart Room' },
+
 
     // Chapter 7
     // 7A side
@@ -707,41 +698,39 @@ exports.seed = async (knex: Knex) => {
     { id: 7091, 		room_no: 1, 		checkpoint_id: 706, 		debug_id: 'g-00', 		nickname: 'Flag 30' },
     { id: 7092, 		room_no: 2, 		checkpoint_id: 706, 		debug_id: 'g-00', 		nickname: 'Flag 29' },
     // Downdraft
-    { id: 7094, 		room_no: 3, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 28' },
-    { id: 7095, 		room_no: 4, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Heart Room' },
-    { id: 7096, 		room_no: 5, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 27' },
-    { id: 7097, 		room_no: 6, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 26' },
-    { id: 7098, 		room_no: 7, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 25' },
-    { id: 7099, 		room_no: 8, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 24' },
-    { id: 7100, 		room_no: 9, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 23' },
-    { id: 7101, 		room_no: 10, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 22' },
-    { id: 7102, 		room_no: 11, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 21' },
-    { id: 7103, 		room_no: 12, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 20' },
+    { id: 7093, 		room_no: 3, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 28' },
+    { id: 7094, 		room_no: 4, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Heart Room' },
+    { id: 7095, 		room_no: 5, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 27' },
+    { id: 7096, 		room_no: 6, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 26' },
+    { id: 7097, 		room_no: 7, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 25' },
+    { id: 7098, 		room_no: 8, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 24' },
+    { id: 7099, 		room_no: 9, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 23' },
+    { id: 7100, 		room_no: 10, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 22' },
+    { id: 7101, 		room_no: 11, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 21' },
+    { id: 7102, 		room_no: 12, 		checkpoint_id: 706, 		debug_id: 'g-00b', 		nickname: 'Flag 20' },
     // Updraft
-    { id: 7104, 		room_no: 13, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 19' },
-    { id: 7105, 		room_no: 14, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 18' },
-    { id: 7106, 		room_no: 15, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 17' },
-    { id: 7107, 		room_no: 16, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 16' },
-    { id: 7108, 		room_no: 17, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 15' },
-    { id: 7109, 		room_no: 18, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 14' },
-    { id: 7110, 		room_no: 19, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 13' },
-    { id: 7111, 		room_no: 20, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 12' },
-    { id: 7112, 		room_no: 21, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 11' },
-    { id: 7113, 		room_no: 22, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 10' },
-    { id: 7114, 		room_no: 23, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 9' },
-    { id: 7115, 		room_no: 24, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 8' },
-    { id: 7116, 		room_no: 25, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 7' },
+    { id: 7103, 		room_no: 13, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 19' },
+    { id: 7104, 		room_no: 14, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 18' },
+    { id: 7105, 		room_no: 15, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 17' },
+    { id: 7106, 		room_no: 16, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 16' },
+    { id: 7107, 		room_no: 17, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 15' },
+    { id: 7108, 		room_no: 18, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 14' },
+    { id: 7109, 		room_no: 19, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 13' },
+    { id: 7110, 		room_no: 20, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 12' },
+    { id: 7111, 		room_no: 21, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 11' },
+    { id: 7112, 		room_no: 22, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 10' },
+    { id: 7113, 		room_no: 23, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 9' },
+    { id: 7114, 		room_no: 24, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 8' },
+    { id: 7115, 		room_no: 25, 		checkpoint_id: 706, 		debug_id: 'g-01', 		nickname: 'Flag 7' },
     // Updraft
-    { id: 7117, 		room_no: 26, 		checkpoint_id: 706, 		debug_id: 'g-02', 		nickname: 'Flag 6' },
+    { id: 7116, 		room_no: 26, 		checkpoint_id: 706, 		debug_id: 'g-02', 		nickname: 'Flag 6' },
     // No Draft
-    { id: 7118, 		room_no: 27, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 5' },
-    { id: 7119, 		room_no: 28, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 4' },
-    { id: 7120, 		room_no: 29, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 3' },
-    { id: 7121, 		room_no: 30, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 2' },
-    { id: 7122, 		room_no: 31, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 1' },
+    { id: 7117, 		room_no: 27, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 5' },
+    { id: 7118, 		room_no: 28, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 4' },
+    { id: 7119, 		room_no: 29, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 3' },
+    { id: 7120, 		room_no: 30, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 2' },
+    { id: 7121, 		room_no: 31, 		checkpoint_id: 706, 		debug_id: 'g-03', 		nickname: 'Flag 1' },
 
-
-    // TODO: Number rooms, 		ids and split rooms
     // 7B //
     { id: 7301, 		room_no: 1, 		checkpoint_id: 707, 		debug_id: 'a-00-intro',   nickname: '' },
     { id: 7302, 		room_no: 2, 		checkpoint_id: 707, 		debug_id: 'a-00', 		    nickname: '' },
@@ -812,6 +801,7 @@ exports.seed = async (knex: Knex) => {
     { id: 7503, 		room_no: 3, 		checkpoint_id: 750, 		debug_id: 'bridge', 	    nickname: '' },
     { id: 7504, 		room_no: 4, 		checkpoint_id: 750, 		debug_id: 'secret', 	    nickname: '' },
 
+
     // Chapter 8
     // 8A
     { id: 8001, 		room_no: 1, 		checkpoint_id: 800, 		debug_id: '0x', 	  	nickname: '' },
@@ -857,156 +847,160 @@ exports.seed = async (knex: Knex) => {
     { id: 8038, 		room_no: 14, 		checkpoint_id: 803, 		debug_id: 'd-11', 		nickname: '' },
     { id: 8039, 		room_no: 15, 		checkpoint_id: 803, 		debug_id: 'space', 		nickname: '' },
 
-
     // 8B //
-    { id: 8001, 		room_no: 1, 		checkpoint_id: 804, 		debug_id: '00', 	  	nickname: '' },
-    { id: 8002, 		room_no: 2, 		checkpoint_id: 804, 		debug_id: '01', 	  	nickname: '' },
+    { id: 8201, 		room_no: 1, 		checkpoint_id: 804, 		debug_id: '00', 	  	nickname: '' },
+    { id: 8202, 		room_no: 2, 		checkpoint_id: 804, 		debug_id: '01', 	  	nickname: '' },
 
-    { id: 8003, 		room_no: 1, 		checkpoint_id: 805, 		debug_id: 'a-00', 	  nickname: '' },
-    { id: 8004, 		room_no: 2, 		checkpoint_id: 805, 		debug_id: 'a-01', 	  nickname: '' },
-    { id: 8005, 		room_no: 3, 		checkpoint_id: 805, 		debug_id: 'a-02', 		nickname: '' },
-    { id: 8006, 		room_no: 4, 		checkpoint_id: 805, 		debug_id: 'a-03', 		nickname: '' },
-    { id: 8007, 		room_no: 5, 		checkpoint_id: 805, 		debug_id: 'a-04', 		nickname: '' },
-    { id: 8008, 		room_no: 6, 		checkpoint_id: 805, 		debug_id: 'a-05', 		nickname: '' },
+    { id: 8203, 		room_no: 1, 		checkpoint_id: 805, 		debug_id: 'a-00', 	  nickname: '' },
+    { id: 8204, 		room_no: 2, 		checkpoint_id: 805, 		debug_id: 'a-01', 	  nickname: '' },
+    { id: 8205, 		room_no: 3, 		checkpoint_id: 805, 		debug_id: 'a-02', 		nickname: '' },
+    { id: 8206, 		room_no: 4, 		checkpoint_id: 805, 		debug_id: 'a-03', 		nickname: '' },
+    { id: 8207, 		room_no: 5, 		checkpoint_id: 805, 		debug_id: 'a-04', 		nickname: '' },
+    { id: 8208, 		room_no: 6, 		checkpoint_id: 805, 		debug_id: 'a-05', 		nickname: '' },
 
-    { id: 8009, 		room_no: 1, 		checkpoint_id: 806, 		debug_id: 'b-00', 		nickname: '' },
-    { id: 8010, 		room_no: 2, 		checkpoint_id: 806, 		debug_id: 'b-01', 		nickname: '' },
-    { id: 8011, 		room_no: 3, 		checkpoint_id: 806, 		debug_id: 'b-02', 		nickname: '' },
-    { id: 8012, 		room_no: 4, 		checkpoint_id: 806, 		debug_id: 'b-03', 		nickname: '' },
-    { id: 8013, 		room_no: 5, 		checkpoint_id: 806, 		debug_id: 'b-04', 		nickname: '' },
-    { id: 8014, 		room_no: 6, 		checkpoint_id: 806, 		debug_id: 'b-05', 		nickname: '' },
+    { id: 8209, 		room_no: 1, 		checkpoint_id: 806, 		debug_id: 'b-00', 		nickname: '' },
+    { id: 8210, 		room_no: 2, 		checkpoint_id: 806, 		debug_id: 'b-01', 		nickname: '' },
+    { id: 8211, 		room_no: 3, 		checkpoint_id: 806, 		debug_id: 'b-02', 		nickname: '' },
+    { id: 8212, 		room_no: 4, 		checkpoint_id: 806, 		debug_id: 'b-03', 		nickname: '' },
+    { id: 8213, 		room_no: 5, 		checkpoint_id: 806, 		debug_id: 'b-04', 		nickname: '' },
+    { id: 8214, 		room_no: 6, 		checkpoint_id: 806, 		debug_id: 'b-05', 		nickname: '' },
 
-    { id: 8015, 		room_no: 1, 		checkpoint_id: 807, 		debug_id: 'c-01', 		nickname: '' },
-    { id: 8016, 		room_no: 2, 		checkpoint_id: 807, 		debug_id: 'c-02', 		nickname: '' },
-    { id: 8017, 		room_no: 3, 		checkpoint_id: 807, 		debug_id: 'c-03', 		nickname: '' },
-    { id: 8018, 		room_no: 4, 		checkpoint_id: 807, 		debug_id: 'c-04', 		nickname: '' },
-    { id: 8019, 		room_no: 5, 		checkpoint_id: 807, 		debug_id: 'c-05', 		nickname: '' },
-    { id: 8020, 		room_no: 6, 		checkpoint_id: 807, 		debug_id: 'c-06', 		nickname: '' },
-    { id: 8021, 		room_no: 7, 		checkpoint_id: 807, 		debug_id: 'c-07', 		nickname: '' },
-    { id: 8022, 		room_no: 8, 		checkpoint_id: 807, 		debug_id: 'space', 		nickname: '' },
+    { id: 8215, 		room_no: 1, 		checkpoint_id: 807, 		debug_id: 'c-01', 		nickname: '' },
+    { id: 8216, 		room_no: 2, 		checkpoint_id: 807, 		debug_id: 'c-02', 		nickname: '' },
+    { id: 8217, 		room_no: 3, 		checkpoint_id: 807, 		debug_id: 'c-03', 		nickname: '' },
+    { id: 8218, 		room_no: 4, 		checkpoint_id: 807, 		debug_id: 'c-04', 		nickname: '' },
+    { id: 8219, 		room_no: 5, 		checkpoint_id: 807, 		debug_id: 'c-05', 		nickname: '' },
+    { id: 8220, 		room_no: 6, 		checkpoint_id: 807, 		debug_id: 'c-06', 		nickname: '' },
+    { id: 8221, 		room_no: 7, 		checkpoint_id: 807, 		debug_id: 'c-07', 		nickname: '' },
+    { id: 8222, 		room_no: 8, 		checkpoint_id: 807, 		debug_id: 'space', 		nickname: '' },
 
-    
     // 8C //
+    { id: 8401, 		room_no: 1, 		checkpoint_id: 808, 		debug_id: 'intro', 	  nickname: 'Heart gate' },
+    { id: 8402, 		room_no: 2, 		checkpoint_id: 808, 		debug_id: '00', 	  	nickname: 'Hyper tutorial' },
+    { id: 8403, 		room_no: 3, 		checkpoint_id: 808, 		debug_id: '01', 	    nickname: 'Blocks and bumpers' },
+    { id: 8404, 		room_no: 4, 		checkpoint_id: 808, 		debug_id: '02', 	    nickname: 'Heart room' },
 
 
     // Chapter 9 //
     // 9A Start //
-    { id: 9001, 		room_no: 1, 		checkpoint_id: 900, 		debug_id: 'intro-00-past', 		  nickname: '' },
-    { id: 9002, 		room_no: 2, 		checkpoint_id: 900, 		debug_id: 'intro-01-future', 		nickname: '' },
-    { id: 9003, 		room_no: 3, 		checkpoint_id: 900, 		debug_id: 'intro-02-launch', 		nickname: '' },
-    { id: 9004, 		room_no: 4, 		checkpoint_id: 900, 		debug_id: 'intro-03-space', 		nickname: '' },
+    { id: 9001, 		room_no: 1, 		checkpoint_id: 900, 		debug_id: 'intro-00-past', 		  nickname: 'Past' },
+    { id: 9002, 		room_no: 2, 		checkpoint_id: 900, 		debug_id: 'intro-01-future', 		nickname: 'Present' },
+    { id: 9003, 		room_no: 3, 		checkpoint_id: 900, 		debug_id: 'intro-02-launch', 		nickname: 'Clouds' },
+    { id: 9004, 		room_no: 4, 		checkpoint_id: 900, 		debug_id: 'intro-03-space', 		nickname: 'Space' },
     // 9A Singular //
-    { id: 9005, 		room_no: 1, 		checkpoint_id: 901, 		debug_id: 'a-00', 		          nickname: '' },
-    { id: 9006, 		room_no: 2, 		checkpoint_id: 901, 		debug_id: 'a-01', 		          nickname: '' },
-    { id: 9007, 		room_no: 3, 		checkpoint_id: 901, 		debug_id: 'a-02', 		          nickname: '' },
-    { id: 9008, 		room_no: 4, 		checkpoint_id: 901, 		debug_id: 'a-03', 		          nickname: '' },
-    { id: 9009, 		room_no: 5, 		checkpoint_id: 901, 		debug_id: 'a-04', 		          nickname: '' },
-    { id: 9010, 		room_no: 6, 		checkpoint_id: 901, 		debug_id: 'a-05', 		          nickname: '' },
-    { id: 9011, 		room_no: 7, 		checkpoint_id: 901, 		debug_id: 'b-00', 		          nickname: '' },
-    { id: 9012, 		room_no: 8, 		checkpoint_id: 901, 		debug_id: 'b-01', 		          nickname: '' },
-    { id: 9013, 		room_no: 9, 		checkpoint_id: 901, 		debug_id: 'b-02', 		          nickname: '' },
-    { id: 9014, 		room_no: 10, 		checkpoint_id: 901, 		debug_id: 'b-03', 		          nickname: '' },
-    { id: 9015, 		room_no: 11, 		checkpoint_id: 901, 		debug_id: 'b-04', 		          nickname: '' },
-    { id: 9016, 		room_no: 12, 		checkpoint_id: 901, 		debug_id: 'b-05', 		          nickname: '' },
-    { id: 9017, 		room_no: 13, 		checkpoint_id: 901, 		debug_id: 'b-06', 		          nickname: '' },
-    { id: 9018, 		room_no: 14, 		checkpoint_id: 901, 		debug_id: 'b-07', 		          nickname: '' },
+    { id: 9005, 		room_no: 1, 		checkpoint_id: 901, 		debug_id: 'a-00', 		          nickname: 'Start' },
+    { id: 9006, 		room_no: 2, 		checkpoint_id: 901, 		debug_id: 'a-01', 		          nickname: 'Crystal tunnel' },
+    { id: 9007, 		room_no: 3, 		checkpoint_id: 901, 		debug_id: 'a-02', 		          nickname: 'Sliding block' },
+    { id: 9008, 		room_no: 4, 		checkpoint_id: 901, 		debug_id: 'a-03', 		          nickname: 'Block toss' },
+    { id: 9009, 		room_no: 5, 		checkpoint_id: 901, 		debug_id: 'a-04', 		          nickname: 'Spring blocks 1' },
+    { id: 9010, 		room_no: 6, 		checkpoint_id: 901, 		debug_id: 'a-05', 		          nickname: 'Spring blocks 2' },
+    { id: 9011, 		room_no: 7, 		checkpoint_id: 901, 		debug_id: 'b-00', 		          nickname: 'First Fish' },
+    { id: 9012, 		room_no: 8, 		checkpoint_id: 901, 		debug_id: 'b-01', 		          nickname: 'Fish bounce 1' },
+    { id: 9013, 		room_no: 9, 		checkpoint_id: 901, 		debug_id: 'b-02', 		          nickname: 'Fish bounce 2' },
+    { id: 9014, 		room_no: 10, 		checkpoint_id: 901, 		debug_id: 'b-03', 		          nickname: 'Dream fish' },
+    { id: 9015, 		room_no: 11, 		checkpoint_id: 901, 		debug_id: 'b-04', 		          nickname: 'Fish cave' },
+    { id: 9016, 		room_no: 12, 		checkpoint_id: 901, 		debug_id: 'b-05', 		          nickname: 'Fish spring 1' },
+    { id: 9017, 		room_no: 13, 		checkpoint_id: 901, 		debug_id: 'b-06', 		          nickname: 'Fish spring 2' },
+    { id: 9018, 		room_no: 14, 		checkpoint_id: 901, 		debug_id: 'b-07', 		          nickname: 'Electric maze' },
     // 9A Power Source //
-    { id: 9019, 		room_no: 1, 		checkpoint_id: 902, 		debug_id: 'c-00', 		          nickname: '' },
-    { id: 9020, 		room_no: 2, 		checkpoint_id: 902, 		debug_id: 'c-00-b', 		        nickname: '' },
-    { id: 9021, 		room_no: 3, 		checkpoint_id: 902, 		debug_id: 'c-alt-00', 		      nickname: '' },
-    { id: 9022, 		room_no: 4, 		checkpoint_id: 902, 		debug_id: 'c-alt-01', 		      nickname: '' },
-    { id: 9023, 		room_no: 5, 		checkpoint_id: 902, 		debug_id: 'c-01', 		          nickname: '' },
-    { id: 9024, 		room_no: 6, 		checkpoint_id: 902, 		debug_id: 'c-02', 		          nickname: '' },
-    { id: 9025, 		room_no: 7, 		checkpoint_id: 902, 		debug_id: 'c-03', 		          nickname: '' },
-    { id: 9026, 		room_no: 8, 		checkpoint_id: 902, 		debug_id: 'd-00', 		          nickname: '' },
-    { id: 9027, 		room_no: 9, 		checkpoint_id: 902, 		debug_id: 'd-01', 		          nickname: '' },
-    { id: 9028, 		room_no: 10, 		checkpoint_id: 902, 		debug_id: 'd-02', 		          nickname: '' },
-    { id: 9029, 		room_no: 11, 		checkpoint_id: 902, 		debug_id: 'd-03', 		          nickname: '' },
-    { id: 9030, 		room_no: 12, 		checkpoint_id: 902, 		debug_id: 'd-04', 		          nickname: '' },
-    { id: 9031, 		room_no: 13, 		checkpoint_id: 902, 		debug_id: 'd-05', 		          nickname: '' },
-    { id: 9032, 		room_no: 14, 		checkpoint_id: 902, 		debug_id: 'e-00y', 		          nickname: '' },
-    { id: 9033, 		room_no: 15, 		checkpoint_id: 902, 		debug_id: 'e-00yb', 	          nickname: '' },
+    { id: 9019, 		room_no: 1, 		checkpoint_id: 902, 		debug_id: 'c-00', 		          nickname: 'Start' },
+    { id: 9021, 		room_no: 2, 		checkpoint_id: 902, 		debug_id: 'c-alt-00', 		      nickname: 'Top route 1' },
+    { id: 9022, 		room_no: 3, 		checkpoint_id: 902, 		debug_id: 'c-alt-01', 		      nickname: 'Top route 2' },
+    { id: 9020, 		room_no: 4, 		checkpoint_id: 902, 		debug_id: 'c-00-b', 		        nickname: 'Bottom route 1' },
+    { id: 9023, 		room_no: 5, 		checkpoint_id: 902, 		debug_id: 'c-01', 		          nickname: 'Bottom route 2' },
+    { id: 9024, 		room_no: 6, 		checkpoint_id: 902, 		debug_id: 'c-02', 		          nickname: 'Bottom route 3' },
+    { id: 9025, 		room_no: 7, 		checkpoint_id: 902, 		debug_id: 'c-03', 		          nickname: 'Keyskip Jelly' },
+    { id: 9026, 		room_no: 8, 		checkpoint_id: 902, 		debug_id: 'd-00', 		          nickname: 'Locked room' },
+    { id: 9027, 		room_no: 9, 		checkpoint_id: 902, 		debug_id: 'd-01', 		          nickname: 'Bottom left key' },
+    { id: 9028, 		room_no: 10, 		checkpoint_id: 902, 		debug_id: 'd-02', 		          nickname: 'Top left key' },
+    { id: 9029, 		room_no: 11, 		checkpoint_id: 902, 		debug_id: 'd-03', 		          nickname: 'Bottom right key' },
+    { id: 9030, 		room_no: 12, 		checkpoint_id: 902, 		debug_id: 'd-04', 		          nickname: 'Top right key' },
+    { id: 9031, 		room_no: 13, 		checkpoint_id: 902, 		debug_id: 'd-05', 		          nickname: 'Top key/keyskip' },
+    { id: 9032, 		room_no: 14, 		checkpoint_id: 902, 		debug_id: 'e-00y', 		          nickname: 'Bubble stars/keyskip' },
+    { id: 9033, 		room_no: 15, 		checkpoint_id: 902, 		debug_id: 'e-00yb', 	          nickname: 'Keyskip path' },
     // 9A Remembered //
-    { id: 9034, 		room_no: 1, 		checkpoint_id: 903, 		debug_id: 'e-00z', 		          nickname: '' },
-    { id: 9035, 		room_no: 2, 		checkpoint_id: 903, 		debug_id: 'e-00', 		          nickname: '' },
-    { id: 9036, 		room_no: 3, 		checkpoint_id: 903, 		debug_id: 'e-00b', 		          nickname: '' },
-    { id: 9037, 		room_no: 4, 		checkpoint_id: 903, 		debug_id: 'e-01', 		          nickname: '' },
-    { id: 9038, 		room_no: 5, 		checkpoint_id: 903, 		debug_id: 'e-02', 		          nickname: '' },
-    { id: 9039, 		room_no: 6, 		checkpoint_id: 903, 		debug_id: 'e-03', 		          nickname: '' },
-    { id: 9040, 		room_no: 7, 		checkpoint_id: 903, 		debug_id: 'e-04', 		          nickname: '' },
-    { id: 9041, 		room_no: 8, 		checkpoint_id: 903, 		debug_id: 'e-05', 		          nickname: '' },
-    { id: 9042, 		room_no: 9, 		checkpoint_id: 903, 		debug_id: 'e-05b', 		          nickname: '' },
-    { id: 9043, 		room_no: 10, 		checkpoint_id: 903, 		debug_id: 'e-05c', 		          nickname: '' },
-    { id: 9044, 		room_no: 11, 		checkpoint_id: 903, 		debug_id: 'e-06', 		          nickname: '' },
-    { id: 9045, 		room_no: 12, 		checkpoint_id: 903, 		debug_id: 'e-07', 		          nickname: '' },
-    { id: 9046, 		room_no: 13, 		checkpoint_id: 903, 		debug_id: 'e-08', 		          nickname: '' },
+    { id: 9034, 		room_no: 1, 		checkpoint_id: 903, 		debug_id: 'e-00z', 		          nickname: 'Start' },
+    { id: 9035, 		room_no: 2, 		checkpoint_id: 903, 		debug_id: 'e-00', 		          nickname: 'Cloud fish switch' },
+    { id: 9036, 		room_no: 3, 		checkpoint_id: 903, 		debug_id: 'e-00b', 		          nickname: 'Jelly up' },
+    { id: 9037, 		room_no: 4, 		checkpoint_id: 903, 		debug_id: 'e-01', 		          nickname: 'Falling pillars' },
+    { id: 9038, 		room_no: 5, 		checkpoint_id: 903, 		debug_id: 'e-02', 		          nickname: 'Jelly right' },
+    { id: 9039, 		room_no: 6, 		checkpoint_id: 903, 		debug_id: 'e-03', 		          nickname: 'Fish springs' },
+    { id: 9040, 		room_no: 7, 		checkpoint_id: 903, 		debug_id: 'e-04', 		          nickname: 'Jelly gates' },
+    { id: 9041, 		room_no: 8, 		checkpoint_id: 903, 		debug_id: 'e-05', 		          nickname: 'Fish push' },
+    { id: 9042, 		room_no: 9, 		checkpoint_id: 903, 		debug_id: 'e-05b', 		          nickname: 'Aloft fish' },
+    { id: 9043, 		room_no: 10, 		checkpoint_id: 903, 		debug_id: 'e-05c', 		          nickname: 'Fish bounce' },
+    { id: 9044, 		room_no: 11, 		checkpoint_id: 903, 		debug_id: 'e-06', 		          nickname: 'Glide springs' },
+    { id: 9045, 		room_no: 12, 		checkpoint_id: 903, 		debug_id: 'e-07', 		          nickname: 'Fish scroller' },
+    { id: 9046, 		room_no: 13, 		checkpoint_id: 903, 		debug_id: 'e-08', 		          nickname: 'Jelly scroller' },
     // 9A Event Horizon //
-    { id: 9047, 		room_no: 1, 		checkpoint_id: 904, 		debug_id: 'f-door', 	          nickname: '' },
-    { id: 9048, 		room_no: 2, 		checkpoint_id: 904, 		debug_id: 'f-00', 		          nickname: '' },
-    { id: 9049, 		room_no: 3, 		checkpoint_id: 904, 		debug_id: 'f-01', 		          nickname: '' },
-    { id: 9050, 		room_no: 4, 		checkpoint_id: 904, 		debug_id: 'f-02', 		          nickname: '' },
-    { id: 9051, 		room_no: 5, 		checkpoint_id: 904, 		debug_id: 'f-03', 		          nickname: '' },
-    { id: 9052, 		room_no: 6, 		checkpoint_id: 904, 		debug_id: 'f-04', 		          nickname: '' },
-    { id: 9053, 		room_no: 7, 		checkpoint_id: 904, 		debug_id: 'f-05', 		          nickname: '' },
-    { id: 9054, 		room_no: 8, 		checkpoint_id: 904, 		debug_id: 'f-06', 		          nickname: '' },
-    { id: 9055, 		room_no: 9, 		checkpoint_id: 904, 		debug_id: 'f-07', 		          nickname: '' },
-    { id: 9056, 		room_no: 10, 		checkpoint_id: 904, 		debug_id: 'f-08', 		          nickname: '' },
-    { id: 9057, 		room_no: 11, 		checkpoint_id: 904, 		debug_id: 'f-09', 		          nickname: '' },
-    { id: 9058, 		room_no: 12, 		checkpoint_id: 904, 		debug_id: 'g-00', 		          nickname: '' },
-    { id: 9059, 		room_no: 13, 		checkpoint_id: 904, 		debug_id: 'g-01', 		          nickname: '' },
-    { id: 9060, 		room_no: 14, 		checkpoint_id: 904, 		debug_id: 'g-03', 		          nickname: '' },
-    { id: 9061, 		room_no: 15, 		checkpoint_id: 904, 		debug_id: 'g-02', 		          nickname: '' },
-    { id: 9062, 		room_no: 16, 		checkpoint_id: 904, 		debug_id: 'g-04', 		          nickname: '' },
-    { id: 9063, 		room_no: 17, 		checkpoint_id: 904, 		debug_id: 'g-05', 		          nickname: '' },
-    { id: 9064, 		room_no: 18, 		checkpoint_id: 904, 		debug_id: 'g-06', 		          nickname: '' },
+    { id: 9047, 		room_no: 1, 		checkpoint_id: 904, 		debug_id: 'f-door', 	          nickname: 'Heart gate' },
+    { id: 9048, 		room_no: 2, 		checkpoint_id: 904, 		debug_id: 'f-00', 		          nickname: 'Wavedash Tutorial 1' },
+    { id: 9049, 		room_no: 3, 		checkpoint_id: 904, 		debug_id: 'f-00', 		          nickname: 'Wavedash Tutorial 2' },
+    { id: 9050, 		room_no: 4, 		checkpoint_id: 904, 		debug_id: 'f-01', 		          nickname: 'Wavedash Tutorial 3' },
+    { id: 9051, 		room_no: 5, 		checkpoint_id: 904, 		debug_id: 'f-02', 		          nickname: 'Bird' },
+    { id: 9052, 		room_no: 6, 		checkpoint_id: 904, 		debug_id: 'f-03', 		          nickname: 'Beyond the heart' },
+    { id: 9053, 		room_no: 7, 		checkpoint_id: 904, 		debug_id: 'f-04', 		          nickname: 'Wavedash blocks' },
+    { id: 9054, 		room_no: 8, 		checkpoint_id: 904, 		debug_id: 'f-05', 		          nickname: 'Conveyor' },
+    { id: 9055, 		room_no: 9, 		checkpoint_id: 904, 		debug_id: 'f-06', 		          nickname: 'Kevin' },
+    { id: 9056, 		room_no: 10, 		checkpoint_id: 904, 		debug_id: 'f-07', 		          nickname: 'Conveyor blocks' },
+    { id: 9057, 		room_no: 12, 		checkpoint_id: 904, 		debug_id: 'f-08', 		          nickname: 'Autoscroller' },
+    { id: 9058, 		room_no: 13, 		checkpoint_id: 904, 		debug_id: 'f-09', 		          nickname: 'Bounce switch' },
+    { id: 9059, 		room_no: 14, 		checkpoint_id: 904, 		debug_id: 'g-00', 		          nickname: 'Zipper' },
+    { id: 9060, 		room_no: 15, 		checkpoint_id: 904, 		debug_id: 'g-01', 		          nickname: 'Dash bubbles' },
+    { id: 9061, 		room_no: 16, 		checkpoint_id: 904, 		debug_id: 'g-03', 		          nickname: 'Dream switch' },
+    { id: 9062, 		room_no: 17, 		checkpoint_id: 904, 		debug_id: 'g-02', 		          nickname: 'Moving dream blocks' },
+    { id: 9063, 		room_no: 18, 		checkpoint_id: 904, 		debug_id: 'g-04', 		          nickname: 'Comb' },
+    { id: 9064, 		room_no: 19, 		checkpoint_id: 904, 		debug_id: 'g-05', 		          nickname: 'Cloud gap' },
+    { id: 9065, 		room_no: 20, 		checkpoint_id: 904, 		debug_id: 'g-06', 		          nickname: 'Bird trail' },
     // 9A Determination //
-    { id: 9065, 		room_no: 1, 		checkpoint_id: 905, 		debug_id: 'h-00b', 		          nickname: '' },
-    { id: 9066, 		room_no: 2, 		checkpoint_id: 905, 		debug_id: 'h-00', 		          nickname: '' },
-    { id: 9067, 		room_no: 3, 		checkpoint_id: 905, 		debug_id: 'h-01', 		          nickname: '' },
-    { id: 9068, 		room_no: 4, 		checkpoint_id: 905, 		debug_id: 'h-02', 		          nickname: '' },
-    { id: 9069, 		room_no: 5, 		checkpoint_id: 905, 		debug_id: 'h-03', 		          nickname: '' },
-    { id: 9070, 		room_no: 6, 		checkpoint_id: 905, 		debug_id: 'h-03b', 		          nickname: '' },
-    { id: 9071, 		room_no: 7, 		checkpoint_id: 905, 		debug_id: 'h-04', 		          nickname: '' },
-    { id: 9072, 		room_no: 8, 		checkpoint_id: 905, 		debug_id: 'h-04b', 		          nickname: '' },
-    { id: 9073, 		room_no: 9, 		checkpoint_id: 905, 		debug_id: 'h-05', 		          nickname: '' },
-    { id: 9074, 		room_no: 10, 		checkpoint_id: 905, 		debug_id: 'h-06', 		          nickname: '' },
-    { id: 9075, 		room_no: 11, 		checkpoint_id: 905, 		debug_id: 'h-06b', 		          nickname: '' },
-    { id: 9076, 		room_no: 12, 		checkpoint_id: 905, 		debug_id: 'h-07', 		          nickname: '' },
-    { id: 9077, 		room_no: 13, 		checkpoint_id: 905, 		debug_id: 'h-08', 		          nickname: '' },
-    { id: 9078, 		room_no: 14, 		checkpoint_id: 905, 		debug_id: 'h-09', 		          nickname: '' },
-    { id: 9079, 		room_no: 15, 		checkpoint_id: 905, 		debug_id: 'h-10', 		          nickname: '' },
+    { id: 9066, 		room_no: 1, 		checkpoint_id: 905, 		debug_id: 'h-00b', 		          nickname: 'Start' },
+    { id: 9067, 		room_no: 2, 		checkpoint_id: 905, 		debug_id: 'h-00', 		          nickname: 'Sandwich' },
+    { id: 9068, 		room_no: 3, 		checkpoint_id: 905, 		debug_id: 'h-01', 		          nickname: 'Spring scroller' },
+    { id: 9069, 		room_no: 4, 		checkpoint_id: 905, 		debug_id: 'h-02', 		          nickname: 'Wind bubbles' },
+    { id: 9070, 		room_no: 5, 		checkpoint_id: 905, 		debug_id: 'h-03', 		          nickname: 'Airlock' },
+    { id: 9071, 		room_no: 6, 		checkpoint_id: 905, 		debug_id: 'h-03b', 		          nickname: 'Stargate' },
+    { id: 9072, 		room_no: 7, 		checkpoint_id: 905, 		debug_id: 'h-04', 		          nickname: 'Starshaft' },
+    { id: 9073, 		room_no: 8, 		checkpoint_id: 905, 		debug_id: 'h-04b', 		          nickname: 'Demo room' },
+    { id: 9074, 		room_no: 9, 		checkpoint_id: 905, 		debug_id: 'h-05', 		          nickname: 'Tri-switch' },
+    { id: 9075, 		room_no: 10, 		checkpoint_id: 905, 		debug_id: 'h-06', 		          nickname: 'Falling pillars' },
+    { id: 9076, 		room_no: 11, 		checkpoint_id: 905, 		debug_id: 'h-06b', 		          nickname: 'Fire and Ice' },
+    { id: 9077, 		room_no: 12, 		checkpoint_id: 905, 		debug_id: 'h-07', 		          nickname: 'Wind dash' },
+    { id: 9078, 		room_no: 13, 		checkpoint_id: 905, 		debug_id: 'h-07', 		          nickname: 'Windsprings' },
+    { id: 9079, 		room_no: 14, 		checkpoint_id: 905, 		debug_id: 'h-08', 		          nickname: 'Conveyor' },
+    { id: 9080, 		room_no: 15, 		checkpoint_id: 905, 		debug_id: 'h-09', 		          nickname: 'Kevin' },
+    { id: 9081, 		room_no: 16, 		checkpoint_id: 905, 		debug_id: 'h-10', 		          nickname: 'Feathers and stars' },
     // 9A Stubbornness //
-    { id: 9080, 		room_no: 1, 		checkpoint_id: 906, 		debug_id: 'i-00', 		          nickname: '' },
-    { id: 9081, 		room_no: 2, 		checkpoint_id: 906, 		debug_id: 'i-00b', 		          nickname: '' },
-    { id: 9082, 		room_no: 3, 		checkpoint_id: 906, 		debug_id: 'i-01', 		          nickname: '' },
-    { id: 9083, 		room_no: 4, 		checkpoint_id: 906, 		debug_id: 'i-02', 		          nickname: '' },
-    { id: 9084, 		room_no: 5, 		checkpoint_id: 906, 		debug_id: 'i-03', 		          nickname: '' },
-    { id: 9085, 		room_no: 6, 		checkpoint_id: 906, 		debug_id: 'i-04', 		          nickname: '' },
-    { id: 9086, 		room_no: 7, 		checkpoint_id: 906, 		debug_id: 'i-05', 		          nickname: '' },
+    { id: 9082, 		room_no: 1, 		checkpoint_id: 906, 		debug_id: 'i-00', 		          nickname: 'Start' },
+    { id: 9083, 		room_no: 2, 		checkpoint_id: 906, 		debug_id: 'i-00b', 		          nickname: 'Bounce or grab' },
+    { id: 9084, 		room_no: 3, 		checkpoint_id: 906, 		debug_id: 'i-01', 		          nickname: 'Spring blocks' },
+    { id: 9085, 		room_no: 4, 		checkpoint_id: 906, 		debug_id: 'i-02', 		          nickname: '' },
+    { id: 9086, 		room_no: 5, 		checkpoint_id: 906, 		debug_id: 'i-03', 		          nickname: 'Crystal columns' },
+    { id: 9087, 		room_no: 6, 		checkpoint_id: 906, 		debug_id: 'i-04', 		          nickname: 'Bubble lock' },
+    { id: 9088, 		room_no: 7, 		checkpoint_id: 906, 		debug_id: 'i-05', 		          nickname: '' },
     // 9A Reconciliation //
-    { id: 9087, 		room_no: 1, 		checkpoint_id: 907, 		debug_id: 'j-00', 		          nickname: '' },
-    { id: 9088, 		room_no: 2, 		checkpoint_id: 907, 		debug_id: 'j-00b', 		          nickname: '' },
-    { id: 9089, 		room_no: 3, 		checkpoint_id: 907, 		debug_id: 'j-01', 		          nickname: '' },
-    { id: 9090, 		room_no: 4, 		checkpoint_id: 907, 		debug_id: 'j-02', 		          nickname: '' },
-    { id: 9091, 		room_no: 5, 		checkpoint_id: 907, 		debug_id: 'j-03', 		          nickname: '' },
-    { id: 9092, 		room_no: 6, 		checkpoint_id: 907, 		debug_id: 'j-04', 		          nickname: '' },
-    { id: 9093, 		room_no: 7, 		checkpoint_id: 907, 		debug_id: 'j-05', 		          nickname: '' },
-    { id: 9094, 		room_no: 8, 		checkpoint_id: 907, 		debug_id: 'j-06', 		          nickname: '' },
-    { id: 9095, 		room_no: 9, 		checkpoint_id: 907, 		debug_id: 'j-07', 		          nickname: '' },
-    { id: 9096, 		room_no: 10, 		checkpoint_id: 907, 		debug_id: 'j-08', 		          nickname: '' },
-    { id: 9097, 		room_no: 11, 		checkpoint_id: 907, 		debug_id: 'j-09', 		          nickname: '' },
-    { id: 9098, 		room_no: 12, 		checkpoint_id: 907, 		debug_id: 'j-10', 		          nickname: '' },
-    { id: 9099, 		room_no: 13, 		checkpoint_id: 907, 		debug_id: 'j-11', 		          nickname: '' },
-    { id: 10000, 		room_no: 14, 		checkpoint_id: 907, 		debug_id: 'j-12', 		          nickname: '' },
-    { id: 10001, 		room_no: 15, 		checkpoint_id: 907, 		debug_id: 'j-13', 		          nickname: '' },
-    { id: 10002, 		room_no: 16, 		checkpoint_id: 907, 		debug_id: 'j-14', 		          nickname: '' },
-    { id: 10003, 		room_no: 17, 		checkpoint_id: 907, 		debug_id: 'j-14b', 		          nickname: '' },
-    { id: 10004, 		room_no: 18, 		checkpoint_id: 907, 		debug_id: 'j-15', 		          nickname: '' },
+    { id: 9089, 		room_no: 1, 		checkpoint_id: 907, 		debug_id: 'j-00', 		          nickname: '' },
+    { id: 9090, 		room_no: 2, 		checkpoint_id: 907, 		debug_id: 'j-00b', 		          nickname: '' },
+    { id: 9091, 		room_no: 3, 		checkpoint_id: 907, 		debug_id: 'j-01', 		          nickname: '' },
+    { id: 9092, 		room_no: 4, 		checkpoint_id: 907, 		debug_id: 'j-02', 		          nickname: '' },
+    { id: 9093, 		room_no: 5, 		checkpoint_id: 907, 		debug_id: 'j-03', 		          nickname: '' },
+    { id: 9094, 		room_no: 6, 		checkpoint_id: 907, 		debug_id: 'j-04', 		          nickname: '' },
+    { id: 9095, 		room_no: 7, 		checkpoint_id: 907, 		debug_id: 'j-05', 		          nickname: '' },
+    { id: 9096, 		room_no: 8, 		checkpoint_id: 907, 		debug_id: 'j-06', 		          nickname: '' },
+    { id: 9097, 		room_no: 9, 		checkpoint_id: 907, 		debug_id: 'j-07', 		          nickname: '' },
+    { id: 9098, 		room_no: 10, 		checkpoint_id: 907, 		debug_id: 'j-08', 		          nickname: '' },
+    { id: 9099, 		room_no: 11, 		checkpoint_id: 907, 		debug_id: 'j-09', 		          nickname: '' },
+    { id: 9100, 		room_no: 12, 		checkpoint_id: 907, 		debug_id: 'j-10', 		          nickname: '' },
+    { id: 9101, 		room_no: 13, 		checkpoint_id: 907, 		debug_id: 'j-11', 		          nickname: '' },
+    { id: 9102, 		room_no: 14, 		checkpoint_id: 907, 		debug_id: 'j-12', 		          nickname: '' },
+    { id: 9103, 		room_no: 15, 		checkpoint_id: 907, 		debug_id: 'j-13', 		          nickname: '' },
+    { id: 9104, 		room_no: 16, 		checkpoint_id: 907, 		debug_id: 'j-14', 		          nickname: '' },
+    { id: 9105, 		room_no: 17, 		checkpoint_id: 907, 		debug_id: 'j-14b', 		          nickname: '' },
+    { id: 9106, 		room_no: 18, 		checkpoint_id: 907, 		debug_id: 'j-15', 		          nickname: '' },
     // 9A Farewell //
-    { id: 10005, 		room_no: 1, 		checkpoint_id: 908, 		debug_id: 'j-16', 		          nickname: '' },
-    { id: 10006, 		room_no: 2, 		checkpoint_id: 908, 		debug_id: 'j-17', 		          nickname: '' },
-    { id: 10007, 		room_no: 3, 		checkpoint_id: 908, 		debug_id: 'j-18', 		          nickname: '' },
-    { id: 10008, 		room_no: 4, 		checkpoint_id: 908, 		debug_id: 'j-19', 		          nickname: '' },
-    { id: 10009, 		room_no: 5, 		checkpoint_id: 908, 		debug_id: 'end-golden', 		    nickname: '' },
+    { id: 9107, 		room_no: 1, 		checkpoint_id: 908, 		debug_id: 'j-16', 		          nickname: '' },
+    { id: 9108, 		room_no: 2, 		checkpoint_id: 908, 		debug_id: 'j-17', 		          nickname: '' },
+    { id: 9109, 		room_no: 3, 		checkpoint_id: 908, 		debug_id: 'j-18', 		          nickname: '' },
+    { id: 9110, 		room_no: 4, 		checkpoint_id: 908, 		debug_id: 'j-19', 		          nickname: '' },
+    { id: 9111, 		room_no: 5, 		checkpoint_id: 908, 		debug_id: 'end-golden', 		    nickname: '' },
   ]);
 }
