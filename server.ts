@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import Knex from 'knex';
-import knexfile from './knexfile';
+import * as KnexConfig from './knexfile';
 
 import { Model } from 'objection';
 import Chapter from './data/models/Chapter';
@@ -10,13 +10,12 @@ import Side from './data/models/Side';
 import Checkpoint from './data/models/Checkpoint';
 import Room from './data/models/Room';
 
-
 const app = express();
 const router = express.Router();
 dotenv.config();
 
 // Connect to DB
-const knex = Knex(knexfile);
+const knex = Knex(KnexConfig);
 Model.knex(knex);
 
 // Pretty JSON
@@ -87,5 +86,5 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/../client/build/index.html'));
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 app.listen(port);

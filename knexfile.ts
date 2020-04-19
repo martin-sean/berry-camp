@@ -4,7 +4,7 @@ import pg from 'pg';
 dotenv.config();
 pg.defaults.ssl = true;
 
-export default {
+const herokuConnection = {
   client: "pg",
   connection: process.env.DATABASE_URL + '?sslmode=require',
   pool: {
@@ -16,3 +16,5 @@ export default {
     extension: 'ts',
   }
 }
+
+module.exports = herokuConnection;
