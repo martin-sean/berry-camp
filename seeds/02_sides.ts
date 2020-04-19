@@ -8,7 +8,7 @@ exports.seed = async (knex: Knex) => {
   // Inserts seed entries
   return knex(tableName).insert([
     // Prologue
-    { id: '1', chapter_id: 'prologue', side_no: 1, official: true },
+    { id: '1', name: 'A', chapter_id: 'prologue', side_no: 1, official: true },
 
     // Chapter 1
     { id: 10, name: 'A', chapter_id: 'city', side_no: 1, official: true },
@@ -46,7 +46,7 @@ exports.seed = async (knex: Knex) => {
     { id: 72, name: 'C', chapter_id: 'summit', side_no: 3, official: true },
 
     // Epilogue
-    { id: 75, chapter_id: 'epilogue', side_no: 1, official: true },
+    { id: 75, name: 'A', chapter_id: 'epilogue', side_no: 1, official: true },
 
     // Chapter 8
     { id: 80, name: 'A', chapter_id: 'core', side_no: 1, official: true },
@@ -54,6 +54,6 @@ exports.seed = async (knex: Knex) => {
     { id: 82, name: 'C', chapter_id: 'core', side_no: 3, official: true },
 
     // Chapter 9
-    { id: 90, chapter_id: 'farewell', side_no: 1, official: true },
+    { id: 90, name: 'A', chapter_id: 'farewell', side_no: 1, official: true },
   ]);
 }

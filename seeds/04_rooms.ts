@@ -906,7 +906,7 @@ exports.seed = async (knex: Knex) => {
     { id: 9019, 		room_no: 1, 		checkpoint_id: 902, 		debug_id: 'c-00', 		          nickname: 'Start' },
     { id: 9021, 		room_no: 2, 		checkpoint_id: 902, 		debug_id: 'c-alt-00', 		      nickname: 'Top route 1' },
     { id: 9022, 		room_no: 3, 		checkpoint_id: 902, 		debug_id: 'c-alt-01', 		      nickname: 'Top route 2' },
-    { id: 9020, 		room_no: 4, 		checkpoint_id: 902, 		debug_id: 'c-00-b', 		        nickname: 'Bottom route 1' },
+    { id: 9020, 		room_no: 4, 		checkpoint_id: 902, 		debug_id: 'c-00b', 		          nickname: 'Bottom route 1' },
     { id: 9023, 		room_no: 5, 		checkpoint_id: 902, 		debug_id: 'c-01', 		          nickname: 'Bottom route 2' },
     { id: 9024, 		room_no: 6, 		checkpoint_id: 902, 		debug_id: 'c-02', 		          nickname: 'Bottom route 3' },
     { id: 9025, 		room_no: 7, 		checkpoint_id: 902, 		debug_id: 'c-03', 		          nickname: 'Keyskip Jelly' },

@@ -8,7 +8,7 @@ exports.seed = async (knex: Knex) => {
   // Inserts seed entries
   return knex(tableName).insert([
     // Prologue
-    { id: 50, side_id: 1, checkpoint_no: 1, abbreviation: 'B' },
+    { id: 50, side_id: 1, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 1
     // A side
@@ -20,7 +20,7 @@ exports.seed = async (knex: Knex) => {
     { id: 104, side_id: 11, checkpoint_no: 2, name: 'Contraption', abbreviation: 'CT' },
     { id: 105, side_id: 11, checkpoint_no: 3, name: 'Scrap Pit', abbreviation: 'SP' },
     // C side
-    { id: 106, side_id: 12, checkpoint_no: 1 },
+    { id: 106, side_id: 12, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 2
     // A side
@@ -32,7 +32,7 @@ exports.seed = async (knex: Knex) => {
     { id: 204, side_id: 21, checkpoint_no: 2, name: 'Combination Lock', abbreviation: 'CL' },
     { id: 205, side_id: 21, checkpoint_no: 3, name: 'Dream Altar', abbreviation: 'DA' },
     // C side
-    { id: 206, side_id: 22, checkpoint_no: 1 },
+    { id: 206, side_id: 22, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 3
     // A side
@@ -46,7 +46,7 @@ exports.seed = async (knex: Knex) => {
     { id: 306, side_id: 31, checkpoint_no: 3, name: 'Library', abbreviation: 'LB' },
     { id: 307, side_id: 31, checkpoint_no: 4, name: 'Rooftop', abbreviation: 'RT' },
     // C side
-    { id: 308, side_id: 32, checkpoint_no: 1 },
+    { id: 308, side_id: 32, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 4
     // A side
@@ -60,7 +60,7 @@ exports.seed = async (knex: Knex) => {
     { id: 406, side_id: 41, checkpoint_no: 3, name: 'Gusty Canyon', abbreviation: 'GC' },
     { id: 407, side_id: 41, checkpoint_no: 4, name: 'Eye of the Storm', abbreviation: 'EOTS' },
     // C side
-    { id: 408, side_id: 42, checkpoint_no: 1 },
+    { id: 408, side_id: 42, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 5
     // A side
@@ -75,7 +75,7 @@ exports.seed = async (knex: Knex) => {
     { id: 507, side_id: 51, checkpoint_no: 3, name: 'Through the Mirror', abbreviation: 'TTM' },
     { id: 508, side_id: 51, checkpoint_no: 4, name: 'Mix Master', abbreviation: 'MM' },
     // C side
-    { id: 509, side_id: 51, checkpoint_no: 1 },
+    { id: 509, side_id: 51, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 6
     // A side
@@ -91,7 +91,7 @@ exports.seed = async (knex: Knex) => {
     { id: 608, side_id: 61, checkpoint_no: 3, name: 'Rock Bottom', abbreviation: 'RB' },
     { id: 609, side_id: 61, checkpoint_no: 4, name: 'Reprieve', abbreviation: 'RP' },
     // C side
-    { id: 610, side_id: 62, checkpoint_no: 1 },
+    { id: 610, side_id: 62, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 7
     // A side
@@ -111,10 +111,10 @@ exports.seed = async (knex: Knex) => {
     { id: 712, side_id: 71, checkpoint_no: 6, name: '2500 M', abbreviation: '2.5K' },
     { id: 713, side_id: 71, checkpoint_no: 7, name: '3000 M', abbreviation: '3K' },
     // C side
-    { id: 714, side_id: 72, checkpoint_no: 1 },
+    { id: 714, side_id: 72, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Epilogue
-    { id: 750, side_id: 75, checkpoint_no: 1 },
+    { id: 750, side_id: 75, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 8
     // A side
@@ -128,7 +128,7 @@ exports.seed = async (knex: Knex) => {
     { id: 806, side_id: 81, checkpoint_no: 3, name: 'Burning or Freezing', abbreviation: 'BOF' },
     { id: 807, side_id: 81, checkpoint_no: 4, name: 'Heartbeat', abbreviation: 'HB' },
     // C side
-    { id: 808, side_id: 82, checkpoint_no: 1 },
+    { id: 808, side_id: 82, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 9
     { id: 900, side_id: 90, checkpoint_no: 1, name: 'Start', abbreviation: 'ST' },
