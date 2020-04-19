@@ -55,11 +55,9 @@ export default () => {
           ))
         :
         // Otherwise render a progress circle
-        <React.Fragment>
-          <ListItem className={ classes.flexItem }>
-            <CircularProgress className={ classes.progress } />
-          </ListItem>
-        </React.Fragment>
+        <ListItem className={ classes.flexItem }>
+          <CircularProgress className={ classes.progress } />
+        </ListItem>
       }
     </List>
   );
