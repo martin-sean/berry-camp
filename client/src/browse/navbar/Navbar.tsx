@@ -1,37 +1,43 @@
 import React from 'react';
 
-import { AppBar, Toolbar, Typography, Button, IconButton } from '@material-ui/core';
-import { Menu as MenuIcon } from '@material-ui/icons/';
+import { AppBar, Hidden, Toolbar, Typography, Button, IconButton, Theme } from '@material-ui/core';
+import { ExpandLess, ExpandMore } from '@material-ui/icons/';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
+const useStyles = makeStyles((theme: Theme) => ({
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1000,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
   },
 }));
 
-export default () => {
+export default (props: { open: boolean, toggleDrawer: () => void }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <AppBar position='static'>
-        <Toolbar>
-          <IconButton className={classes.menuButton} edge='start' color='inherit' aria-label='menu'>
-            <MenuIcon />
+    <AppBar className={ classes.appBar } position='fixed'>
+      <Toolbar>
+        <Typography className={classes.title} variant='h6'>
+          Strawberry House
+        </Typography>
+        <Button color='inherit'>Login</Button>
+        <Hidden smUp>
+          <IconButton 
+          className={classes.menuButton} 
+          edge='end' 
+          color='inherit' 
+          aria-label='menu' 
+          onClick={ props.toggleDrawer }
+          >
+            { props.open ? <ExpandLess /> : <ExpandMore /> }
           </IconButton>
-          <Typography className={classes.title} variant='h6'>
-            Strawberry House
-          </Typography>
-          <Button color='inherit'>Login</Button>
-        </Toolbar>
-      </AppBar>
-    </div>
+        </Hidden>
+      </Toolbar>
+    </AppBar>
   );
 }
