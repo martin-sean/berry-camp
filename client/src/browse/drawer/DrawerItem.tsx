@@ -3,7 +3,7 @@ import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Collapse, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
-import { MenuItem } from './Sidebar';
+import { MenuItem } from '../../App';
 
 interface SidebarItemProps {
   item: MenuItem;
@@ -27,7 +27,7 @@ const useStyles = makeStyles<Theme, SidebarItemProps>((theme: Theme) => ({
 }));
 
 // Render a sidebar item as a dropdown or single item
-const SidebarItem = (props: { item: MenuItem, indent: number }) => {
+const DrawerItem = (props: { item: MenuItem, indent: number }) => {
   return (
     props.item.children ? 
       <DropdownItem item={ props.item } indent={ props.indent + 1 } /> 
@@ -72,7 +72,7 @@ const RenderChildren = (props: { item: MenuItem, indent: number }) => {
     <List component='div' disablePadding>
       {
         props.item.children && props.item.children.map((item: MenuItem, index: number) => (
-          <SidebarItem item={ item } key={ index } indent={ props.indent }/>
+          <DrawerItem item={ item } key={ index } indent={ props.indent }/>
         ))
       }
     </List>
@@ -96,4 +96,4 @@ const RoomItem = (props: { item: MenuItem, indent: number }) => {
   );
 }
 
-export default SidebarItem;
+export default DrawerItem;
