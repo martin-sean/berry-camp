@@ -10,16 +10,16 @@ exports.seed = async (knex: Knex) => {
   await knex(tableName).del();
   // Inserts seed entries
   return knex(tableName).insert([
-    { id: 5, name: 'Prologue', official: true },
-    { id: 10, chapter_no: 1, name: 'Forsaken City', official: true },
-    { id: 20, chapter_no: 2, name: 'Old Site', official: true },
-    { id: 30, chapter_no: 3, name: 'Celestial Resort', official: true },
-    { id: 40, chapter_no: 4, name: 'Golden Ridge', official: true },
-    { id: 50, chapter_no: 5, name: 'Mirror Temple', official: true },
-    { id: 60, chapter_no: 6, name: 'Reflection', official: true },
-    { id: 70, chapter_no: 7, name: 'The Summit', official: true },
-    { id: 75, name: 'Epilogue', official: true },
-    { id: 80, chapter_no: 8, name: 'Core', official: true },
-    { id: 90, chapter_no: 9, name: 'Farewell', official: true },
+    { id: 'prologue', name: 'Prologue', official: true },
+    { id: 'city', chapter_no: 1, name: 'Forsaken City', official: true },
+    { id: 'site', chapter_no: 2, name: 'Old Site', official: true },
+    { id: 'resort', chapter_no: 3, name: 'Celestial Resort', official: true },
+    { id: 'ridge', chapter_no: 4, name: 'Golden Ridge', official: true },
+    { id: 'temple', chapter_no: 5, name: 'Mirror Temple', official: true },
+    { id: 'reflection', chapter_no: 6, name: 'Reflection', official: true },
+    { id: 'summit', chapter_no: 7, name: 'The Summit', official: true },
+    { id: 'epilogue', name: 'Epilogue', official: true },
+    { id: 'core', chapter_no: 8, name: 'Core', official: true },
+    { id: 'farewell', chapter_no: 9, name: 'Farewell', official: true },
   ]);
 }

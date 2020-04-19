@@ -2,7 +2,7 @@ import { Model } from 'objection';
 import Side from './Side';
 
 export default class Chapter extends Model {
-  id!: number;
+  id!: string;
   chapter_no?: number;
   name!: string;
   offical!: boolean;
@@ -13,7 +13,7 @@ export default class Chapter extends Model {
     type: 'object',
     required: ['name', 'official'],
     properties: {
-      id: { type: 'integer' },
+      id: { type: 'string', minLength: 1, maxLength: 12 },
       chapter_no: { type: 'integer' },
       name: { type: 'string', minLength: 1, maxLength: 24 },
       offical: { type: 'boolean' },

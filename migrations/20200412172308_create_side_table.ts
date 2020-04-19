@@ -7,8 +7,7 @@ exports.up = (knex: Knex): Promise<any> => {
     table
       .increments();
     table
-      .integer('chapter_id')
-      .unsigned()
+      .string('chapter_id', 12)
       .notNullable()
       .references('id')
       .inTable('chapter')

@@ -6,8 +6,8 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Navbar from './browse/navbar';
 import Sidebar from './browse/sidebar';
-// import Modal from './watch/modal'
 import { Grid } from '@material-ui/core';
+import Router  from './browse/router';
 
 const theme = createMuiTheme({
   palette: {
@@ -26,13 +26,13 @@ export default () => {
         <header> 
           <Navbar />
         </header>
-        {/* TODO: React router routing */}
         <Grid container>
+          {/* TODO: Structure this better */}
           <Grid item xs={3}>
             <Sidebar />
           </Grid>
           <Grid item xs={9}>
-            {/* <Modal /> */}
+            <Router />
           </Grid>
         </Grid>
         <footer />

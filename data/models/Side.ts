@@ -4,7 +4,7 @@ import Checkpoint from './Checkpoint';
 
 export default class Side extends Model {
   id!: number;
-  chapter_id!: number;
+  chapter_id!: string;
   name!: string;
   side_no!: number;
   official!: boolean;
@@ -16,7 +16,7 @@ export default class Side extends Model {
     required: ['chapter_id', 'side_no', 'official'],
     properties: {
       id: { type: 'integer' },
-      chapter_id: { type: 'integer' },
+      chapter_id: { type: 'string', minLength: 1, maxLength: 12 },
       name: { type: 'string', minLength: 0, maxLength: 12 },
       side_no: { type: 'integer' },
       official: { type: 'boolean' },

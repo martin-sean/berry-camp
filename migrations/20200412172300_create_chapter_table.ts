@@ -5,7 +5,10 @@ const tableName = 'chapter';
 exports.up = (knex: Knex): Promise<any> => {
   return knex.schema.createTable(tableName, (table) => {
     table
-      .increments();
+      .string('id', 12)
+      .notNullable()
+      .index()
+      .primary();
     table
       .integer('chapter_no')
       .unsigned()
