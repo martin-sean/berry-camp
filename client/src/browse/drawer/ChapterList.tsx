@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Breadcrumbs, Divider, CircularProgress, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import React from 'react';
+import { Breadcrumbs, Divider, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
-interface Chapter {
-  id: string,
-  chapter_no?: number,
-  name: string,
-  official: boolean,
-  created_at: Date,
-  updated_at: Date,
-}
+import { DataTree } from '../../api/Data';
 
 const useStyles = makeStyles((theme: Theme) => ({
   progress: {
@@ -25,16 +18,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-export default () => {
+export default (props: { data: DataTree}) => {
   const classes = useStyles();
-  const [chapters, setChapters] = useState<Chapter[]>([]);
-  
-  useEffect(() => {
-    console.log('API CALL');
-    fetch('/api/chapters')
-      .then((res) => res.json())
-      .then((chapterTree: Chapter[]) => setChapters(chapterTree));
-  },[]);
 
   return (
     <List
@@ -48,19 +33,12 @@ export default () => {
       </ListItem>
       <Divider />
       {
-        // Render content if data is present
-        chapters.length > 0 ?
-          chapters.map((chapter: Chapter, index: number) => (
-            <ListItem button component={ Link } to={ '/chapter/' + chapter.id } key={ index }>
-              <Typography component='div' className={ classes.chapterNo } color="textSecondary">{ chapter.chapter_no }</Typography>
-              <ListItemText primary={ chapter.name }/>
+          Object.keys(props.data).map((chapterId: string, index: number) => (
+            <ListItem button component={ Link } to={ '/chapter/' + chapterId } key={ index }>
+              <Typography component='div' className={ classes.chapterNo } color="textSecondary">{ props.data[chapterId].chapter_no }</Typography>
+              <ListItemText primary={ props.data[chapterId].name }/>
             </ListItem>
           ))
-        :
-        // Otherwise render a progress circle
-        <ListItem className={ classes.progress }>
-          <CircularProgress />
-        </ListItem>
       }
     </List>
   );

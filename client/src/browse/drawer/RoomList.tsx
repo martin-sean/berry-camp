@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, CircularProgress, Typography } from '@material-ui/core';
+import React from 'react';
+import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
-interface Room   {
-  id: number,
-  debug_id: string,
-  room_no: number,
-  checkpoint_id: number,
-  nickname: string,
-}
+import { DataTree } from '../../api/Data';
 
 const useStyles = makeStyles((theme: Theme) => ({
   progress: {
@@ -21,17 +15,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default () => {
+export default (props: { data: DataTree}) => {
   const classes = useStyles();
-  const [rooms, setRooms] = useState<Room[]>([]);
   const { chapterId, sideNo, checkpointNo } = useParams();
-
-  useEffect(() => {
-    console.log('API call, checkpointNo: ' + checkpointNo);
-    fetch(`/api/chapters/${ chapterId }/sides/${ sideNo }/checkpoints/${ checkpointNo }/rooms`)
-      .then((res) => res.json())
-      .then((rooms: Room[]) => setRooms(rooms));
-  },[chapterId, sideNo, checkpointNo]);
 
   return (
     <List
@@ -41,28 +27,27 @@ export default () => {
       <ListItem>
         <Breadcrumbs separator="›">
           <Link color="textSecondary" component={ RouterLink } to={ '/' }>Chapter</Link>
-          <Link color="textSecondary" component={ RouterLink } to={ `/chapter/${ chapterId }/side/${ sideNo }` }>Side</Link>
-          <Link color="textSecondary" component={ RouterLink } to={ `/chapter/${ chapterId }/side/${ sideNo }/checkpoint/${ checkpointNo }` }>Checkpoint</Link>
+          <Link color="textSecondary" component={ RouterLink } to={ `/chapter/${ chapterId }` }>Side</Link>
+          <Link color="textSecondary" component={ RouterLink } to={ `/chapter/${ chapterId }/side/${ sideNo }` }>Checkpoint</Link>
           <Typography color="textPrimary">Room</Typography>
         </Breadcrumbs>
       </ListItem>
       <Divider />
       {
         // Render content if data is present
-        rooms.length > 0 ?
-          rooms.map((room: Room, index: number) => (
+        chapterId && sideNo && checkpointNo ?
+          Object.keys(props.data[chapterId].sides[sideNo].checkpoints[checkpointNo].rooms).map((roomNo: string, index: number) => (
             <ListItem button 
               component={ RouterLink } 
-              to={ `/chapter/${ chapterId }/side/${ sideNo }/checkpoint/${ checkpointNo }/room/${ room.room_no }` } 
+              to={ `/chapter/${ chapterId }/side/${ sideNo }/checkpoint/${ checkpointNo }/room/${ roomNo }` } 
               key={ index }
             >
-              <ListItemText primary={ room.debug_id }/>
+              <ListItemText primary={ props.data[chapterId].sides[sideNo].checkpoints[checkpointNo].rooms[roomNo].name }/>
             </ListItem>
           ))
         :
-        // Otherwise render a progress circle
-        <ListItem className={ classes.progress }>
-          <CircularProgress />
+        <ListItem>
+          <ListItemText primary="Error loading data" />
         </ListItem>
       }
     </List>

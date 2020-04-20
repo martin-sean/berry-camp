@@ -120,18 +120,21 @@ router.get('/rooms/:room_id', async (req, res) => {
 router.get('/chaptertree', async (req, res) => {
   res.json(
     await Chapter.query()
-    .select('id', 'chapter_no', 'name')
+    .select('id', 'chapter_no', 'name', 'official')
     .withGraphFetched(
-      `sides(nameAndId) as children
-      .[checkpoints(nameAndId) as children
-        .[rooms(modifyRoom) as children]
+      `sides(modifySides)
+      .[checkpoints(modifyCheckpoints)
+        .[rooms(modifyRoom)]
       ]`
     ).modifiers({
-      nameAndId(builder) {
-        builder.select('id', 'name');
+      modifySides(builder) {
+        builder.select('side_no', 'name', 'official');
+      },
+      modifyCheckpoints(builder) {
+        builder.select('checkpoint_no', 'name', 'abbreviation')
       },
       modifyRoom(builder) {
-        builder.select('id', 'debug_id', 'nickname as name');
+        builder.select('room_no', 'nickname as name', 'debug_id');
       }
     })
   );

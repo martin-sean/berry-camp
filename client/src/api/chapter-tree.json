@@ -1,0 +1,45 @@
+
+{
+  "prologue": {
+    "name": "Prologue",
+    "official": true,
+    "sides": {
+      "1": {
+        "name": "A",
+        "official": true,
+        "checkpoints": {
+          "1": {
+            "name": "Begin",
+            "abbreviation": "BG",
+            "rooms": {
+              "1": {
+                "name": "Drive up",
+                "debug_id": "-1"
+              },
+              "2": {
+                "name": "Broken driveway 1",
+                "debug_id": "0"
+              },
+              "3": {
+                "name": "Birds",
+                "debug_id": "0b"
+              },
+              "4": {
+                "name": "Broken driveway 2",
+                "debug_id": "1"
+              },
+              "5": {
+                "name": "Granny meeting",
+                "debug_id": "2"
+              },
+              "6": {
+                "name": "Learn to dash",
+                "debug_id": "3"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

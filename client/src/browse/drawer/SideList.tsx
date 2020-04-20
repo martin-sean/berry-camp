@@ -1,17 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Breadcrumbs, Divider, Link, List, ListItem, ListItemText, CircularProgress, Typography } from '@material-ui/core';
+import React from 'react';
+import { Breadcrumbs, Divider, Link, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
-interface Side {
-  id: number,
-  chapter_id: string,
-  name: string,
-  side_no: number,
-  official: boolean,
-  created_at: Date,
-  updated_at: Date,
-}
+import { DataTree } from '../../api/Data';
 
 const useStyles = makeStyles((theme: Theme) => ({
   progress: {
@@ -23,17 +15,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default () => {
+export default (props: { data: DataTree }) => {
   const classes = useStyles();
-  const [sides, setSides] = useState<Side[]>([]);
   const { chapterId } = useParams();
-
-  useEffect(() => {
-    console.log('API call, chapterId: ' + chapterId);
-    fetch(`/api/chapters/${chapterId}/sides`)
-      .then((res) => res.json())
-      .then((sides: Side[]) => setSides(sides));
-  },[chapterId]);
 
   return (
     <List
@@ -48,17 +32,15 @@ export default () => {
       </ListItem>
       <Divider />
       {
-        // Render content if data is present
-        sides.length > 0 ? 
-          sides.map((side: Side, index: number) => (
-            <ListItem button component={ RouterLink } to={ `/chapter/${chapterId}/side/${side.side_no}` } key={ index }>
-              <ListItemText primary={ side.name }/>
-            </ListItem>
-          ))
+        chapterId ?
+        Object.keys(props.data[chapterId].sides).map((sideNo: string, index: number) => (
+          <ListItem button component={ RouterLink } to={ `/chapter/${chapterId}/side/${sideNo}` } key={ index }>
+            <ListItemText primary={ props.data[chapterId].sides[sideNo].name }/>
+          </ListItem>
+        ))
         :
-        // Otherwise render a progress circle
-        <ListItem className={ classes.progress }>
-          <CircularProgress />
+        <ListItem>
+          <ListItemText primary="Error loading data" />
         </ListItem>
       }
     </List>
