@@ -75,7 +75,7 @@ exports.seed = async (knex: Knex) => {
     { id: 507, side_id: 51, checkpoint_no: 3, name: 'Through the Mirror', abbreviation: 'TTM' },
     { id: 508, side_id: 51, checkpoint_no: 4, name: 'Mix Master', abbreviation: 'MM' },
     // C side
-    { id: 509, side_id: 51, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
+    { id: 509, side_id: 52, checkpoint_no: 1, name: 'Begin', abbreviation: 'BG' },
 
     // Chapter 6
     // A side

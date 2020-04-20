@@ -7,6 +7,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from './browse/drawer';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import jsondata from './api/chapter-tree.json';
+import { DataTree } from './api/Data';
+
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
@@ -17,13 +20,15 @@ const theme = createMuiTheme({
 });
 
 export default () => {
+  const data: DataTree = jsondata;
+
   return (
     <React.Fragment>
       <Router>
         <ThemeProvider theme={ theme }>
           <CssBaseline />
           {/* Navbar is contained in drawer */}
-          <Drawer />
+          <Drawer data={ data }/>
           {/* <Modal /> */}
           <footer />
         </ThemeProvider>

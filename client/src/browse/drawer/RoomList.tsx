@@ -18,6 +18,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default (props: { data: DataTree}) => {
   const classes = useStyles();
   const { chapterId, sideNo, checkpointNo } = useParams();
+  
+  if (!(chapterId && sideNo && checkpointNo)) {
+    return (
+      <ListItem>
+        <ListItemText primary="Error loading data" />
+      </ListItem>
+    );
+  }
+  
+  const rooms = props.data[chapterId]?.sides[sideNo]?.checkpoints[checkpointNo]?.rooms;
 
   return (
     <List
@@ -34,20 +44,22 @@ export default (props: { data: DataTree}) => {
       </ListItem>
       <Divider />
       {
-        // Render content if data is present
-        chapterId && sideNo && checkpointNo ?
-          Object.keys(props.data[chapterId].sides[sideNo].checkpoints[checkpointNo].rooms).map((roomNo: string, index: number) => (
-            <ListItem button 
-              component={ RouterLink } 
-              to={ `/chapter/${ chapterId }/side/${ sideNo }/checkpoint/${ checkpointNo }/room/${ roomNo }` } 
-              key={ index }
-            >
-              <ListItemText primary={ props.data[chapterId].sides[sideNo].checkpoints[checkpointNo].rooms[roomNo].name }/>
-            </ListItem>
-          ))
+        rooms ?
+        Object.keys(rooms).map((roomNo: string, index: number) => (
+          <ListItem button 
+            component={ RouterLink } 
+            to={ `/chapter/${ chapterId }/side/${ sideNo }/checkpoint/${ checkpointNo }/room/${ roomNo }` } 
+            key={ index }
+          >
+            <ListItemText 
+              primary={ rooms[roomNo].name }
+              secondary={ rooms[roomNo].debug_id }
+            />
+          </ListItem>
+        ))
         :
         <ListItem>
-          <ListItemText primary="Error loading data" />
+          <ListItemText primary='No rooms found' />
         </ListItem>
       }
     </List>

@@ -19,6 +19,16 @@ export default (props: { data: DataTree }) => {
   const classes = useStyles();
   const { chapterId } = useParams();
 
+  if (!chapterId) {
+    return (
+      <ListItem>
+        <ListItemText primary="Error loading data" />
+      </ListItem>
+    );
+  }
+  
+  const sides = props.data[chapterId]?.sides;
+
   return (
     <List
       className={ classes.list }
@@ -32,15 +42,15 @@ export default (props: { data: DataTree }) => {
       </ListItem>
       <Divider />
       {
-        chapterId ?
-        Object.keys(props.data[chapterId].sides).map((sideNo: string, index: number) => (
+        sides ?
+        Object.keys(sides).map((sideNo: string, index: number) => (
           <ListItem button component={ RouterLink } to={ `/chapter/${chapterId}/side/${sideNo}` } key={ index }>
-            <ListItemText primary={ props.data[chapterId].sides[sideNo].name }/>
+            <ListItemText primary={ sides[sideNo].name }/>
           </ListItem>
         ))
         :
         <ListItem>
-          <ListItemText primary="Error loading data" />
+          <ListItemText primary="Sides not found" />
         </ListItem>
       }
     </List>

@@ -19,6 +19,16 @@ export default (props: { data: DataTree }) => {
   const classes = useStyles();
   const { chapterId, sideNo } = useParams();
 
+  if (!(chapterId && sideNo)) {
+    return (
+      <ListItem>
+        <ListItemText primary="Error loading data" />
+      </ListItem>
+    );
+  }
+  
+  const checkpoints = props.data[chapterId]?.sides[sideNo]?.checkpoints;
+
   return (
     <List
       className={ classes.list }
@@ -33,21 +43,19 @@ export default (props: { data: DataTree }) => {
       </ListItem>
       <Divider />
       {
-        chapterId && sideNo ?
-        // Render content if data is present
-
-        Object.keys(props.data[chapterId].sides[sideNo].checkpoints).map((checkpointNo: string, index: number) => (
+        checkpoints ?
+        Object.keys(checkpoints).map((checkpointNo: string, index: number) => (
             <ListItem button 
               component={ RouterLink } 
               to={ `/chapter/${ chapterId }/side/${ sideNo }/checkpoint/${ checkpointNo }` } 
               key={ index }
             >
-              <ListItemText primary={ props.data[chapterId].sides[sideNo].checkpoints[checkpointNo].name }/>
+              <ListItemText primary={ checkpoints[checkpointNo].name }/>
             </ListItem>
         ))
         :
         <ListItem>
-          <ListItemText primary="Error loading data" />
+          <ListItemText primary="Checkpoints not found" />
         </ListItem>
       }
     </List>

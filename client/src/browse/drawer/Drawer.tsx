@@ -10,7 +10,6 @@ import SideList from './SideList';
 import CheckpointList from './CheckpointList';
 import RoomList from './RoomList';
 
-import jsondata from '../../api/chapter-tree.json';
 import { DataTree } from '../../api/Data';
 
 const drawerWidthDesktop = 320;
@@ -42,10 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+export default (props: { data: DataTree }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const data: DataTree = jsondata;
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -56,10 +54,10 @@ export default () => {
       <Toolbar />
       <div className={ classes.drawerContainer }></div>
         <Switch>
-          <Route exact path={ Paths.HOME } render={() => <ChapterList data={ data }/> }/>
-          <Route exact path={ Paths.CHAPTER } render={() => <SideList data={ data }/> }/>
-          <Route exact path={ Paths.SIDE } render={() => <CheckpointList data={ data }/> }/>
-          <Route path={ Paths.CHECKPOINT } render={() => <RoomList data={ data }/> }/>
+          <Route exact path={ Paths.HOME } render={() => <ChapterList data={ props.data }/> }/>
+          <Route exact path={ Paths.CHAPTER } render={() => <SideList data={ props.data }/> }/>
+          <Route exact path={ Paths.SIDE } render={() => <CheckpointList data={ props.data }/> }/>
+          <Route path={ Paths.CHECKPOINT } render={() => <RoomList data={ props.data }/> }/>
         </Switch>
     </React.Fragment>
   );
