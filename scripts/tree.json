@@ -2529,27 +2529,27 @@
             "abbreviation": "LK",
             "rooms": [
               {
-                "room_no": 2,
+                "room_no": 1,
                 "name": "",
                 "debug_id": "00"
               },
               {
-                "room_no": 3,
+                "room_no": 2,
                 "name": "",
                 "debug_id": "01"
               },
               {
-                "room_no": 4,
+                "room_no": 3,
                 "name": "",
                 "debug_id": "02"
               },
               {
-                "room_no": 5,
+                "room_no": 4,
                 "name": "",
                 "debug_id": "03"
               },
               {
-                "room_no": 6,
+                "room_no": 5,
                 "name": "",
                 "debug_id": "02b"
               }
@@ -2561,142 +2561,142 @@
             "abbreviation": "HL",
             "rooms": [
               {
-                "room_no": 7,
+                "room_no": 1,
                 "name": "",
                 "debug_id": "04"
               },
               {
-                "room_no": 8,
+                "room_no": 2,
                 "name": "",
                 "debug_id": "04b"
               },
               {
-                "room_no": 9,
+                "room_no": 3,
                 "name": "",
                 "debug_id": "04c"
               },
               {
-                "room_no": 10,
+                "room_no": 4,
                 "name": "",
                 "debug_id": "04d"
               },
               {
-                "room_no": 1,
+                "room_no": 5,
                 "name": "",
                 "debug_id": "04e"
               },
               {
-                "room_no": 2,
+                "room_no": 6,
                 "name": "",
                 "debug_id": "05"
               },
               {
-                "room_no": 3,
+                "room_no": 7,
                 "name": "",
                 "debug_id": "06"
               },
               {
-                "room_no": 4,
+                "room_no": 8,
                 "name": "",
                 "debug_id": "07"
               },
               {
-                "room_no": 5,
+                "room_no": 9,
                 "name": "",
                 "debug_id": "08a"
               },
               {
-                "room_no": 6,
+                "room_no": 10,
                 "name": "",
                 "debug_id": "08b"
               },
               {
-                "room_no": 7,
+                "room_no": 11,
                 "name": "",
                 "debug_id": "09"
               },
               {
-                "room_no": 8,
+                "room_no": 12,
                 "name": "",
                 "debug_id": "10a"
               },
               {
-                "room_no": 9,
+                "room_no": 13,
                 "name": "",
                 "debug_id": "10b"
               },
               {
-                "room_no": 10,
+                "room_no": 14,
                 "name": "",
                 "debug_id": "11"
               },
               {
-                "room_no": 11,
+                "room_no": 15,
                 "name": "",
                 "debug_id": "12a"
               },
               {
-                "room_no": 12,
+                "room_no": 16,
                 "name": "",
                 "debug_id": "12b"
               },
               {
-                "room_no": 13,
+                "room_no": 17,
                 "name": "",
                 "debug_id": "13"
               },
               {
-                "room_no": 14,
+                "room_no": 18,
                 "name": "",
                 "debug_id": "14a"
               },
               {
-                "room_no": 1,
+                "room_no": 19,
                 "name": "",
                 "debug_id": "14b"
               },
               {
-                "room_no": 2,
+                "room_no": 20,
                 "name": "",
                 "debug_id": "15"
               },
               {
-                "room_no": 3,
+                "room_no": 21,
                 "name": "",
                 "debug_id": "16a"
               },
               {
-                "room_no": 4,
+                "room_no": 22,
                 "name": "",
                 "debug_id": "16b"
               },
               {
-                "room_no": 5,
+                "room_no": 23,
                 "name": "",
                 "debug_id": "17"
               },
               {
-                "room_no": 6,
+                "room_no": 24,
                 "name": "",
                 "debug_id": "18a"
               },
               {
-                "room_no": 7,
+                "room_no": 25,
                 "name": "",
                 "debug_id": "18b"
               },
               {
-                "room_no": 8,
+                "room_no": 26,
                 "name": "",
                 "debug_id": "19"
               },
               {
-                "room_no": 9,
+                "room_no": 27,
                 "name": "",
                 "debug_id": "20"
               },
               {
-                "room_no": 10,
+                "room_no": 28,
                 "name": "",
                 "debug_id": "b-00"
               }
@@ -2708,32 +2708,32 @@
             "abbreviation": "RF",
             "rooms": [
               {
-                "room_no": 11,
+                "room_no": 1,
                 "name": "",
                 "debug_id": "b-00b"
               },
               {
-                "room_no": 12,
+                "room_no": 2,
                 "name": "",
                 "debug_id": "b-00c"
               },
               {
-                "room_no": 13,
+                "room_no": 3,
                 "name": "",
                 "debug_id": "b-01"
               },
               {
-                "room_no": 14,
+                "room_no": 4,
                 "name": "",
                 "debug_id": "b-02"
               },
               {
-                "room_no": 1,
+                "room_no": 5,
                 "name": "",
                 "debug_id": "b-02b"
               },
               {
-                "room_no": 2,
+                "room_no": 6,
                 "name": "",
                 "debug_id": "b-03"
               }
@@ -2745,107 +2745,107 @@
             "abbreviation": "RB",
             "rooms": [
               {
-                "room_no": 3,
+                "room_no": 1,
                 "name": "",
                 "debug_id": "boss-00"
               },
               {
-                "room_no": 4,
+                "room_no": 2,
                 "name": "",
                 "debug_id": "boss-01"
               },
               {
-                "room_no": 5,
+                "room_no": 3,
                 "name": "",
                 "debug_id": "boss-02"
               },
               {
-                "room_no": 6,
+                "room_no": 4,
                 "name": "",
                 "debug_id": "boss-03"
               },
               {
-                "room_no": 7,
+                "room_no": 5,
                 "name": "",
                 "debug_id": "boss-04"
               },
               {
-                "room_no": 8,
+                "room_no": 6,
                 "name": "",
                 "debug_id": "boss-05"
               },
               {
-                "room_no": 9,
+                "room_no": 7,
                 "name": "",
                 "debug_id": "boss-06"
               },
               {
-                "room_no": 10,
+                "room_no": 8,
                 "name": "",
                 "debug_id": "boss-07"
               },
               {
-                "room_no": 11,
+                "room_no": 9,
                 "name": "",
                 "debug_id": "boss-08"
               },
               {
-                "room_no": 12,
+                "room_no": 10,
                 "name": "",
                 "debug_id": "boss-09"
               },
               {
-                "room_no": 13,
+                "room_no": 11,
                 "name": "",
                 "debug_id": "boss-10"
               },
               {
-                "room_no": 14,
+                "room_no": 12,
                 "name": "",
                 "debug_id": "boss-11"
               },
               {
-                "room_no": 15,
+                "room_no": 13,
                 "name": "",
                 "debug_id": "boss-12"
               },
               {
-                "room_no": 16,
+                "room_no": 14,
                 "name": "",
                 "debug_id": "boss-13"
               },
               {
-                "room_no": 17,
+                "room_no": 15,
                 "name": "",
                 "debug_id": "boss-14"
               },
               {
-                "room_no": 18,
+                "room_no": 16,
                 "name": "",
                 "debug_id": "boss-15"
               },
               {
-                "room_no": 1,
+                "room_no": 17,
                 "name": "",
                 "debug_id": "boss-16"
               },
               {
-                "room_no": 2,
+                "room_no": 18,
                 "name": "",
                 "debug_id": "boss-17"
               },
               {
-                "room_no": 3,
+                "room_no": 19,
                 "name": "",
                 "debug_id": "boss-18"
               },
               {
-                "room_no": 4,
+                "room_no": 20,
                 "name": "",
                 "debug_id": "boss-19"
               },
               {
-                "room_no": 5,
+                "room_no": 21,
                 "name": "",
                 "debug_id": "boss-20"
               }
@@ -2857,17 +2857,17 @@
             "abbreviation": "RL",
             "rooms": [
               {
-                "room_no": 6,
+                "room_no": 1,
                 "name": "",
                 "debug_id": "after-01"
               },
               {
-                "room_no": 7,
+                "room_no": 2,
                 "name": "",
                 "debug_id": "after-02"
               },
               {
-                "room_no": 8,
+                "room_no": 3,
                 "name": "",
                 "debug_id": "after-03"
               }

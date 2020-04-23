@@ -1,6 +1,5 @@
 {
   "prologue": {
-    "chapter_no": null,
     "name": "Prologue",
     "official": true,
     "sides": {
@@ -2050,23 +2049,23 @@
             "name": "Lake",
             "abbreviation": "LK",
             "rooms": {
-              "2": {
+              "1": {
                 "name": "",
                 "debug_id": "00"
               },
-              "3": {
+              "2": {
                 "name": "",
                 "debug_id": "01"
               },
-              "4": {
+              "3": {
                 "name": "",
                 "debug_id": "02"
               },
-              "5": {
+              "4": {
                 "name": "",
                 "debug_id": "03"
               },
-              "6": {
+              "5": {
                 "name": "",
                 "debug_id": "02b"
               }
@@ -2078,59 +2077,115 @@
             "rooms": {
               "1": {
                 "name": "",
-                "debug_id": "14b"
+                "debug_id": "04"
               },
               "2": {
                 "name": "",
-                "debug_id": "15"
+                "debug_id": "04b"
               },
               "3": {
                 "name": "",
-                "debug_id": "16a"
+                "debug_id": "04c"
               },
               "4": {
                 "name": "",
-                "debug_id": "16b"
+                "debug_id": "04d"
               },
               "5": {
                 "name": "",
-                "debug_id": "17"
+                "debug_id": "04e"
               },
               "6": {
                 "name": "",
-                "debug_id": "18a"
+                "debug_id": "05"
               },
               "7": {
                 "name": "",
-                "debug_id": "18b"
+                "debug_id": "06"
               },
               "8": {
                 "name": "",
-                "debug_id": "19"
+                "debug_id": "07"
               },
               "9": {
                 "name": "",
-                "debug_id": "20"
+                "debug_id": "08a"
               },
               "10": {
                 "name": "",
-                "debug_id": "b-00"
+                "debug_id": "08b"
               },
               "11": {
                 "name": "",
-                "debug_id": "12a"
+                "debug_id": "09"
               },
               "12": {
                 "name": "",
-                "debug_id": "12b"
+                "debug_id": "10a"
               },
               "13": {
                 "name": "",
-                "debug_id": "13"
+                "debug_id": "10b"
               },
               "14": {
                 "name": "",
+                "debug_id": "11"
+              },
+              "15": {
+                "name": "",
+                "debug_id": "12a"
+              },
+              "16": {
+                "name": "",
+                "debug_id": "12b"
+              },
+              "17": {
+                "name": "",
+                "debug_id": "13"
+              },
+              "18": {
+                "name": "",
                 "debug_id": "14a"
+              },
+              "19": {
+                "name": "",
+                "debug_id": "14b"
+              },
+              "20": {
+                "name": "",
+                "debug_id": "15"
+              },
+              "21": {
+                "name": "",
+                "debug_id": "16a"
+              },
+              "22": {
+                "name": "",
+                "debug_id": "16b"
+              },
+              "23": {
+                "name": "",
+                "debug_id": "17"
+              },
+              "24": {
+                "name": "",
+                "debug_id": "18a"
+              },
+              "25": {
+                "name": "",
+                "debug_id": "18b"
+              },
+              "26": {
+                "name": "",
+                "debug_id": "19"
+              },
+              "27": {
+                "name": "",
+                "debug_id": "20"
+              },
+              "28": {
+                "name": "",
+                "debug_id": "b-00"
               }
             }
           },
@@ -2140,27 +2195,27 @@
             "rooms": {
               "1": {
                 "name": "",
-                "debug_id": "b-02b"
+                "debug_id": "b-00b"
               },
               "2": {
                 "name": "",
-                "debug_id": "b-03"
-              },
-              "11": {
-                "name": "",
-                "debug_id": "b-00b"
-              },
-              "12": {
-                "name": "",
                 "debug_id": "b-00c"
               },
-              "13": {
+              "3": {
                 "name": "",
                 "debug_id": "b-01"
               },
-              "14": {
+              "4": {
                 "name": "",
                 "debug_id": "b-02"
+              },
+              "5": {
+                "name": "",
+                "debug_id": "b-02b"
+              },
+              "6": {
+                "name": "",
+                "debug_id": "b-03"
               }
             }
           },
@@ -2170,75 +2225,87 @@
             "rooms": {
               "1": {
                 "name": "",
-                "debug_id": "boss-16"
+                "debug_id": "boss-00"
               },
               "2": {
                 "name": "",
-                "debug_id": "boss-17"
+                "debug_id": "boss-01"
               },
               "3": {
                 "name": "",
-                "debug_id": "boss-18"
+                "debug_id": "boss-02"
               },
               "4": {
                 "name": "",
-                "debug_id": "boss-19"
+                "debug_id": "boss-03"
               },
               "5": {
                 "name": "",
-                "debug_id": "boss-20"
+                "debug_id": "boss-04"
               },
               "6": {
                 "name": "",
-                "debug_id": "boss-03"
+                "debug_id": "boss-05"
               },
               "7": {
                 "name": "",
-                "debug_id": "boss-04"
+                "debug_id": "boss-06"
               },
               "8": {
                 "name": "",
-                "debug_id": "boss-05"
+                "debug_id": "boss-07"
               },
               "9": {
                 "name": "",
-                "debug_id": "boss-06"
+                "debug_id": "boss-08"
               },
               "10": {
                 "name": "",
-                "debug_id": "boss-07"
+                "debug_id": "boss-09"
               },
               "11": {
                 "name": "",
-                "debug_id": "boss-08"
+                "debug_id": "boss-10"
               },
               "12": {
                 "name": "",
-                "debug_id": "boss-09"
+                "debug_id": "boss-11"
               },
               "13": {
                 "name": "",
-                "debug_id": "boss-10"
+                "debug_id": "boss-12"
               },
               "14": {
                 "name": "",
-                "debug_id": "boss-11"
+                "debug_id": "boss-13"
               },
               "15": {
                 "name": "",
-                "debug_id": "boss-12"
+                "debug_id": "boss-14"
               },
               "16": {
                 "name": "",
-                "debug_id": "boss-13"
+                "debug_id": "boss-15"
               },
               "17": {
                 "name": "",
-                "debug_id": "boss-14"
+                "debug_id": "boss-16"
               },
               "18": {
                 "name": "",
-                "debug_id": "boss-15"
+                "debug_id": "boss-17"
+              },
+              "19": {
+                "name": "",
+                "debug_id": "boss-18"
+              },
+              "20": {
+                "name": "",
+                "debug_id": "boss-19"
+              },
+              "21": {
+                "name": "",
+                "debug_id": "boss-20"
               }
             }
           },
@@ -2246,15 +2313,15 @@
             "name": "Resolution",
             "abbreviation": "RL",
             "rooms": {
-              "6": {
+              "1": {
                 "name": "",
                 "debug_id": "after-01"
               },
-              "7": {
+              "2": {
                 "name": "",
                 "debug_id": "after-02"
               },
-              "8": {
+              "3": {
                 "name": "",
                 "debug_id": "after-03"
               }
@@ -3234,7 +3301,6 @@
     }
   },
   "epilogue": {
-    "chapter_no": null,
     "name": "Epilogue",
     "official": true,
     "sides": {
