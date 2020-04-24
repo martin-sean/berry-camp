@@ -14,11 +14,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: 0,
   },
   chapterNo: {
-    width: '9%',
+    width: '25px',
   }
 }));
 
-export default (props: { data: DataTree}) => {
+export default (props: { data: DataTree }) => {
   const classes = useStyles();
 
   return (

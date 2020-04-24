@@ -13,9 +13,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   list: {
     padding: 0,
   },
+  roomNo: {
+    width: '30px',
+  }
 }));
 
-export default (props: { data: DataTree}) => {
+export default (props: { data: DataTree, onItemSelect: () => void }) => {
   const classes = useStyles();
   const { chapterId, sideNo, checkpointNo } = useParams();
   
@@ -26,9 +29,9 @@ export default (props: { data: DataTree}) => {
       </ListItem>
     );
   }
-  
-  const rooms = props.data[chapterId]?.sides[sideNo]?.checkpoints[checkpointNo]?.rooms;
 
+  const rooms = props.data[chapterId]?.sides[sideNo]?.checkpoints[checkpointNo]?.rooms;
+  
   return (
     <List
       className={ classes.list }
@@ -49,8 +52,10 @@ export default (props: { data: DataTree}) => {
           <ListItem button 
             component={ RouterLink } 
             to={ `/chapter/${ chapterId }/side/${ sideNo }/checkpoint/${ checkpointNo }/room/${ roomNo }` } 
+            onClick={ props.onItemSelect }
             key={ index }
           >
+            <Typography className={ classes.roomNo } color="textSecondary">{ roomNo }</Typography>
             <ListItemText 
               primary={ rooms[roomNo].name }
               secondary={ rooms[roomNo].debug_id }

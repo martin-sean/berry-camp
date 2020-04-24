@@ -26,7 +26,7 @@ export default (props: { open: boolean, toggleDrawer: () => void }) => {
           Strawberry House
         </Typography>
         <Button color='inherit'>Login</Button>
-        <Hidden smUp>
+        <Hidden mdUp>
           <IconButton 
           className={classes.menuButton} 
           edge='end' 

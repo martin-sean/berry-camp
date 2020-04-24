@@ -11,17 +11,10 @@ import CheckpointList from './CheckpointList';
 import RoomList from './RoomList';
 
 import { DataTree } from '../../api/Data';
+import { Paths } from '../../App'
 
-const drawerWidthDesktop = 320;
+const drawerWidthDesktop = 330;
 const drawerWidthMobile = '100%';
-
-export const Paths = {
-  HOME: '/',
-  CHAPTER: '/chapter/:chapterId',
-  SIDE: '/chapter/:chapterId/side/:sideNo',
-  CHECKPOINT: '/chapter/:chapterId/side/:sideNo/checkpoint/:checkpointNo',
-  ROOM: '/chapter/:chapterId/side/:sideNo/checkpoint/:checkpointNo/room/:roomNo',
-}
 
 const useStyles = makeStyles((theme) => ({
   drawerDesktop: {
@@ -49,23 +42,29 @@ export default (props: { data: DataTree }) => {
     setOpen(!open);
   }
 
-  const drawerList = (
-    <React.Fragment>
-      <Toolbar />
-      <div className={ classes.drawerContainer }></div>
-        <Switch>
-          <Route exact path={ Paths.HOME } render={() => <ChapterList data={ props.data }/> }/>
-          <Route exact path={ Paths.CHAPTER } render={() => <SideList data={ props.data }/> }/>
-          <Route exact path={ Paths.SIDE } render={() => <CheckpointList data={ props.data }/> }/>
-          <Route path={ Paths.CHECKPOINT } render={() => <RoomList data={ props.data }/> }/>
-        </Switch>
-    </React.Fragment>
-  );
+  const closeDrawer = () => {
+    setOpen(false);
+  }
+
+  const DrawerList = (props: { data: DataTree, onItemSelect: () => void }) => {
+    return (
+      <React.Fragment>
+        <Toolbar />
+        <div className={ classes.drawerContainer }></div>
+          <Switch>
+            <Route exact path={ Paths.HOME } render={() => <ChapterList data={ props.data }/> }/>
+            <Route exact path={ Paths.CHAPTER } render={() => <SideList data={ props.data }/> }/>
+            <Route exact path={ Paths.SIDE } render={() => <CheckpointList data={ props.data }/> }/>
+            <Route path={ Paths.CHECKPOINT } render={() => <RoomList data={ props.data } onItemSelect={ props.onItemSelect }/> }/>
+          </Switch>
+      </React.Fragment>
+    )
+  };
 
   return (
     <React.Fragment>
       <Navbar open={ open } toggleDrawer={ toggleDrawer }/>
-      <Hidden smUp>
+      <Hidden mdUp>
         <Drawer
           className={ classes.drawerMobile }
           open={ open }
@@ -78,10 +77,10 @@ export default (props: { data: DataTree }) => {
             paper: classes.drawerMobile,
           }}
         >
-          { drawerList }
+          <DrawerList data={ props.data } onItemSelect={ closeDrawer } />
         </Drawer>
       </Hidden>
-      <Hidden xsDown>
+      <Hidden smDown>
         <Drawer
           className={ classes.drawerDesktop }
           variant='permanent'
@@ -91,7 +90,7 @@ export default (props: { data: DataTree }) => {
             paper: classes.drawerDesktop,
           }}
         >
-          { drawerList }
+          <DrawerList data={ props.data } onItemSelect={ closeDrawer } />
         </Drawer>
       </Hidden>
     </React.Fragment>
