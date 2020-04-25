@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { makeStyles, Theme, Typography } from '@material-ui/core'
+import { makeStyles, Theme, Typography, Divider } from '@material-ui/core'
 import { DataTree } from '../../api/Data';
 import { useParams } from 'react-router-dom';
+
+const imageHost = 'https://f002.backblazeb2.com/file/strawberry-house/screens/'
+
 
 const useStyles = makeStyles((theme: Theme) => ({
   placeholder: {
@@ -15,6 +18,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     height: '300px',
   },
+  info: {
+    fontSize: '12pt',
+  },
+  divider: {
+    marginTop: '10px',
+    marginBottom: '10px',
+  }
 }));
 
 export default (props: { data: DataTree }) => {
@@ -28,7 +38,15 @@ export default (props: { data: DataTree }) => {
     );
   }
 
-  const room = props.data[chapterId]?.sides[sideNo]?.checkpoints[checkpointNo]?.rooms[roomNo];
+  const chapter = props.data[chapterId];
+  const side = chapter?.sides[sideNo];
+  const checkpoint = side?.checkpoints[checkpointNo];
+  const room = checkpoint?.rooms[roomNo];
+
+  const imageUrl = imageHost
+    + (chapter.chapter_no || chapter.name.toLocaleLowerCase()) 
+    + '/' + side.name.toLocaleLowerCase() 
+    + '/' + room.image + '.jpg'
 
   return (
     <React.Fragment>
@@ -37,12 +55,19 @@ export default (props: { data: DataTree }) => {
       }
       <img
         className={ classes.image }
-        src="https://f002.backblazeb2.com/file/strawberry-house/screens/1/a/0001.jpg"
+        src={ imageUrl }
+        alt="Screenshot of current room"
         style={ loaded ? {} : { display: 'none'} }
         onLoad={ () => setLoaded(true) }
       />
+
       <Typography variant="h4" color="textPrimary">{ room.name }</Typography>
-      <Typography variant="h6" color="textSecondary">Debug id: { room.debug_id }</Typography>
+      <Typography variant="h6" color="textSecondary">Room: { checkpoint.abbreviation + '-' + roomNo }</Typography>
+      <Typography variant="h6" color="textSecondary">Debug: { room.debug_id }</Typography>
+      <Divider className={ classes.divider } />
+      <Typography className={ classes.info } variant="h6" color="textSecondary">Chapter: { chapter.name }</Typography>
+      <Typography className={ classes.info } variant="h6" color="textSecondary">Side: { side.name }</Typography>
+      <Typography className={ classes.info } variant="h6" color="textSecondary">Checkpoint: { checkpoint.name }</Typography>
     </React.Fragment>
   )
 }
