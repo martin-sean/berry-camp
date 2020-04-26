@@ -9,18 +9,10 @@ import Drawer from './browse/drawer';
 import Room from './browse/room';
 
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Paths } from './browse/router';
 
 import jsondata from './api/chapter-tree.json';
 import { DataTree } from './api/Data';
-
-
-export const Paths = {
-  HOME: '/',
-  CHAPTER: '/chapter/:chapterId',
-  SIDE: '/chapter/:chapterId/side/:sideNo',
-  CHECKPOINT: '/chapter/:chapterId/side/:sideNo/checkpoint/:checkpointNo',
-  ROOM: '/chapter/:chapterId/side/:sideNo/checkpoint/:checkpointNo/room/:roomNo',
-}
 
 const theme = createMuiTheme({
   palette: {
@@ -30,7 +22,6 @@ const theme = createMuiTheme({
     },
   },
 });
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const setDocTitle = (title: string) => {
+  document.title = 'Strawberry House · ' + title || 'Error';
+}
+
 export default () => {
   const data: DataTree = jsondata;
   const classes = useStyles();
@@ -55,12 +50,12 @@ export default () => {
           <CssBaseline />
           {/* Navbar is contained in drawer */}
           <div className={ classes.root } >
-            <Drawer data={ data } />
+            <Drawer data={ data } setTitle={ setDocTitle } />
             <div className={ classes.content } >
               <Toolbar />
               <Grid container>
                 <Grid className={ classes.item } item sm={ 12 } md={ 6 }>
-                  <Route exact path={ Paths.ROOM } render={() => <Room data={ data }/> }/>
+                  <Route exact path={ Paths.ROOM } render={() => <Room data={ data } setTitle={ setDocTitle }/> }/>
                 </Grid>
                 <Grid className={ classes.item } item sm={12} md={ 6 }>
 

@@ -1,6 +1,5 @@
 {
   "prologue": {
-    "chapter_no": null,
     "name": "Prologue",
     "official": true,
     "sides": {
@@ -4017,7 +4016,6 @@
     }
   },
   "epilogue": {
-    "chapter_no": null,
     "name": "Epilogue",
     "official": true,
     "sides": {

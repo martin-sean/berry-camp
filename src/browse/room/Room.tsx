@@ -27,14 +27,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-export default (props: { data: DataTree }) => {
+export default (props: { data: DataTree, setTitle: (title: string | undefined) => void }) => {
   const [loaded, setLoaded] = useState(false);
   const { chapterId, sideNo, checkpointNo, roomNo } = useParams();
   const classes = useStyles();
-  
+
   if (!(chapterId && sideNo && checkpointNo && roomNo)) {
     return (
-        <div>Error loading room </div>
+      <div>Error loading room </div>
     );
   }
 
@@ -42,6 +42,8 @@ export default (props: { data: DataTree }) => {
   const side = chapter?.sides[sideNo];
   const checkpoint = side?.checkpoints[checkpointNo];
   const room = checkpoint?.rooms[roomNo];
+
+  props.setTitle(room.name);
 
   const imageUrl = imageHost
     + (chapter.chapter_no || chapter.name.toLocaleLowerCase()) 

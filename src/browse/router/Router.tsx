@@ -2,33 +2,37 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from '../home';
 import Room from '../room';
+import { DataTree } from '../../api/Data';
 
 export const Paths = {
   HOME: '/',
-  SIDES: '/chaptesr/:id/sides',
-  CHECKPOINTS: '/chapters/:id/sides/:side_no/checkpoints',
-  ROOMS: '/chapters/:id/sides/:side_no/checkpoints/:checkpoint_no/rooms',
-  ROOM: '/chapters/:id/sides/:side_no/checkpoints/:checkpoint_no/rooms/:room_no',
+  CHAPTER: '/chpt/:chapterId',
+  SIDE: '/chpt/:chapterId/side/:sideNo',
+  CHECKPOINT: '/chpt/:chapterId/side/:sideNo/ckpt/:checkpointNo',
+  ROOM: '/chpt/:chapterId/side/:sideNo/ckpt/:checkpointNo/room/:roomNo',
 }
 
 export interface RoutePath {
   path: string,
   to: () => JSX.Element,
-  routes?: RoutePath[],
+  // routes?: RoutePath[],
 }
 
-const routes: RoutePath[] = [
-  {
-    path: Paths.HOME,
-    to: Home,
-  },
-  {
-    path: Paths.ROOM,
-    to: Room,
-  },
-]
 
-export default () => {
+
+export default (props: { data: DataTree }) => {
+  
+  const routes: RoutePath[] = [
+    {
+      path: Paths.HOME,
+      to: Home,
+    },
+    {
+      path: Paths.ROOM,
+      to: Room,
+    },
+  ]
+
   return (
     <Router>
       <Switch>

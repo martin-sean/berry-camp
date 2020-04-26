@@ -2,16 +2,10 @@ import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, Toolbar, Hidden } from '@material-ui/core';
-import { Route, Switch } from 'react-router-dom';
 import Navbar from '../navbar';
-
-import ChapterList from './ChapterList';
-import SideList from './SideList';
-import CheckpointList from './CheckpointList';
-import RoomList from './RoomList';
+import ItemList from './ItemList';
 
 import { DataTree } from '../../api/Data';
-import { Paths } from '../../App'
 
 const drawerWidthDesktop = 330;
 const drawerWidthMobile = '100%';
@@ -34,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default (props: { data: DataTree }) => {
+export default (props: { data: DataTree, setTitle: (title: string | undefined) => void }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -46,17 +40,13 @@ export default (props: { data: DataTree }) => {
     setOpen(false);
   }
 
-  const DrawerList = (props: { data: DataTree, onItemSelect: () => void }) => {
+  const DrawerList = (props: { data: DataTree, onItemSelect: () => void , setTitle: (title: string | undefined) => void }) => {
     return (
       <React.Fragment>
         <Toolbar />
-        <div className={ classes.drawerContainer }></div>
-          <Switch>
-            <Route exact path={ Paths.HOME } render={() => <ChapterList data={ props.data }/> }/>
-            <Route exact path={ Paths.CHAPTER } render={() => <SideList data={ props.data }/> }/>
-            <Route exact path={ Paths.SIDE } render={() => <CheckpointList data={ props.data }/> }/>
-            <Route path={ Paths.CHECKPOINT } render={() => <RoomList data={ props.data } onItemSelect={ props.onItemSelect }/> }/>
-          </Switch>
+        <div className={ classes.drawerContainer }>
+          <ItemList data={ props.data } onItemSelect={ props.onItemSelect } setTitle={ props.setTitle }/>
+        </div>
       </React.Fragment>
     )
   };
@@ -77,7 +67,7 @@ export default (props: { data: DataTree }) => {
             paper: classes.drawerMobile,
           }}
         >
-          <DrawerList data={ props.data } onItemSelect={ closeDrawer } />
+          <DrawerList data={ props.data } onItemSelect={ closeDrawer } setTitle={ props.setTitle }/>
         </Drawer>
       </Hidden>
       <Hidden smDown>
@@ -90,7 +80,7 @@ export default (props: { data: DataTree }) => {
             paper: classes.drawerDesktop,
           }}
         >
-          <DrawerList data={ props.data } onItemSelect={ closeDrawer } />
+          <DrawerList data={ props.data } onItemSelect={ closeDrawer } setTitle={ props.setTitle }/>
         </Drawer>
       </Hidden>
     </React.Fragment>

@@ -20,8 +20,8 @@ export interface Side {
 }
 
 export interface Checkpoint {
-  name?: string,
-  abbreviation?: string,
+  name: string,
+  abbreviation: string,
   rooms: {
     [key: string]: Room,
   },
