@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const setDocTitle = (title: string) => {
+const setDocTitle = (title: string | undefined) => {
   document.title = 'Berry Camp · ' + title || 'Error';
 }
 
