@@ -23,7 +23,7 @@ export default (props: { open: boolean, toggleDrawer: () => void }) => {
     <AppBar className={ classes.appBar } position='fixed'>
       <Toolbar>
         <Typography className={classes.title} variant='h6'>
-          Strawberry House
+          Berry Camp
         </Typography>
         <Button color='inherit'>Login</Button>
         <Hidden mdUp>

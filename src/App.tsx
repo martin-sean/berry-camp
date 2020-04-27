@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const setDocTitle = (title: string) => {
-  document.title = 'Strawberry House · ' + title || 'Error';
+  document.title = 'Berry Camp · ' + title || 'Error';
 }
 
 export default () => {
