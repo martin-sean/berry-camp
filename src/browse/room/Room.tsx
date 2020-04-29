@@ -1,22 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { makeStyles, Theme, Typography, Divider } from '@material-ui/core'
+
+import { makeStyles, Fade, Theme, Typography, Divider } from '@material-ui/core'
 import { DataTree } from '../../api/Data';
 import { useParams } from 'react-router-dom';
 
-const imageHost = 'https://f002.backblazeb2.com/file/strawberry-house/screens/'
-
+const imageHost = 'https://f002.backblazeb2.com/file/strawberry-house/small/'
 
 const useStyles = makeStyles((theme: Theme) => ({
-  placeholder: {
-    transform: 'none',
-    width: '100%',
-    height: '300px',
-  },
   image: {
     objectFit: 'cover',
-    width: '100%',
+    maxWidth: '100%',
     height: '300px',
+  },
+  imageWrapper: {
+    marginBottom: '20px',
   },
   info: {
     fontSize: '12pt',
@@ -24,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   divider: {
     marginTop: '10px',
     marginBottom: '10px',
-  }
+  },
 }));
 
 export default (props: { data: DataTree, setTitle: (title: string | undefined) => void }) => {
@@ -45,23 +43,36 @@ export default (props: { data: DataTree, setTitle: (title: string | undefined) =
 
   props.setTitle(room.name);
 
-  const imageUrl = imageHost
-    + (chapter.chapter_no || chapter.name.toLocaleLowerCase()) 
-    + '/' + side.name.toLocaleLowerCase() 
-    + '/' + room.image + '.jpg'
+  const image = imageHost + chapterId + '/' + sideNo + '/' + checkpointNo + '/' + roomNo + '.jpg'
+
+  useEffect(() => {
+    setLoaded(false);
+  }, [roomNo]);
 
   return (
     <React.Fragment>
-      {
-          loaded ? null : <Skeleton className={ classes.placeholder } />
-      }
-      <img
-        className={ classes.image }
-        src={ imageUrl }
-        alt="Screenshot of current room"
-        style={ loaded ? {} : { display: 'none'} }
-        onLoad={ () => setLoaded(true) }
-      />
+      <div className={ classes.imageWrapper }>
+        <Fade in={ !loaded }>
+          <div>
+          {
+              loaded ? null : 
+              <React.Fragment>
+                <Skeleton variant="rect" width={ '100%' } height={300} />
+              </React.Fragment>
+          }
+          </div>
+        </Fade>
+        
+        <Fade in={ loaded }>
+          <img
+            className={ classes.image }
+            src={ image }
+            alt="Screenshot of current room"
+            style={ loaded ? {} : { display: 'none'} }
+            onLoad={ () => setLoaded(true) }
+          />
+        </Fade>
+      </div>
 
       <Typography variant="h4" color="textPrimary">{ room.name }</Typography>
       <Typography variant="h6" color="textSecondary">Room: { checkpoint.abbreviation + '-' + roomNo }</Typography>

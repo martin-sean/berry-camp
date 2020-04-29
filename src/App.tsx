@@ -13,6 +13,8 @@ import { Paths } from './browse/router';
 
 import jsondata from './api/chapter-tree.json';
 import { DataTree } from './api/Data';
+import Skeleton from '@material-ui/lab/Skeleton';
+
 
 const theme = createMuiTheme({
   palette: {
@@ -29,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flex: 1,
+  },
+  toolbar: {
+    height: '64px',
   },
   item: {
     padding: theme.spacing(2),
@@ -52,15 +57,20 @@ export default () => {
           <div className={ classes.root } >
             <Drawer data={ data } setTitle={ setDocTitle } />
             <div className={ classes.content } >
-              <Toolbar />
-              <Grid container>
-                <Grid className={ classes.item } item sm={ 12 } md={ 6 }>
-                  <Route exact path={ Paths.ROOM } render={() => <Room data={ data } setTitle={ setDocTitle }/> }/>
+              <Toolbar className={ classes.toolbar } />
+              <Route exact path={ Paths.ROOM }>
+              <Grid container direction="row-reverse">
+                <Grid item className={ classes.item } xs={12} lg={5}>
+                  <Room data={ data } setTitle={ setDocTitle }/>
                 </Grid>
-                <Grid className={ classes.item } item sm={12} md={ 6 }>
-
+                <Grid item className={ classes.item } xs={12} lg={7}>
+                  <Skeleton animation={false} height={ 50 }/>
+                  <Skeleton animation={false} height={ 50 }/>
+                  <Skeleton animation={false} height={ 50 }/>
+                  <Skeleton animation={false} height={ 50 }/>
                 </Grid>
               </Grid>
+              </Route>
             </div>
           </div>
           <footer />
