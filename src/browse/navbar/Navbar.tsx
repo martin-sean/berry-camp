@@ -44,8 +44,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: 400,
     // maskImage: 'linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0))',
     WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 1.0) 50%, transparent);',
-    
-    
     // filter: 'blur(1px)',
     // WebkitFilter: 'blur(1px)',
     // mixBlendMode: 'screen',
