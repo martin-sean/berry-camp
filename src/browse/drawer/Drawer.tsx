@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidthMobile,
     flexShrink: 0,
   },
+  toolbar: {
+    height: '64px',
+  },
   drawerContainer: {
     overflow: 'auto',
   },
@@ -43,7 +46,7 @@ export default (props: { data: DataTree, setTitle: (title: string | undefined) =
   const DrawerList = (props: { data: DataTree, onItemSelect: () => void , setTitle: (title: string | undefined) => void }) => {
     return (
       <React.Fragment>
-        <Toolbar />
+        <Toolbar className={ classes.toolbar } />
         <div className={ classes.drawerContainer }>
           <ItemList data={ props.data } onItemSelect={ props.onItemSelect } setTitle={ props.setTitle }/>
         </div>

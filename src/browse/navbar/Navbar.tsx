@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { AppBar, Hidden, Toolbar, Typography, IconButton, Theme } from '@material-ui/core';
+import { AppBar, Fade, Hidden, Toolbar, Typography, IconButton, Theme } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons/';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -38,20 +38,26 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: 'white',
     paddingLeft: theme.spacing(2),
   },
-  logo:{
+  logo: {
     objectFit: 'cover',
-    objectPosition: '0 100%',
-    width: 330,
+    // objectPosition: '50%',
+    width: 400,
     // maskImage: 'linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0))',
+    WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 1.0) 50%, transparent);',
+    
+    
+    // filter: 'blur(1px)',
+    // WebkitFilter: 'blur(1px)',
     // mixBlendMode: 'screen',
   },
 }));
 
 const logos = [
-  'logo_1.gif', 'logo_2.gif', /*'logo_3.gif', 'logo_4.gif',*/ 'logo_5.gif', 'logo_6.gif',
+  'logo_1.gif', 'logo_2.gif', 'logo_5.gif', 'logo_6.gif',
 ];
 
 export default (props: { open: boolean, toggleDrawer: () => void }) => {
+  const [loaded, setLoaded] = useState(false);
   const logo = logos[Math.floor(Math.random() * logos.length)];
   const classes = useStyles({ logo });
 
@@ -60,11 +66,14 @@ export default (props: { open: boolean, toggleDrawer: () => void }) => {
       <Toolbar className={ classes.toolBar }>
         <Hidden smDown>
           <div className={ classes.container }>
-            <img
-              className={ classes.logo }
-              src={ process.env.PUBLIC_URL + `/img/${ logo }` }
-              alt='Animation of madeline in a campsite in game'
-            />
+            <Fade in={ loaded }>
+              <img
+                className={ classes.logo }
+                src={ process.env.PUBLIC_URL + `/img/${ logo }` }
+                alt='Animation of madeline in a campsite in game'
+                onLoad={ () => setLoaded(true) }
+              />
+            </Fade>
             <Typography component="div" className={ classes.title  }><span role='img' aria-label='Berry'>🍓</span> camp</Typography>
           </div>
         </Hidden>
