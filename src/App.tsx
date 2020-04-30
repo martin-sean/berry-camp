@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     height: '64px',
   },
   item: {
-    // padding: theme.spacing(2),
+    padding: theme.spacing(2),
   }
 }));
 
@@ -42,7 +42,16 @@ const setDocTitle = (title: string | undefined) => {
   document.title = 'Berry Camp · ' + title || 'Error';
 }
 
+// TODO: Last room + navigation state management - I might need redux/mobx
+export interface LastRoom {
+  chapterId: string,
+  sideNo: string,
+  checkpointNo: string,
+  roomNo: string,
+}
+
 export default () => {
+  const [lastRoom, setLastRoom] = useState<LastRoom | null>(null);
   const [chapterId, setChapterId] = useState("");
   const [sideNo, setSideNo] = useState("");
   const [checkpointNo, setCheckpointNo] = useState("");
@@ -60,6 +69,7 @@ export default () => {
           {/* Navbar is contained in drawer */}
           <div className={ classes.root } >
             <Drawer
+              setLastRoom={ setLastRoom }
               chapterId={ chapterId }
               sideNo={ sideNo }
               checkpointNo={ checkpointNo }
@@ -76,12 +86,9 @@ export default () => {
               <Grid container direction="row-reverse">
                 <Grid item className={ classes.item } xs={12} lg={5} spacing={2}>
                   {
-                    roomNo &&
+                    lastRoom &&
                     <Room 
-                      chapterId={ chapterId }
-                      sideNo={ sideNo }
-                      checkpointNo={ checkpointNo }
-                      roomNo={ roomNo }
+                      lastRoom={ lastRoom }
                       data={ data } 
                       setTitle={ setDocTitle }
                     />

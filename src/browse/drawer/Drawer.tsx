@@ -6,6 +6,7 @@ import Navbar from '../navbar';
 import ItemList from './ItemList';
 
 import { DataTree } from '../../api/Data';
+import { LastRoom } from '../../App';
 
 const drawerWidthDesktop = 330;
 const drawerWidthMobile = '100%';
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface DrawerProps {
+  setLastRoom: (lastRoom: LastRoom) => void,
   chapterId: string,
   sideNo: string,
   checkpointNo: string,
@@ -61,6 +63,7 @@ export default (props: DrawerProps) => {
       <Toolbar className={ classes.toolbar } />
       <div className={ classes.drawerContainer }>
         <ItemList
+          setLastRoom={ props.setLastRoom }
           chapterId={ props.chapterId }
           sideNo={ props.sideNo }
           checkpointNo={ props.checkpointNo }

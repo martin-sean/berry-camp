@@ -3,6 +3,7 @@ import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography } 
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { DataTree } from '../../api/Data';
+import { LastRoom } from '../../App';
 
 const useStyles = makeStyles((theme: Theme) => ({
   progress: {
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface ItemsListProps {
+  setLastRoom: (lastRoom: LastRoom) => void,
   chapterId: string,
   sideNo: string,
   checkpointNo: string,
@@ -151,7 +153,14 @@ export default (props: ItemsListProps) => {
               <Item 
                 primary={ checkpoint.rooms[roomNo].name }
                 secondary={ checkpoint.rooms[roomNo].debug_id }
-                handleClick={ () => props.closeDrawer && props.setRoomNo(roomNo) }
+                handleClick={ () => props.closeDrawer && 
+                  props.setLastRoom({ 
+                    chapterId: props.chapterId,
+                    sideNo: props.sideNo,
+                    checkpointNo: props.checkpointNo,
+                    roomNo: roomNo,
+                  }) 
+                }
                 key={ index }
               />
           ))}
