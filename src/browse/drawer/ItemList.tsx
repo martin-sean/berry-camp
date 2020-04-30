@@ -1,10 +1,8 @@
 import React from 'react';
 import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Link as RouterLink, useParams, Route, Switch } from 'react-router-dom';
 
 import { DataTree } from '../../api/Data';
-import { Paths } from '../router';
 
 const useStyles = makeStyles((theme: Theme) => ({
   progress: {
@@ -19,11 +17,42 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
+interface ItemsListProps {
+  chapterId: string,
+  sideNo: string,
+  checkpointNo: string,
+  roomNo: string,
+  setChapterId: (chapterId: string) => void,
+  setSideNo: (sideNo: string) => void,
+  setCheckpointNo: (checkpointNo: string) => void,
+  setRoomNo: (roomNo: string) => void,
+  data: DataTree, 
+  closeDrawer: () => void, 
+  setTitle: (title: string | undefined) => void,
+}
+
 // Populate the chapter tree drawer
-export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (title: string | undefined) => void}) => {
+export default (props: ItemsListProps) => {
   const classes = useStyles();
   const chapters = props.data;
   const setTitle = props.setTitle;
+
+  // Breadcrumb actions - clear the state
+  const selectChapter = () => {
+    props.setChapterId('');
+    selectSide();
+    selectCheckpoint();
+  }
+
+  const selectSide = () => {
+    props.setSideNo('');
+    selectCheckpoint();
+  }
+
+  const selectCheckpoint = () => {
+    props.setCheckpointNo('');
+    props.setRoomNo('');
+  }
 
   const ChapterList = () => {
     setTitle('Chapters');
@@ -36,14 +65,12 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
         </ListItem>
         <Divider />
         { Object.keys(chapters).map((chapterId: string, index: number) => (
-            <React.Fragment>
-              <Item
-                primary={ chapters[chapterId].name }
-                to={ `/chpt/${ chapterId }` }
-                before={ <Typography className={ classes.indent } color="textSecondary">{ chapters[chapterId].chapter_no }</Typography> }
-                key={ index }
-              />
-            </React.Fragment>
+            <Item
+              primary={ chapters[chapterId].name }
+              handleClick={ () => props.setChapterId(chapterId) }
+              before={ <Typography className={ classes.indent } color="textSecondary">{ chapters[chapterId].chapter_no }</Typography> }
+              key={ index }
+            />
           ))
         }
       </React.Fragment>
@@ -51,8 +78,7 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
   }
   
   const SideList = () => {
-    const { chapterId } = useParams();
-    const chapter = chapterId ? props.data[chapterId] : undefined;
+    const chapter = props.chapterId ? props.data[props.chapterId] : undefined;
     setTitle(chapter?.name);
 
     return (
@@ -60,7 +86,7 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
-              <Link color="textSecondary" component={ RouterLink } to={ '/' }>Chapter</Link> 
+              <Link color="textSecondary" onClick={ selectChapter }>Chapter</Link> 
               <Typography color="textPrimary">Side</Typography>
             </Breadcrumbs>
           </ListItem>
@@ -68,18 +94,17 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
           { Object.keys(chapter.sides).map((sideNo: string, index: number) => (
             <Item 
               primary={ chapter.sides[sideNo].name }
-              to={ `/chpt/${ chapterId }/side/${ sideNo }` }
+              handleClick={ () => props.setSideNo(sideNo) }
               key={ index }
             />
           ))}
         </React.Fragment> 
     );
   }
-  
+
   const CheckpointList = () => {
-    const { chapterId, sideNo } = useParams();
-    const chapter = chapterId ? props.data[chapterId] : undefined;
-    const side = sideNo ? chapter?.sides[sideNo] : undefined;
+    const chapter = props.chapterId ? props.data[props.chapterId] : undefined;
+    const side = props.sideNo ? chapter?.sides[props.sideNo] : undefined;
     setTitle(side?.name);
 
     return (
@@ -87,8 +112,8 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
-              <Link color="textSecondary" component={ RouterLink } to={ '/' }>Chapter</Link>
-              <Link color="textSecondary" component={ RouterLink } to={ `/chpt/${ chapterId }/`}>Side</Link>
+              <Link color="textSecondary" onClick={ selectChapter }>Chapter</Link>
+              <Link color="textSecondary" onClick={ selectSide }>Side</Link>
               <Typography color="textPrimary">Checkpoint</Typography>
             </Breadcrumbs>
           </ListItem>
@@ -96,19 +121,18 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
           { Object.keys(side.checkpoints).map((checkpointNo: string, index: number) => (
               <Item 
                 primary={ side.checkpoints[checkpointNo].name }
-                to={ `/chpt/${ chapterId }/side/${ sideNo }/ckpt/${ checkpointNo }` }
+                handleClick={ () => props.setCheckpointNo(checkpointNo) }
                 key={ index }
               />
           ))}
         </React.Fragment>
     );
   }
-  
-  const RoomList = (props: { data: DataTree, onClick: () => void }) => {
-    const { chapterId, sideNo, checkpointNo } = useParams();
-    const chapter = chapterId ? props.data[chapterId] : undefined;
-    const side = sideNo ? chapter?.sides[sideNo] : undefined;
-    const checkpoint = checkpointNo ? side?.checkpoints[checkpointNo] : undefined;
+
+  const RoomList = () => {
+    const chapter = props.chapterId ? props.data[props.chapterId] : undefined;
+    const side = props.sideNo ? chapter?.sides[props.sideNo] : undefined;
+    const checkpoint = props.checkpointNo ? side?.checkpoints[props.checkpointNo] : undefined;
     setTitle(checkpoint?.name);
 
     return (
@@ -116,9 +140,9 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
-              <Link color="textSecondary" component={ RouterLink } to={ '/' }>Chapter</Link>
-              <Link color="textSecondary" component={ RouterLink } to={ `/chpt/${ chapterId }/`}>Side</Link>
-              <Link color="textSecondary" component={ RouterLink } to={ `/chpt/${ chapterId }/side/${ sideNo }/` }>Checkpoint</Link>
+              <Link color="textSecondary" onClick={ selectChapter }>Chapter</Link>
+              <Link color="textSecondary" onClick={ selectSide }>Side</Link>
+              <Link color="textSecondary" onClick={ selectCheckpoint }>Checkpoint</Link>
               <Typography color="textPrimary">Room</Typography>
             </Breadcrumbs>
           </ListItem>
@@ -127,8 +151,7 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
               <Item 
                 primary={ checkpoint.rooms[roomNo].name }
                 secondary={ checkpoint.rooms[roomNo].debug_id }
-                to={ `/chpt/${ chapterId }/side/${ sideNo }/ckpt/${ checkpointNo }/room/${ roomNo }` }
-                onClick={ props.onClick }
+                handleClick={ () => props.closeDrawer && props.setRoomNo(roomNo) }
                 key={ index }
               />
           ))}
@@ -136,13 +159,18 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
     );
   }
   
+  interface ItemProps {
+    primary: string, 
+    secondary?: string, 
+    before?: JSX.Element, 
+    handleClick: () => void,
+  }
+
   // Render an item in the list
-  const Item = (props: { primary: string, secondary?: string, to: string, before?: JSX.Element, onClick?: () => void }) => {
+  const Item = (props: ItemProps) => {
     return (
       <ListItem button 
-        component={ RouterLink }
-        to={ props.to } 
-        onClick={ props.onClick }
+        onClick={ props.handleClick }
       > 
         { props.before }
         <ListItemText primary={ props.primary } secondary={ props.secondary } />
@@ -155,20 +183,23 @@ export default (props: { data: DataTree, onItemSelect: () => void, setTitle: (ti
     <ListItem>
       <ListItemText primary={ resource + " not found" }/>
     </ListItem>
-  )
+  );
 
   return (
     <List
       className={ classes.list }
       aria-labelledby='TODO'
     >
-      {/* Render the items */}
-      <Switch>
-        <Route exact path={ Paths.HOME } component={ ChapterList }/>
-        <Route exact path={ Paths.CHAPTER } component={ SideList }/>
-        <Route exact path={ Paths.SIDE } component={ CheckpointList }/>
-        <Route path={ Paths.CHECKPOINT } render={ () => <RoomList data={ props.data } onClick={ props.onItemSelect }/> }/>
-      </Switch>
+      {
+        props.checkpointNo && props.sideNo && props.chapterId ?
+          <RoomList />
+        : props.sideNo && props.chapterId ?
+        <CheckpointList />
+        : props.chapterId ?
+          <SideList />
+        :
+          <ChapterList />
+      }
     </List>
   );
 }

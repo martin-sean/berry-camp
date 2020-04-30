@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './App.css';
 
@@ -8,8 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from './browse/drawer';
 import Room from './browse/room';
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Paths } from './browse/router';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import jsondata from './api/chapter-tree.json';
 import { DataTree } from './api/Data';
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     height: '64px',
   },
   item: {
-    padding: theme.spacing(2),
+    // padding: theme.spacing(2),
   }
 }));
 
@@ -44,6 +43,12 @@ const setDocTitle = (title: string | undefined) => {
 }
 
 export default () => {
+  const [chapterId, setChapterId] = useState("");
+  const [sideNo, setSideNo] = useState("");
+  const [checkpointNo, setCheckpointNo] = useState("");
+  const [roomNo, setRoomNo] = useState("");
+
+
   const data: DataTree = jsondata;
   const classes = useStyles();
 
@@ -54,22 +59,41 @@ export default () => {
           <CssBaseline />
           {/* Navbar is contained in drawer */}
           <div className={ classes.root } >
-            <Drawer data={ data } setTitle={ setDocTitle } />
+            <Drawer
+              chapterId={ chapterId }
+              sideNo={ sideNo }
+              checkpointNo={ checkpointNo }
+              roomNo={ roomNo }
+              setChapterId={ setChapterId }
+              setSideNo={ setSideNo }
+              setCheckpointNo={ setCheckpointNo }
+              setRoomNo={ setRoomNo }
+              data={ data }
+              setTitle={ setDocTitle }
+            />
             <div className={ classes.content } >
               <Toolbar className={ classes.toolbar } />
-              <Route exact path={ Paths.ROOM }>
               <Grid container direction="row-reverse">
-                <Grid item className={ classes.item } xs={12} lg={5}>
-                  <Room data={ data } setTitle={ setDocTitle }/>
+                <Grid item className={ classes.item } xs={12} lg={5} spacing={2}>
+                  {
+                    roomNo &&
+                    <Room 
+                      chapterId={ chapterId }
+                      sideNo={ sideNo }
+                      checkpointNo={ checkpointNo }
+                      roomNo={ roomNo }
+                      data={ data } 
+                      setTitle={ setDocTitle }
+                    />
+                  }
                 </Grid>
-                <Grid item className={ classes.item } xs={12} lg={7}>
+                <Grid item className={ classes.item } xs={12} lg={7} spacing={2}>
                   <Skeleton animation={false} height={ 50 }/>
                   <Skeleton animation={false} height={ 50 }/>
                   <Skeleton animation={false} height={ 50 }/>
                   <Skeleton animation={false} height={ 50 }/>
                 </Grid>
               </Grid>
-              </Route>
             </div>
           </div>
           <footer />

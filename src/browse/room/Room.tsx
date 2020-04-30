@@ -3,7 +3,6 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 import { makeStyles, Fade, Theme, Typography, Divider } from '@material-ui/core'
 import { DataTree } from '../../api/Data';
-import { useParams } from 'react-router-dom';
 
 const imageHost = 'https://f002.backblazeb2.com/file/strawberry-house/small/'
 
@@ -14,7 +13,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '300px',
   },
   imageWrapper: {
-    marginBottom: '20px',
+    display: 'inline',
+    // marginBottom: '20px',
   },
   info: {
     fontSize: '12pt',
@@ -25,29 +25,31 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default (props: { data: DataTree, setTitle: (title: string | undefined) => void }) => {
+interface RoomProps { 
+  chapterId: string, 
+  sideNo: string, 
+  checkpointNo: string, 
+  roomNo: string, 
+  data: DataTree,
+  setTitle: (title: string | undefined) => void
+}
+
+export default (props: RoomProps) => {
   const [loaded, setLoaded] = useState(false);
-  const { chapterId, sideNo, checkpointNo, roomNo } = useParams();
   const classes = useStyles();
+  
+  const chapter = props.data[props.chapterId];
+  const side = chapter?.sides[props.sideNo];
+  const checkpoint = side?.checkpoints[props.checkpointNo];
+  const room = checkpoint?.rooms[props.roomNo];
 
-  if (!(chapterId && sideNo && checkpointNo && roomNo)) {
-    return (
-      <div>Error loading room </div>
-    );
-  }
+  props.setTitle(room?.name);
 
-  const chapter = props.data[chapterId];
-  const side = chapter?.sides[sideNo];
-  const checkpoint = side?.checkpoints[checkpointNo];
-  const room = checkpoint?.rooms[roomNo];
-
-  props.setTitle(room.name);
-
-  const image = imageHost + chapterId + '/' + sideNo + '/' + checkpointNo + '/' + roomNo + '.jpg'
+  const image = imageHost + props.chapterId + '/' + props.sideNo + '/' + props.checkpointNo + '/' + props.roomNo + '.jpg'
 
   useEffect(() => {
     setLoaded(false);
-  }, [roomNo]);
+  }, [props.roomNo]);
 
   return (
     <React.Fragment>
@@ -74,13 +76,13 @@ export default (props: { data: DataTree, setTitle: (title: string | undefined) =
         </Fade>
       </div>
 
-      <Typography variant="h4" color="textPrimary">{ room.name }</Typography>
-      <Typography variant="h6" color="textSecondary">Room: { checkpoint.abbreviation + '-' + roomNo }</Typography>
-      <Typography variant="h6" color="textSecondary">Debug: { room.debug_id }</Typography>
+      <Typography variant="h4" color="textPrimary">{ room?.name }</Typography>
+      <Typography variant="h6" color="textSecondary">Room: { checkpoint?.abbreviation + '-' + props.roomNo }</Typography>
+      <Typography variant="h6" color="textSecondary">Debug: { room?.debug_id }</Typography>
       <Divider className={ classes.divider } />
-      <Typography className={ classes.info } variant="h6" color="textSecondary">Chapter: { chapter.name }</Typography>
-      <Typography className={ classes.info } variant="h6" color="textSecondary">Side: { side.name }</Typography>
-      <Typography className={ classes.info } variant="h6" color="textSecondary">Checkpoint: { checkpoint.name }</Typography>
+      <Typography className={ classes.info } variant="h6" color="textSecondary">Chapter: { chapter?.name }</Typography>
+      <Typography className={ classes.info } variant="h6" color="textSecondary">Side: { side?.name }</Typography>
+      <Typography className={ classes.info } variant="h6" color="textSecondary">Checkpoint: { checkpoint?.name }</Typography>
     </React.Fragment>
   )
 }

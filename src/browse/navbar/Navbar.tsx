@@ -56,7 +56,12 @@ const logos = [
   'logo_1.gif', 'logo_2.gif', 'logo_5.gif', 'logo_6.gif',
 ];
 
-export default (props: { open: boolean, toggleDrawer: () => void }) => {
+interface NavbarProps {
+  open: boolean,
+  toggleDrawer: () => void
+}
+
+export default (props: NavbarProps) => {
   const [loaded, setLoaded] = useState(false);
   const logo = logos[Math.floor(Math.random() * logos.length)];
   const classes = useStyles({ logo });

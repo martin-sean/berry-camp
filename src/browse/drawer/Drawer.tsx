@@ -31,7 +31,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default (props: { data: DataTree, setTitle: (title: string | undefined) => void }) => {
+interface DrawerProps {
+  chapterId: string,
+  sideNo: string,
+  checkpointNo: string,
+  roomNo: string,
+  setChapterId: (chapterId: string) => void,
+  setSideNo: (setSideNo: string) => void,
+  setCheckpointNo: (setCheckpointNo: string) => void,
+  setRoomNo: (setRoomNo: string) => void,
+  data: DataTree, 
+  setTitle: (title: string | undefined) => void
+}
+
+export default (props: DrawerProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -43,16 +56,26 @@ export default (props: { data: DataTree, setTitle: (title: string | undefined) =
     setOpen(false);
   }
 
-  const DrawerList = (props: { data: DataTree, onItemSelect: () => void , setTitle: (title: string | undefined) => void }) => {
-    return (
-      <React.Fragment>
-        <Toolbar className={ classes.toolbar } />
-        <div className={ classes.drawerContainer }>
-          <ItemList data={ props.data } onItemSelect={ props.onItemSelect } setTitle={ props.setTitle }/>
-        </div>
-      </React.Fragment>
-    )
-  };
+  const DrawerList = () => (
+    <React.Fragment>
+      <Toolbar className={ classes.toolbar } />
+      <div className={ classes.drawerContainer }>
+        <ItemList
+          chapterId={ props.chapterId }
+          sideNo={ props.sideNo }
+          checkpointNo={ props.checkpointNo }
+          roomNo={ props.roomNo }
+          setChapterId={ props.setChapterId }
+          setSideNo={ props.setSideNo }
+          setCheckpointNo={ props.setCheckpointNo }
+          setRoomNo={ props.setRoomNo }
+          data={ props.data } 
+          closeDrawer={ closeDrawer } 
+          setTitle={ props.setTitle }
+        />
+      </div>
+    </React.Fragment>
+  );
 
   return (
     <React.Fragment>
@@ -70,7 +93,7 @@ export default (props: { data: DataTree, setTitle: (title: string | undefined) =
             paper: classes.drawerMobile,
           }}
         >
-          <DrawerList data={ props.data } onItemSelect={ closeDrawer } setTitle={ props.setTitle }/>
+          <DrawerList />
         </Drawer>
       </Hidden>
       <Hidden smDown>
@@ -83,7 +106,7 @@ export default (props: { data: DataTree, setTitle: (title: string | undefined) =
             paper: classes.drawerDesktop,
           }}
         >
-          <DrawerList data={ props.data } onItemSelect={ closeDrawer } setTitle={ props.setTitle }/>
+          <DrawerList />
         </Drawer>
       </Hidden>
     </React.Fragment>
