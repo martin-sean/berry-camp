@@ -28,9 +28,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '24pt',
     color: 'white',
     paddingLeft: theme.spacing(2),
-    // color: '#F03A17',
-    // WebkitTextStrokeWidth: '1px',
-    // WebkitTextStrokeColor: 'black',
   },
   mobileTitle: {
     flexGrow: 1,
@@ -40,12 +37,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   logo: {
     objectFit: 'cover',
-    // objectPosition: '50%',
     width: 400,
-    // maskImage: 'linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0))',
     WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 1.0) 50%, transparent);',
-    
-    
+    // maskImage: 'linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0))',
     // filter: 'blur(1px)',
     // WebkitFilter: 'blur(1px)',
     // mixBlendMode: 'screen',
@@ -58,13 +52,14 @@ const logos = [
 
 interface NavbarProps {
   open: boolean,
-  toggleDrawer: () => void
+  setOpen: (open: boolean) => void
 }
 
 export default (props: NavbarProps) => {
   const [loaded, setLoaded] = useState(false);
   const logo = logos[Math.floor(Math.random() * logos.length)];
-  const classes = useStyles({ logo });
+  const classes = useStyles();
+  console.log('NAVBAR render');
 
   return (
     <AppBar className={ classes.appBar } position='fixed'>
@@ -74,6 +69,7 @@ export default (props: NavbarProps) => {
             <Fade in={ loaded }>
               <img
                 className={ classes.logo }
+                src={ process.env.PUBLIC_URL + '/img/logo_1.gif' }
                 src={ process.env.PUBLIC_URL + `/img/${ logo }` }
                 alt='Animation of madeline in a campsite in game'
                 onLoad={ () => setLoaded(true) }
@@ -89,7 +85,7 @@ export default (props: NavbarProps) => {
             edge='end' 
             color='inherit' 
             aria-label='menu' 
-            onClick={ props.toggleDrawer }
+            onClick={ () => props.setOpen(!props.open) }
           >
             { props.open ? <ExpandLess /> : <ExpandMore /> }
           </IconButton>

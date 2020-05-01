@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, Toolbar, Hidden } from '@material-ui/core';
-import Navbar from '../navbar';
 import ItemList from './ItemList';
 
 import { DataTree } from '../../api/Data';
-import { LastRoom } from '../../App';
+import { LastRoom, Navigation, SetNavigation } from '../../App';
 
 const drawerWidthDesktop = 330;
 const drawerWidthMobile = '100%';
@@ -33,47 +32,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface DrawerProps {
+  nav: Navigation,
+  setNav: (navigation: Navigation) => void,
   setLastRoom: (lastRoom: LastRoom) => void,
-  chapterId: string,
-  sideNo: string,
-  checkpointNo: string,
-  roomNo: string,
-  setChapterId: (chapterId: string) => void,
-  setSideNo: (setSideNo: string) => void,
-  setCheckpointNo: (setCheckpointNo: string) => void,
-  setRoomNo: (setRoomNo: string) => void,
   data: DataTree, 
-  setTitle: (title: string | undefined) => void
+  setTitle: (title: string | undefined) => void,
+  open: boolean,
+  setOpen: (open: boolean) => void,
 }
 
 export default (props: DrawerProps) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
 
-  const toggleDrawer = () => {
-    setOpen(!open);
-  }
-
-  const closeDrawer = () => {
-    setOpen(false);
-  }
-
+  console.log("DRAWER render");
+  
   const DrawerList = () => (
     <React.Fragment>
       <Toolbar className={ classes.toolbar } />
       <div className={ classes.drawerContainer }>
         <ItemList
+          nav={ props.nav }
+          setNavigation={ props.setNav }
           setLastRoom={ props.setLastRoom }
-          chapterId={ props.chapterId }
-          sideNo={ props.sideNo }
-          checkpointNo={ props.checkpointNo }
-          roomNo={ props.roomNo }
-          setChapterId={ props.setChapterId }
-          setSideNo={ props.setSideNo }
-          setCheckpointNo={ props.setCheckpointNo }
-          setRoomNo={ props.setRoomNo }
           data={ props.data } 
-          closeDrawer={ closeDrawer } 
+          closeDrawer={ () => props.setOpen(false) } 
           setTitle={ props.setTitle }
         />
       </div>
@@ -82,12 +64,11 @@ export default (props: DrawerProps) => {
 
   return (
     <React.Fragment>
-      <Navbar open={ open } toggleDrawer={ toggleDrawer }/>
       <Hidden mdUp>
         <Drawer
           className={ classes.drawerMobile }
-          open={ open }
-          onClose={ toggleDrawer }
+          open={ props.open }
+          onClose={ () => props.setOpen(false) }
           anchor='top'
           ModalProps={{
             keepMounted: true,

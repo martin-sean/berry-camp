@@ -9,13 +9,13 @@ const imageHost = 'https://f002.backblazeb2.com/file/strawberry-house/small/'
 
 const useStyles = makeStyles((theme: Theme) => ({
   image: {
+    display: 'block',
     objectFit: 'cover',
     width: '100%',
     height: '300px',
   },
   imageWrapper: {
-    display: 'inline',
-    // marginBottom: '20px',
+    paddingBottom: theme.spacing(1),
   },
   info: {
     fontSize: '12pt',
@@ -78,7 +78,7 @@ export default (props: RoomProps) => {
         </Fade>
       </div>
 
-      <Typography variant="h4" color="textPrimary">{ room?.name }</Typography>
+      <Typography variant="h5" color="textPrimary">{ room?.name }</Typography>
       <Typography variant="h6" color="textSecondary">Room: { checkpoint?.abbreviation + '-' + props.lastRoom.roomNo }</Typography>
       <Typography variant="h6" color="textSecondary">Debug: { room?.debug_id }</Typography>
       <Divider className={ classes.divider } />

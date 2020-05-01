@@ -3,7 +3,7 @@ import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography } 
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { DataTree } from '../../api/Data';
-import { LastRoom } from '../../App';
+import { LastRoom, Navigation } from '../../App';
 
 const useStyles = makeStyles((theme: Theme) => ({
   progress: {
@@ -19,15 +19,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface ItemsListProps {
+  nav: Navigation,
+  setNavigation: (navigation: Navigation) => void,
   setLastRoom: (lastRoom: LastRoom) => void,
-  chapterId: string,
-  sideNo: string,
-  checkpointNo: string,
-  roomNo: string,
-  setChapterId: (chapterId: string) => void,
-  setSideNo: (sideNo: string) => void,
-  setCheckpointNo: (checkpointNo: string) => void,
-  setRoomNo: (roomNo: string) => void,
   data: DataTree, 
   closeDrawer: () => void, 
   setTitle: (title: string | undefined) => void,
@@ -39,22 +33,30 @@ export default (props: ItemsListProps) => {
   const chapters = props.data;
   const setTitle = props.setTitle;
 
-  // Breadcrumb actions - clear the state
+  // Breadcrumb actions - a state manager might be nice right about now...
   const selectChapter = () => {
-    props.setChapterId('');
-    selectSide();
-    selectCheckpoint();
+    props.setNavigation({ chapterId: '', sideNo: '', checkpointNo: '' });
   }
 
   const selectSide = () => {
-    props.setSideNo('');
-    selectCheckpoint();
+    props.setNavigation({ chapterId: props.nav.chapterId, sideNo: '', checkpointNo: '' });
   }
 
   const selectCheckpoint = () => {
-    props.setCheckpointNo('');
-    props.setRoomNo('');
+    props.setNavigation({ chapterId: props.nav.chapterId, sideNo: props.nav.sideNo, checkpointNo: '' });
   }
+  
+  const setNavChapter = (chapterId: string) => {
+    props.setNavigation({ chapterId: chapterId, sideNo: props.nav.sideNo, checkpointNo: props.nav.checkpointNo });
+  }
+
+  const setNavSide = (sideNo: string) => {
+    props.setNavigation({ chapterId: props.nav.chapterId, sideNo: sideNo, checkpointNo: props.nav.checkpointNo });
+  }
+
+  const setNavCheckpoint = (checkpointNo: string) => {
+    props.setNavigation({ chapterId: props.nav.chapterId, sideNo: props.nav.sideNo, checkpointNo: checkpointNo });
+  } 
 
   const ChapterList = () => {
     setTitle('Chapters');
@@ -69,7 +71,7 @@ export default (props: ItemsListProps) => {
         { Object.keys(chapters).map((chapterId: string, index: number) => (
             <Item
               primary={ chapters[chapterId].name }
-              handleClick={ () => props.setChapterId(chapterId) }
+              handleClick={ () => setNavChapter(chapterId) }
               before={ <Typography className={ classes.indent } color="textSecondary">{ chapters[chapterId].chapter_no }</Typography> }
               key={ index }
             />
@@ -80,7 +82,7 @@ export default (props: ItemsListProps) => {
   }
   
   const SideList = () => {
-    const chapter = props.chapterId ? props.data[props.chapterId] : undefined;
+    const chapter = props.nav.chapterId ? props.data[props.nav.chapterId] : undefined;
     setTitle(chapter?.name);
 
     return (
@@ -96,7 +98,7 @@ export default (props: ItemsListProps) => {
           { Object.keys(chapter.sides).map((sideNo: string, index: number) => (
             <Item 
               primary={ chapter.sides[sideNo].name }
-              handleClick={ () => props.setSideNo(sideNo) }
+              handleClick={ () => setNavSide(sideNo) }
               key={ index }
             />
           ))}
@@ -105,8 +107,8 @@ export default (props: ItemsListProps) => {
   }
 
   const CheckpointList = () => {
-    const chapter = props.chapterId ? props.data[props.chapterId] : undefined;
-    const side = props.sideNo ? chapter?.sides[props.sideNo] : undefined;
+    const chapter = props.nav.chapterId ? props.data[props.nav.chapterId] : undefined;
+    const side = props.nav.sideNo ? chapter?.sides[props.nav.sideNo] : undefined;
     setTitle(side?.name);
 
     return (
@@ -123,7 +125,7 @@ export default (props: ItemsListProps) => {
           { Object.keys(side.checkpoints).map((checkpointNo: string, index: number) => (
               <Item 
                 primary={ side.checkpoints[checkpointNo].name }
-                handleClick={ () => props.setCheckpointNo(checkpointNo) }
+                handleClick={ () => setNavCheckpoint(checkpointNo) }
                 key={ index }
               />
           ))}
@@ -132,9 +134,9 @@ export default (props: ItemsListProps) => {
   }
 
   const RoomList = () => {
-    const chapter = props.chapterId ? props.data[props.chapterId] : undefined;
-    const side = props.sideNo ? chapter?.sides[props.sideNo] : undefined;
-    const checkpoint = props.checkpointNo ? side?.checkpoints[props.checkpointNo] : undefined;
+    const chapter = props.nav.chapterId ? props.data[props.nav.chapterId] : undefined;
+    const side = props.nav.sideNo ? chapter?.sides[props.nav.sideNo] : undefined;
+    const checkpoint = props.nav.checkpointNo ? side?.checkpoints[props.nav.checkpointNo] : undefined;
     setTitle(checkpoint?.name);
 
     return (
@@ -153,14 +155,15 @@ export default (props: ItemsListProps) => {
               <Item 
                 primary={ checkpoint.rooms[roomNo].name }
                 secondary={ checkpoint.rooms[roomNo].debug_id }
-                handleClick={ () => props.closeDrawer && 
+                handleClick={ () => { 
+                  props.closeDrawer();
                   props.setLastRoom({ 
-                    chapterId: props.chapterId,
-                    sideNo: props.sideNo,
-                    checkpointNo: props.checkpointNo,
+                    chapterId: props.nav.chapterId,
+                    sideNo: props.nav.sideNo,
+                    checkpointNo: props.nav.checkpointNo,
                     roomNo: roomNo,
-                  }) 
-                }
+                  })
+                }}
                 key={ index }
               />
           ))}
@@ -200,11 +203,11 @@ export default (props: ItemsListProps) => {
       aria-labelledby='TODO'
     >
       {
-        props.checkpointNo && props.sideNo && props.chapterId ?
+        props.nav.checkpointNo && props.nav.sideNo && props.nav.chapterId ?
           <RoomList />
-        : props.sideNo && props.chapterId ?
+        : props.nav.sideNo && props.nav.chapterId ?
         <CheckpointList />
-        : props.chapterId ?
+        : props.nav.chapterId ?
           <SideList />
         :
           <ChapterList />
