@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
   },
   room: {
     padding: theme.spacing(3),
-    height: '100%',
   }
 }));
 
@@ -104,10 +103,15 @@ export default () => {
                 }
               </Grid>
               <Grid item xs={12} lg={7}>
-                <Skeleton animation={false} height={ 50 }/>
-                <Skeleton animation={false} height={ 50 }/>
-                <Skeleton animation={false} height={ 50 }/>
-                <Skeleton animation={false} height={ 50 }/>
+                {
+                  lastRoom &&
+                  <React.Fragment>
+                    <Skeleton animation={false} height={ 50 }/>
+                    <Skeleton animation={false} height={ 50 }/>
+                    <Skeleton animation={false} height={ 50 }/>
+                    <Skeleton animation={false} height={ 50 }/>
+                  </React.Fragment>
+                }
               </Grid>
             </Grid>
           </div>

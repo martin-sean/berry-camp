@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface ItemsListProps {
   nav: Navigation,
-  setNavigation: (navigation: Navigation) => void,
+  setNav: (navigation: Navigation) => void,
   setLastRoom: (lastRoom: LastRoom) => void,
   data: DataTree, 
   closeDrawer: () => void, 
@@ -35,27 +35,27 @@ export default (props: ItemsListProps) => {
 
   // Breadcrumb actions - a state manager might be nice right about now...
   const selectChapter = () => {
-    props.setNavigation({ chapterId: '', sideNo: '', checkpointNo: '' });
+    props.setNav({ chapterId: '', sideNo: '', checkpointNo: '' });
   }
 
   const selectSide = () => {
-    props.setNavigation({ chapterId: props.nav.chapterId, sideNo: '', checkpointNo: '' });
+    props.setNav({ chapterId: props.nav.chapterId, sideNo: '', checkpointNo: '' });
   }
 
   const selectCheckpoint = () => {
-    props.setNavigation({ chapterId: props.nav.chapterId, sideNo: props.nav.sideNo, checkpointNo: '' });
+    props.setNav({ chapterId: props.nav.chapterId, sideNo: props.nav.sideNo, checkpointNo: '' });
   }
   
   const setNavChapter = (chapterId: string) => {
-    props.setNavigation({ chapterId: chapterId, sideNo: props.nav.sideNo, checkpointNo: props.nav.checkpointNo });
+    props.setNav({ chapterId: chapterId, sideNo: props.nav.sideNo, checkpointNo: props.nav.checkpointNo });
   }
 
   const setNavSide = (sideNo: string) => {
-    props.setNavigation({ chapterId: props.nav.chapterId, sideNo: sideNo, checkpointNo: props.nav.checkpointNo });
+    props.setNav({ chapterId: props.nav.chapterId, sideNo: sideNo, checkpointNo: props.nav.checkpointNo });
   }
 
   const setNavCheckpoint = (checkpointNo: string) => {
-    props.setNavigation({ chapterId: props.nav.chapterId, sideNo: props.nav.sideNo, checkpointNo: checkpointNo });
+    props.setNav({ chapterId: props.nav.chapterId, sideNo: props.nav.sideNo, checkpointNo: checkpointNo });
   } 
 
   const ChapterList = () => {

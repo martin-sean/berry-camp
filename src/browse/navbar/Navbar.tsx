@@ -55,7 +55,7 @@ interface NavbarProps {
   setOpen: (open: boolean) => void
 }
 
-export default (props: NavbarProps) => {
+export default React.memo((props: NavbarProps) => {
   const [loaded, setLoaded] = useState(false);
   const logo = logos[Math.floor(Math.random() * logos.length)];
   const classes = useStyles();
@@ -69,7 +69,6 @@ export default (props: NavbarProps) => {
             <Fade in={ loaded }>
               <img
                 className={ classes.logo }
-                src={ process.env.PUBLIC_URL + '/img/logo_1.gif' }
                 src={ process.env.PUBLIC_URL + `/img/${ logo }` }
                 alt='Animation of madeline in a campsite in game'
                 onLoad={ () => setLoaded(true) }
@@ -93,4 +92,4 @@ export default (props: NavbarProps) => {
       </Toolbar>
     </AppBar>
   );
-}
+});
