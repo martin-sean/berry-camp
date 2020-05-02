@@ -72,7 +72,7 @@ export default (props: ItemsListProps) => {
             <Item
               primary={ chapters[chapterId].name }
               handleClick={ () => setNavChapter(chapterId) }
-              before={ <Typography className={ classes.indent } color="textSecondary">{ chapters[chapterId].chapter_no }</Typography> }
+              before={ chapters[chapterId].chapter_no?.toString() }
               key={ index }
             />
           ))
@@ -98,6 +98,7 @@ export default (props: ItemsListProps) => {
           { Object.keys(chapter.sides).map((sideNo: string, index: number) => (
             <Item 
               primary={ chapter.sides[sideNo].name }
+              before={ sideNo }
               handleClick={ () => setNavSide(sideNo) }
               key={ index }
             />
@@ -126,6 +127,7 @@ export default (props: ItemsListProps) => {
               <Item 
                 primary={ side.checkpoints[checkpointNo].name }
                 handleClick={ () => setNavCheckpoint(checkpointNo) }
+                before={ checkpointNo }
                 key={ index }
               />
           ))}
@@ -155,6 +157,7 @@ export default (props: ItemsListProps) => {
               <Item 
                 primary={ checkpoint.rooms[roomNo].name }
                 secondary={ checkpoint.rooms[roomNo].debug_id }
+                before={ roomNo }
                 handleClick={ () => { 
                   props.closeDrawer();
                   props.setLastRoom({ 
@@ -174,7 +177,7 @@ export default (props: ItemsListProps) => {
   interface ItemProps {
     primary: string, 
     secondary?: string, 
-    before?: JSX.Element, 
+    before: string,
     handleClick: () => void,
   }
 
@@ -184,7 +187,7 @@ export default (props: ItemsListProps) => {
       <ListItem button 
         onClick={ props.handleClick }
       > 
-        { props.before }
+        <Typography className={ classes.indent } color="textSecondary">{ props.before }</Typography>
         <ListItemText primary={ props.primary } secondary={ props.secondary } />
       </ListItem>
     );
