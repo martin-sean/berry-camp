@@ -10,6 +10,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  breadcrumbLink: {
+    cursor: 'pointer',
+  },
   list: {
     overflowY: "auto",
     margin: 0,
@@ -100,7 +103,7 @@ export default (props: ItemsListProps) => {
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
-              <Link color="textSecondary" onClick={ selectChapter }>Chapter</Link> 
+              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectChapter }>Chapter</Link> 
               <Typography color="textPrimary">Side</Typography>
             </Breadcrumbs>
           </ListItem>
@@ -127,8 +130,8 @@ export default (props: ItemsListProps) => {
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
-              <Link color="textSecondary" onClick={ selectChapter }>Chapter</Link>
-              <Link color="textSecondary" onClick={ selectSide }>Side</Link>
+              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectChapter }>Chapter</Link>
+              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectSide }>Side</Link>
               <Typography color="textPrimary">Checkpoint</Typography>
             </Breadcrumbs>
           </ListItem>
@@ -156,9 +159,9 @@ export default (props: ItemsListProps) => {
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
-              <Link color="textSecondary" onClick={ selectChapter }>Chapter</Link>
-              <Link color="textSecondary" onClick={ selectSide }>Side</Link>
-              <Link color="textSecondary" onClick={ selectCheckpoint }>Checkpoint</Link>
+              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectChapter }>Chapter</Link>
+              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectSide }>Side</Link>
+              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectCheckpoint }>Checkpoint</Link>
               <Typography color="textPrimary">Room</Typography>
             </Breadcrumbs>
           </ListItem>
