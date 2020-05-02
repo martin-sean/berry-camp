@@ -55,34 +55,6 @@ export default (props: RoomProps) => {
     setLoaded(false);
   }, [props.lastRoom]);
 
-  if (!room) {
-    return (
-      <React.Fragment>
-        <div>
-          {
-              loaded ? null : 
-              <React.Fragment>
-                <Skeleton variant="rect" width={ '100%' } height={300} />
-              </React.Fragment>
-          }
-        </div>
-        <div className={ classes.imageWrapper }>
-          <Fade in={ loaded }>
-            <img
-              className={ classes.image }
-              src={ errorImage }
-              alt="Screenshot of current room"
-              style={ loaded ? {} : { display: 'none'} }
-              onLoad={ () => setLoaded(true) }
-            />
-          </Fade>
-        </div>
-        <Typography variant="h5" color="textPrimary">Room does not exist</Typography>
-        <Typography color="textSecondary">Please select a room from the menu</Typography>
-      </React.Fragment>
-    );
-  }
-
   return (
     <React.Fragment>
       <div className={ classes.imageWrapper }>
@@ -112,13 +84,23 @@ export default (props: RoomProps) => {
         </Fade>
       </div>
 
-      <Typography variant="h5" color="textPrimary">{ room?.name }</Typography>
-      <Typography className={ classes.info } color="textSecondary">{ chapter.chapter_no && `Chapter ${ chapter.chapter_no }: `}{ chapter?.name }</Typography>
-      <Typography className={ classes.info } color="textSecondary">{ side?.name } Side</Typography>
-      <Typography className={ classes.info } color="textSecondary">{ checkpoint?.name }</Typography>
-      <Divider className={ classes.divider } />
-      <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.lastRoom.roomNo }</Typography>
-      <Typography color="textSecondary">Debug ID: { room?.debug_id }</Typography>
+      {
+        room ?
+          <React.Fragment>
+            <Typography variant="h5" color="textPrimary">{ room?.name }</Typography>
+            <Typography className={ classes.info } color="textSecondary">{ chapter.chapter_no && `Chapter ${ chapter.chapter_no }: `}{ chapter?.name }</Typography>
+            <Typography className={ classes.info } color="textSecondary">{ side?.name } Side</Typography>
+            <Typography className={ classes.info } color="textSecondary">{ checkpoint?.name }</Typography>
+            <Divider className={ classes.divider } />
+            <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.lastRoom.roomNo }</Typography>
+            <Typography color="textSecondary">Debug ID: { room?.debug_id }</Typography>
+          </React.Fragment>
+        :
+          <React.Fragment>
+            <Typography variant="h5" color="textPrimary">Room does not exist</Typography>
+            <Typography color="textSecondary">Please select a room from the menu</Typography>
+          </React.Fragment>
+      }
     </React.Fragment>
   )
 }
