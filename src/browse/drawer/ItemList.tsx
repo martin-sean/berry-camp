@@ -11,7 +11,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
   },
   list: {
+    overflowY: "auto",
+    margin: 0,
     padding: 0,
+    height: "100%",
+    '&::-webkit-scrollbar': {
+      width: '0.8em'
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0, 0, 0, .2)',
+      borderRadius: '1em',
+    }
   },
   indent: {
     width: '30px',
@@ -72,7 +82,7 @@ export default (props: ItemsListProps) => {
             <Item
               primary={ chapters[chapterId].name }
               handleClick={ () => setNavChapter(chapterId) }
-              before={ chapters[chapterId].chapter_no?.toString() }
+              before={ chapters[chapterId].chapter_no }
               key={ index }
             />
           ))
@@ -177,7 +187,7 @@ export default (props: ItemsListProps) => {
   interface ItemProps {
     primary: string, 
     secondary?: string, 
-    before: string,
+    before: string | number | undefined,
     handleClick: () => void,
   }
 
