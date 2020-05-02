@@ -49,9 +49,39 @@ export default (props: RoomProps) => {
     '/' + props.lastRoom.roomNo + 
     '.jpg'
 
+  const errorImage = '/img/error.jpg';
+
   useEffect(() => {
     setLoaded(false);
   }, [props.lastRoom]);
+
+  if (!room) {
+    return (
+      <React.Fragment>
+        <div>
+          {
+              loaded ? null : 
+              <React.Fragment>
+                <Skeleton variant="rect" width={ '100%' } height={300} />
+              </React.Fragment>
+          }
+        </div>
+        <div className={ classes.imageWrapper }>
+          <Fade in={ loaded }>
+            <img
+              className={ classes.image }
+              src={ errorImage }
+              alt="Screenshot of current room"
+              style={ loaded ? {} : { display: 'none'} }
+              onLoad={ () => setLoaded(true) }
+            />
+          </Fade>
+        </div>
+        <Typography variant="h5" color="textPrimary">Room does not exist</Typography>
+        <Typography color="textSecondary">Please select a room from the menu</Typography>
+      </React.Fragment>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -74,17 +104,21 @@ export default (props: RoomProps) => {
             alt="Screenshot of current room"
             style={ loaded ? {} : { display: 'none'} }
             onLoad={ () => setLoaded(true) }
+            onError={ (e) => {
+              (e.target as HTMLImageElement).onerror = null;
+              (e.target as HTMLImageElement).src = errorImage
+            } }
           />
         </Fade>
       </div>
 
       <Typography variant="h5" color="textPrimary">{ room?.name }</Typography>
-      <Typography variant="h6" color="textSecondary">Room: { checkpoint?.abbreviation + '-' + props.lastRoom.roomNo }</Typography>
-      <Typography variant="h6" color="textSecondary">Debug: { room?.debug_id }</Typography>
+      <Typography className={ classes.info } color="textSecondary">{ chapter.chapter_no && `Chapter ${ chapter.chapter_no }: `}{ chapter?.name }</Typography>
+      <Typography className={ classes.info } color="textSecondary">{ side?.name } Side</Typography>
+      <Typography className={ classes.info } color="textSecondary">{ checkpoint?.name }</Typography>
       <Divider className={ classes.divider } />
-      <Typography className={ classes.info } variant="h6" color="textSecondary">Chapter: { chapter?.name }</Typography>
-      <Typography className={ classes.info } variant="h6" color="textSecondary">Side: { side?.name }</Typography>
-      <Typography className={ classes.info } variant="h6" color="textSecondary">Checkpoint: { checkpoint?.name }</Typography>
+      <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.lastRoom.roomNo }</Typography>
+      <Typography color="textSecondary">Debug ID: { room?.debug_id }</Typography>
     </React.Fragment>
   )
 }

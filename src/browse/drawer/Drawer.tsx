@@ -6,7 +6,6 @@ import ItemList from './ItemList';
 
 import { DataTree } from '../../api/Data';
 import { LastRoom, Navigation } from '../../App';
-import Navbar from '../navbar';
 
 const drawerWidthDesktop = 330;
 const drawerWidthMobile = '100%';
@@ -65,7 +64,6 @@ export default (props: DrawerProps) => {
 
   return (
     <React.Fragment>
-      <Navbar open={ props.open } setOpen={ props.setOpen }/>
       <Hidden mdUp>
         <Drawer
           className={ classes.drawerMobile }
