@@ -3,16 +3,17 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 import { makeStyles, Fade, Theme, Typography, Divider } from '@material-ui/core'
 import { DataTree } from '../../api/Data';
-import { LastRoom } from '../../App';
+import { LastRoom } from '../../BerryCamp';
 
-const imageHost = 'https://f002.backblazeb2.com/file/strawberry-house/small/'
+const imageHost = 'https://f002.backblazeb2.com/file/strawberry-house/screens/'
 
 const useStyles = makeStyles((theme: Theme) => ({
   image: {
+    imageRendering: 'pixelated',
     display: 'block',
     objectFit: 'cover',
     width: '100%',
-    height: '300px',
+    height: '360px',
   },
   imageWrapper: {
     paddingBottom: theme.spacing(1),
@@ -32,7 +33,7 @@ interface RoomProps {
   setTitle: (title: string | undefined) => void
 }
 
-export default (props: RoomProps) => {
+export default React.memo((props: RoomProps) => {
   const [loaded, setLoaded] = useState(false);
   const classes = useStyles();
   
@@ -47,7 +48,7 @@ export default (props: RoomProps) => {
     '/' + props.lastRoom.sideNo +
     '/' + props.lastRoom.checkpointNo +
     '/' + props.lastRoom.roomNo + 
-    '.jpg'
+    '.png'
 
   const errorImage = '/img/error.jpg';
 
@@ -63,7 +64,7 @@ export default (props: RoomProps) => {
           {
               loaded ? null : 
               <React.Fragment>
-                <Skeleton variant="rect" width={ '100%' } height={300} />
+                <Skeleton variant="rect" width={ '100%' } height={360} />
               </React.Fragment>
           }
           </div>
@@ -103,4 +104,4 @@ export default (props: RoomProps) => {
       }
     </React.Fragment>
   )
-}
+});

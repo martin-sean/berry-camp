@@ -3,7 +3,7 @@ import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography } 
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { DataTree } from '../../api/Data';
-import { LastRoom, Navigation } from '../../App';
+import { LastRoom, Navigation } from '../../BerryCamp';
 
 const useStyles = makeStyles((theme: Theme) => ({
   progress: {

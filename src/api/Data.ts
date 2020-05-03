@@ -29,6 +29,5 @@ export interface Checkpoint {
 
 export interface Room {
   name: string,
-  image: string,
   debug_id: string,
 }
