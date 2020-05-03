@@ -5,7 +5,7 @@ import { Drawer, Toolbar, Hidden } from '@material-ui/core';
 import ItemList from './ItemList';
 
 import { DataTree } from '../../api/Data';
-import { LastRoom, Navigation } from '../../App';
+import { LastRoom, Navigation } from '../../BerryCamp';
 
 const drawerWidthDesktop = 330;
 const drawerWidthMobile = '100%';
