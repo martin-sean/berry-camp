@@ -5,7 +5,7 @@ import { makeStyles, Fade, Theme, Typography, Divider } from '@material-ui/core'
 import { DataTree } from '../../api/Data';
 import { LastRoom } from '../../BerryCamp';
 
-const imageHost = 'https://f002.backblazeb2.com/file/strawberry-house/screens/'
+const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
 const useStyles = makeStyles((theme: Theme) => ({
   image: {
