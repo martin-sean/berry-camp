@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import { makeStyles, Fade, Theme, Typography, Divider } from '@material-ui/core'
-import { DataTree } from '../../api/Data';
-import { LastRoom } from '../../BerryCamp';
+import { makeStyles, Fade, Theme, Typography, Divider, Button, Snackbar, Grid, Slide } from '@material-ui/core'
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import { DataTree } from '../../../api/Data';
+import { LastRoom } from '../Home';
+import { Alert } from '@material-ui/lab';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
@@ -25,6 +27,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: '10px',
     marginBottom: '10px',
   },
+  center: {
+    display: 'flex',
+    alignItems: 'flex-end',
+  }
 }));
 
 interface RoomProps { 
@@ -35,6 +41,7 @@ interface RoomProps {
 
 export default React.memo((props: RoomProps) => {
   const [loaded, setLoaded] = useState(false);
+  const [copied, setCopied] = useState(false);
   const classes = useStyles();
   
   const chapter = props.data[props.lastRoom.chapterId];
@@ -55,6 +62,17 @@ export default React.memo((props: RoomProps) => {
   useEffect(() => {
     setLoaded(false);
   }, [props.lastRoom.chapterId, props.lastRoom.sideNo, props.lastRoom.checkpointNo, props.lastRoom.roomNo]);
+
+  const copyUrl = () => {
+    navigator.clipboard.writeText(
+      window.location.href.replace(window.location.search, '') +
+      `?chapter=${ props.lastRoom.chapterId }` +
+      `&side=${ props.lastRoom.sideNo }` +
+      `&checkpoint=${ props.lastRoom.checkpointNo }`+
+      `&room=${ props.lastRoom.roomNo  }`
+    );
+    setCopied(true);
+  }
 
   return (
     <React.Fragment>
@@ -93,8 +111,24 @@ export default React.memo((props: RoomProps) => {
             <Typography className={ classes.info } color="textSecondary">{ side?.name } Side</Typography>
             <Typography className={ classes.info } color="textSecondary">{ checkpoint?.name }</Typography>
             <Divider className={ classes.divider } />
-            <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.lastRoom.roomNo }</Typography>
-            <Typography color="textSecondary">Debug ID: { room?.debug_id }</Typography>
+            <Grid container justify='space-between'>
+              <Grid item>
+                <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.lastRoom.roomNo }</Typography>
+                <Typography color="textSecondary">Debug ID: { room?.debug_id }</Typography>
+              </Grid>
+              <Grid item className={ classes.center }>
+                <Button variant='outlined' onClick={ copyUrl }>Copy link</Button>
+              </Grid>
+            </Grid>
+            <Snackbar
+              open={ copied }
+              onClose={ () => setCopied(false) }
+              anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } }
+              autoHideDuration={ 2000 }
+              TransitionComponent={ Slide }
+            >
+              <Alert variant='filled' severity='info' icon={ <FileCopyIcon /> }>Room link was copied</Alert>
+            </Snackbar>
           </React.Fragment>
         :
           <React.Fragment>

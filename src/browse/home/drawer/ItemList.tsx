@@ -2,8 +2,8 @@ import React from 'react';
 import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { DataTree } from '../../api/Data';
-import { LastRoom, Navigation } from '../../BerryCamp';
+import { DataTree } from '../../../api/Data';
+import { LastRoom, Navigation } from '../Home';
 
 const useStyles = makeStyles((theme: Theme) => ({
   progress: {
@@ -99,7 +99,6 @@ export default (props: ItemsListProps) => {
     setTitle(chapter?.name);
 
     return (
-      !chapter ? errorMessage("Sides") :
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
@@ -108,7 +107,8 @@ export default (props: ItemsListProps) => {
             </Breadcrumbs>
           </ListItem>
           <Divider />
-          { Object.keys(chapter.sides).map((sideNo: string, index: number) => (
+          { !chapter ? errorMessage("Sides") :
+            Object.keys(chapter.sides).map((sideNo: string, index: number) => (
             <Item 
               primary={ chapter.sides[sideNo].name }
               before={ sideNo }
@@ -126,25 +126,25 @@ export default (props: ItemsListProps) => {
     setTitle(side?.name);
 
     return (
-      !side ? errorMessage("Checkpoints") :
-        <React.Fragment>
-          <ListItem>
-            <Breadcrumbs separator="›">
-              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectChapter }>Chapter</Link>
-              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectSide }>Side</Link>
-              <Typography color="textPrimary">Checkpoint</Typography>
-            </Breadcrumbs>
-          </ListItem>
-          <Divider />
-          { Object.keys(side.checkpoints).map((checkpointNo: string, index: number) => (
-              <Item 
-                primary={ side.checkpoints[checkpointNo].name }
-                handleClick={ () => setNavCheckpoint(checkpointNo) }
-                before={ checkpointNo }
-                key={ index }
-              />
-          ))}
-        </React.Fragment>
+      <React.Fragment>
+        <ListItem>
+          <Breadcrumbs separator="›">
+            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectChapter }>Chapter</Link>
+            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectSide }>Side</Link>
+            <Typography color="textPrimary">Checkpoint</Typography>
+          </Breadcrumbs>
+        </ListItem>
+        <Divider />
+        { !side ? errorMessage("Checkpoints") :
+          Object.keys(side.checkpoints).map((checkpointNo: string, index: number) => (
+            <Item 
+              primary={ side.checkpoints[checkpointNo].name }
+              handleClick={ () => setNavCheckpoint(checkpointNo) }
+              before={ checkpointNo }
+              key={ index }
+            />
+        ))}
+      </React.Fragment>
     );
   }
 
@@ -155,35 +155,35 @@ export default (props: ItemsListProps) => {
     setTitle(checkpoint?.name);
 
     return (
-      !checkpoint ? errorMessage("Rooms") :
-        <React.Fragment>
-          <ListItem>
-            <Breadcrumbs separator="›">
-              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectChapter }>Chapter</Link>
-              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectSide }>Side</Link>
-              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectCheckpoint }>Checkpoint</Link>
-              <Typography color="textPrimary">Room</Typography>
-            </Breadcrumbs>
-          </ListItem>
-          <Divider />
-          { Object.keys(checkpoint.rooms).map((roomNo: string, index: number) => (
-              <Item 
-                primary={ checkpoint.rooms[roomNo].name }
-                secondary={ checkpoint.rooms[roomNo].debug_id }
-                before={ roomNo }
-                handleClick={ () => { 
-                  props.closeDrawer();
-                  props.setLastRoom({ 
-                    chapterId: props.nav.chapterId,
-                    sideNo: props.nav.sideNo,
-                    checkpointNo: props.nav.checkpointNo,
-                    roomNo: roomNo,
-                  })
-                }}
-                key={ index }
-              />
-          ))}
-        </React.Fragment>
+      <React.Fragment>
+        <ListItem>
+          <Breadcrumbs separator="›">
+            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectChapter }>Chapter</Link>
+            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectSide }>Side</Link>
+            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ selectCheckpoint }>Checkpoint</Link>
+            <Typography color="textPrimary">Room</Typography>
+          </Breadcrumbs>
+        </ListItem>
+        <Divider />
+        { !checkpoint ? errorMessage("Rooms") :
+          Object.keys(checkpoint.rooms).map((roomNo: string, index: number) => (
+            <Item 
+              primary={ checkpoint.rooms[roomNo].name }
+              secondary={ checkpoint.rooms[roomNo].debug_id }
+              before={ roomNo }
+              handleClick={ () => { 
+                props.closeDrawer();
+                props.setLastRoom({ 
+                  chapterId: props.nav.chapterId,
+                  sideNo: props.nav.sideNo,
+                  checkpointNo: props.nav.checkpointNo,
+                  roomNo: roomNo,
+                })
+              }}
+              key={ index }
+            />
+        ))}
+      </React.Fragment>
     );
   }
   
