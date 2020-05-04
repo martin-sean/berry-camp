@@ -54,7 +54,7 @@ export default React.memo((props: RoomProps) => {
 
   useEffect(() => {
     setLoaded(false);
-  }, [props.lastRoom]);
+  }, [props.lastRoom.chapterId, props.lastRoom.sideNo, props.lastRoom.checkpointNo, props.lastRoom.roomNo]);
 
   return (
     <React.Fragment>
