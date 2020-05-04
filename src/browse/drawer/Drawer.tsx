@@ -41,7 +41,7 @@ interface DrawerProps {
   setOpen: (open: boolean) => void,
 }
 
-export default (props: DrawerProps) => {
+export default React.memo((props: DrawerProps) => {
   const classes = useStyles();
 
   console.log("DRAWER render");
@@ -95,4 +95,4 @@ export default (props: DrawerProps) => {
       </Hidden>
     </React.Fragment>
   );
-}
+});
