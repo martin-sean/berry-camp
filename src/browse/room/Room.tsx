@@ -3,7 +3,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 import { makeStyles, Fade, Theme, Typography, Divider } from '@material-ui/core'
 import { DataTree } from '../../api/Data';
-import { LastRoom } from '../../App';
+import { LastRoom } from '../../BerryCamp';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
