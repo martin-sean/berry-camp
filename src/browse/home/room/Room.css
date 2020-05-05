@@ -1,0 +1,6 @@
+/* Pixelated images are weird */
+.pixelated {
+  image-rendering: pixelated; /* Chrome */
+  image-rendering: -moz-crisp-edges; /* Compatibility */
+  image-rendering: crisp-edges; /* Firefox */
+}

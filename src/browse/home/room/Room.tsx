@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import Skeleton from '@material-ui/lab/Skeleton';
 
+import  './Room.css';
+
+import Skeleton from '@material-ui/lab/Skeleton';
 import { makeStyles, Fade, Theme, Typography, Divider, Button, Snackbar, Grid, Slide } from '@material-ui/core'
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+
 import { DataTree } from '../../../api/Data';
 import { LastRoom } from '../Home';
 import { Alert } from '@material-ui/lab';
@@ -11,7 +14,6 @@ const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
 const useStyles = makeStyles((theme: Theme) => ({
   image: {
-    imageRendering: 'pixelated',
     display: 'block',
     objectFit: 'cover',
     width: '100%',
@@ -90,7 +92,7 @@ export default React.memo((props: RoomProps) => {
         
         <Fade in={ loaded }>
           <img
-            className={ classes.image }
+            className={ `${ classes.image } pixelated` }
             src={ image }
             alt="Screenshot of current room"
             style={ loaded ? {} : { display: 'none'} }
