@@ -2,8 +2,10 @@ import React from 'react';
 import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { DataTree } from '../../../api/Data';
 import { LastRoom, Navigation } from '../Home';
+
+import { useSelector } from 'react-redux';
+import { GlobalStore } from '../../../redux/reducers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   progress: {
@@ -35,7 +37,6 @@ interface ItemsListProps {
   nav: Navigation,
   setNav: (navigation: Navigation) => void,
   setLastRoom: (lastRoom: LastRoom) => void,
-  data: DataTree, 
   closeDrawer: () => void, 
   setTitle: (title: string | undefined) => void,
 }
@@ -43,7 +44,10 @@ interface ItemsListProps {
 // Populate the chapter tree drawer
 export default React.memo((props: ItemsListProps) => {
   const classes = useStyles();
-  const chapters = props.data;
+
+  // Redux
+  const data = useSelector((state: GlobalStore) => state.data);
+
   const setTitle = props.setTitle;
 
   // Breadcrumb actions - a state manager might be nice right about now...
@@ -81,11 +85,11 @@ export default React.memo((props: ItemsListProps) => {
           </Breadcrumbs>
         </ListItem>
         <Divider />
-        { Object.keys(chapters).map((chapterId: string, index: number) => (
+        { Object.keys(data).map((chapterId: string, index: number) => (
             <Item
-              primary={ chapters[chapterId].name }
+              primary={ data[chapterId].name }
               handleClick={ () => setNavChapter(chapterId) }
-              before={ chapters[chapterId].chapter_no }
+              before={ data[chapterId].chapter_no }
               key={ index }
             />
           ))
@@ -95,7 +99,7 @@ export default React.memo((props: ItemsListProps) => {
   }
   
   const SideList = () => {
-    const chapter = props.nav.chapterId ? props.data[props.nav.chapterId] : undefined;
+    const chapter = props.nav.chapterId ? data[props.nav.chapterId] : undefined;
     setTitle(chapter?.name);
 
     return (
@@ -121,7 +125,7 @@ export default React.memo((props: ItemsListProps) => {
   }
 
   const CheckpointList = () => {
-    const chapter = props.nav.chapterId ? props.data[props.nav.chapterId] : undefined;
+    const chapter = props.nav.chapterId ? data[props.nav.chapterId] : undefined;
     const side = props.nav.sideNo ? chapter?.sides[props.nav.sideNo] : undefined;
     setTitle(side?.name);
 
@@ -149,7 +153,7 @@ export default React.memo((props: ItemsListProps) => {
   }
 
   const RoomList = () => {
-    const chapter = props.nav.chapterId ? props.data[props.nav.chapterId] : undefined;
+    const chapter = props.nav.chapterId ? data[props.nav.chapterId] : undefined;
     const side = props.nav.sideNo ? chapter?.sides[props.nav.sideNo] : undefined;
     const checkpoint = props.nav.checkpointNo ? side?.checkpoints[props.nav.checkpointNo] : undefined;
     setTitle(checkpoint?.name);

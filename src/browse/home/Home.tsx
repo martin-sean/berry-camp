@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import jsondata from '../../api/chapter-tree.json';
-import { DataTree } from '../../api/Data';
-
 import { makeStyles, Grid, Toolbar, Paper } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 
@@ -55,7 +52,6 @@ export default React.memo(() => {
   // Open and close the mobile drawer
   const [open, setOpen] = useState(false);
 
-  const data: DataTree = jsondata;
   const classes = useStyles();
 
   // Set the document title
@@ -104,7 +100,6 @@ export default React.memo(() => {
           setLastRoom={ setLastRoom }
           open={ open }
           setOpen={ setOpen }
-          data={ data }
           setTitle={ setDocTitle }
         />
         <div className={ classes.content }>
@@ -116,7 +111,6 @@ export default React.memo(() => {
                 <Paper className={ classes.room }>
                   <Room 
                     lastRoom={ lastRoom }
-                    data={ data } 
                     setTitle={ setDocTitle }
                   />
                 </Paper>

@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, Toolbar, Hidden } from '@material-ui/core';
 import ItemList from './ItemList';
 
-import { DataTree } from '../../../api/Data';
 import { LastRoom, Navigation } from '../Home';
 
 const drawerWidthDesktop = 330;
@@ -35,13 +34,12 @@ interface DrawerProps {
   nav: Navigation,
   setNav: (navigation: Navigation) => void,
   setLastRoom: (lastRoom: LastRoom) => void,
-  data: DataTree, 
   setTitle: (title: string | undefined) => void,
   open: boolean,
   setOpen: (open: boolean) => void,
 }
 
-export default React.memo((props: DrawerProps) => {
+export default (props: DrawerProps) => {
   const classes = useStyles();
 
   console.log("DRAWER render");
@@ -54,7 +52,6 @@ export default React.memo((props: DrawerProps) => {
           nav={ props.nav }
           setNav={ props.setNav }
           setLastRoom={ props.setLastRoom }
-          data={ props.data } 
           closeDrawer={ () => props.setOpen(false) } 
           setTitle={ props.setTitle }
         />
@@ -95,4 +92,4 @@ export default React.memo((props: DrawerProps) => {
       </Hidden>
     </React.Fragment>
   );
-});
+}
