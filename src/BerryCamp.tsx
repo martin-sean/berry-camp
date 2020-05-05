@@ -1,7 +1,7 @@
 import React from 'react';
 import './BerryCamp.css';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
 import Home from './browse/home';
 
@@ -15,14 +15,12 @@ const theme = createMuiTheme({
 });
 
 export default () => {
-  return (
-    <Router>
-      <ThemeProvider theme={ theme }>
-        <CssBaseline />
-        <Switch>
-          <Route path='/' component={ Home } />
-        </Switch>
-      </ThemeProvider>
-    </Router>
+  return ( 
+    <ThemeProvider theme={ theme }>
+      <CssBaseline />
+      <Switch>
+        <Route path='/' component={ Home } />
+      </Switch>
+    </ThemeProvider>
   );
 }

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import jsondata from '../../api/chapter-tree.json';
 import { DataTree } from '../../api/Data';
 
 import { makeStyles, Grid, Toolbar, Paper } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+
+import { useHistory } from 'react-router-dom';
 
 import Navbar from '../navbar';
 import Drawer from './drawer';
@@ -42,37 +44,14 @@ export interface LastRoom {
   roomNo: string,
 }
 
-export default () => {
-  // Load Query Params
-  const params = new URLSearchParams(window.location.search);
-  const chapterId = params.get('chapter') || '';
-  const sideNo = params.get('side') || '';
-  const checkpointNo = params.get('checkpoint') || '';
-  const roomNo = params.get('room');
-
-  
-
-  // Initialise default values
-  const defaultNav = { chapterId: '', sideNo: '', checkpointNo: '' };
-  // All params
-  const queryNav = (chapterId && sideNo && checkpointNo) ? { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo } :
-    // Chapter and side
-    (chapterId && sideNo) ? { ...defaultNav, chapterId: chapterId, sideNo: sideNo } :
-    // Only chapter
-    chapterId ? { ...defaultNav, chapterId: chapterId } : 
-    // No params
-    defaultNav;
-
-  const queryRoom =  (chapterId && sideNo && checkpointNo && roomNo) ? 
-    { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo, roomNo: roomNo } : null
-
+export default React.memo(() => {
   // Remove the params
-  // window.history.replaceState({ lastRoom: queryRoom } , 'Berry Camp', '/');
+  const history = useHistory();
 
   // Store the current menu navigation
-  const [nav, setNav] = useState<Navigation>(queryNav);
+  const [nav, setNav] = useState<Navigation>({ chapterId: '', sideNo: '', checkpointNo: '' });
   // Remember the last room that was selected
-  const [lastRoom, setLastRoom] = useState<LastRoom | null>(queryRoom);
+  const [lastRoom, setLastRoom] = useState<LastRoom | null>(null);
   // Open and close the mobile drawer
   const [open, setOpen] = useState(false);
 
@@ -83,6 +62,37 @@ export default () => {
   const setDocTitle = (title: string | undefined) => {
     document.title = 'Berry Camp · ' + title || 'Error';
   }
+
+  // TODO: Use state manager instead
+  // Handle query params, Temporary until using Redux
+  useEffect(() => {
+      // Load Query Params
+    const params = new URLSearchParams(window.location.search);
+    const chapterId = params.get('chapter') || '';
+    const sideNo = params.get('side') || '';
+    const checkpointNo = params.get('checkpoint') || '';
+    const roomNo = params.get('room');
+
+    // All params
+    const queryNav = (chapterId && sideNo && checkpointNo) ? { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo } :
+      // Chapter and side
+      (chapterId && sideNo) ? { ...nav, chapterId: chapterId, sideNo: sideNo } :
+      // Only chapter
+      chapterId ? { ...nav, chapterId: chapterId } : 
+      // No params
+      nav;
+
+    const queryRoom =  (chapterId && sideNo && checkpointNo && roomNo) ? 
+      { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo, roomNo: roomNo } : null
+    
+    history.push('/');
+
+    // If any of the params are provided, set the params in state
+    if (chapterId || sideNo || checkpointNo || roomNo) {
+      setNav(queryNav);
+      setLastRoom(queryRoom);
+    }
+  }, [history, nav]);
 
   return (
     <React.Fragment>
@@ -128,4 +138,4 @@ export default () => {
       </div>
     </React.Fragment>
   );
-}
+});

@@ -41,7 +41,7 @@ interface ItemsListProps {
 }
 
 // Populate the chapter tree drawer
-export default (props: ItemsListProps) => {
+export default React.memo((props: ItemsListProps) => {
   const classes = useStyles();
   const chapters = props.data;
   const setTitle = props.setTitle;
@@ -137,7 +137,7 @@ export default (props: ItemsListProps) => {
         <Divider />
         { !side ? errorMessage("Checkpoints") :
           Object.keys(side.checkpoints).map((checkpointNo: string, index: number) => (
-            <Item 
+            <Item
               primary={ side.checkpoints[checkpointNo].name }
               handleClick={ () => setNavCheckpoint(checkpointNo) }
               before={ checkpointNo }
@@ -230,4 +230,4 @@ export default (props: ItemsListProps) => {
       }
     </List>
   );
-}
+});

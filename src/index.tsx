@@ -4,9 +4,16 @@ import './index.css';
 import BerryCamp from './BerryCamp';
 import * as serviceWorker from './serviceWorker';
 
+import { Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
+
 ReactDOM.render(
   <React.StrictMode>
-    <BerryCamp />
+    <Router history={ history }>
+      <BerryCamp />
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
