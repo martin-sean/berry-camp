@@ -4,8 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, Toolbar, Hidden } from '@material-ui/core';
 import ItemList from './ItemList';
 
-import { LastRoom, Navigation } from '../Home';
-
 const drawerWidthDesktop = 330;
 const drawerWidthMobile = '100%';
 
@@ -31,9 +29,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface DrawerProps {
-  nav: Navigation,
-  setNav: (navigation: Navigation) => void,
-  setLastRoom: (lastRoom: LastRoom) => void,
   setTitle: (title: string | undefined) => void,
   open: boolean,
   setOpen: (open: boolean) => void,
@@ -49,9 +44,6 @@ export default (props: DrawerProps) => {
       <Toolbar className={ classes.toolbar } />
       <div className={ classes.drawerContainer }>
         <ItemList
-          nav={ props.nav }
-          setNav={ props.setNav }
-          setLastRoom={ props.setLastRoom }
           closeDrawer={ () => props.setOpen(false) } 
           setTitle={ props.setTitle }
         />

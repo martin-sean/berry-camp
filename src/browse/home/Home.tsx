@@ -9,6 +9,11 @@ import Navbar from '../navbar';
 import Drawer from './drawer';
 import Room from './room';
 
+import { GlobalStore, LastRoom } from '../../redux/reducers';
+import { useSelector, useDispatch } from 'react-redux';
+import { SetNavAction, SetRoomAction } from '../../redux/actions';
+import { SET_NAV, SET_ROOM } from '../../redux/actionTypes';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -26,29 +31,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-// Current navigation position
-export interface Navigation {
-  chapterId: string,
-  sideNo: string,
-  checkpointNo: string,
-}
-
-// Last selected room
-export interface LastRoom {
-  chapterId: string,
-  sideNo: string,
-  checkpointNo: string,
-  roomNo: string,
-}
-
 export default React.memo(() => {
-  // Remove the params
+  // Redux
+  const lastRoom = useSelector((state: GlobalStore) => state.room);
+  const dispatch = useDispatch();
+
+  // // Remove the params
   const history = useHistory();
 
-  // Store the current menu navigation
-  const [nav, setNav] = useState<Navigation>({ chapterId: '', sideNo: '', checkpointNo: '' });
-  // Remember the last room that was selected
-  const [lastRoom, setLastRoom] = useState<LastRoom | null>(null);
   // Open and close the mobile drawer
   const [open, setOpen] = useState(false);
 
@@ -56,7 +46,7 @@ export default React.memo(() => {
 
   // Set the document title
   const setDocTitle = (title: string | undefined) => {
-    document.title = 'Berry Camp · ' + title || 'Error';
+    document.title = 'Berry Camp · ' + (title || 'Error');
   }
 
   // TODO: Use state manager instead
@@ -64,40 +54,35 @@ export default React.memo(() => {
   useEffect(() => {
       // Load Query Params
     const params = new URLSearchParams(window.location.search);
-    const chapterId = params.get('chapter') || '';
-    const sideNo = params.get('side') || '';
-    const checkpointNo = params.get('checkpoint') || '';
+    const chapterId = params.get('chapter');
+    const sideNo = params.get('side');
+    const checkpointNo = params.get('checkpoint');
     const roomNo = params.get('room');
 
-    // All params
-    const queryNav = (chapterId && sideNo && checkpointNo) ? { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo } :
-      // Chapter and side
-      (chapterId && sideNo) ? { ...nav, chapterId: chapterId, sideNo: sideNo } :
-      // Only chapter
-      chapterId ? { ...nav, chapterId: chapterId } : 
-      // No params
-      nav;
+    // Set the nav
+    dispatch<SetNavAction>({ type: SET_NAV,
+      nav: {
+        ...( chapterId && { chapterId: chapterId }),
+        ...( sideNo && { sideNo: sideNo }),
+        ...( checkpointNo && { checkpointNo: checkpointNo })
+      }
+    });
 
-    const queryRoom =  (chapterId && sideNo && checkpointNo && roomNo) ? 
-      { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo, roomNo: roomNo } : null
-    
+    // If any of the params are provided, set the room
+    if (chapterId && sideNo && checkpointNo && roomNo) {
+      const room: LastRoom = { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo, roomNo: roomNo };
+      dispatch<SetRoomAction>({ type: SET_ROOM , room: room })
+    }
+
     history.push('/');
 
-    // If any of the params are provided, set the params in state
-    if (chapterId || sideNo || checkpointNo || roomNo) {
-      setNav(queryNav);
-      setLastRoom(queryRoom);
-    }
-  }, [history, nav]);
+  }, [history]);
 
   return (
     <React.Fragment>
       <div className={ classes.root }>
         <Navbar open={ open } setOpen={ setOpen }/>
         <Drawer
-          nav={ nav }
-          setNav={ setNav }
-          setLastRoom={ setLastRoom }
           open={ open }
           setOpen={ setOpen }
           setTitle={ setDocTitle }
@@ -109,7 +94,7 @@ export default React.memo(() => {
               {
                 lastRoom &&
                 <Paper className={ classes.room }>
-                  <Room 
+                  <Room
                     lastRoom={ lastRoom }
                     setTitle={ setDocTitle }
                   />

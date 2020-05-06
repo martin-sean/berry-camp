@@ -7,9 +7,9 @@ import data from '../api/chapter-tree.json';
 
 // Represents a position in the drawer navigation menu
 export interface Navigation {
-  chapterId: string | null,
-  sideNo: string | null,
-  checkpointNo: string | null,
+  chapterId?: string,
+  sideNo?: string,
+  checkpointNo?: string,
 }
 
 // Represents the last room the user viewed
@@ -28,11 +28,7 @@ export interface GlobalStore {
 }
 
 // Define the default structure of Navigation structure
-export const defaultNav = {
-  chapterId: null,
-  sideNo: null,
-  checkpointNo: null,
-};
+export const defaultNav: Navigation = { };
 
 // Define the default state of the store
 const defaultState: GlobalStore = {
@@ -53,7 +49,7 @@ export default (state: GlobalStore = defaultState, action: Actions): GlobalStore
     case SET_ROOM:
       return {
         ...state,
-        room: state.room,
+        room: action.room,
       };
 
     case CLEAR_ROOM:
@@ -65,13 +61,19 @@ export default (state: GlobalStore = defaultState, action: Actions): GlobalStore
     case SET_NAV:
       return {
         ...state,
-        nav: action.nav,
+        nav: {
+          ...state.nav,
+          ...action.nav,
+        }
       };
 
     case CLEAR_NAV:
       return {
         ...state,
-        nav: defaultNav,
+        nav: {
+          ...defaultNav,
+          ...action.nav,
+        }
       };
     
     default:

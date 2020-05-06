@@ -6,10 +6,9 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { makeStyles, Fade, Theme, Typography, Divider, Button, Snackbar, Grid, Slide } from '@material-ui/core'
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
-import { LastRoom } from '../Home';
 import { Alert } from '@material-ui/lab';
-import { GlobalStore } from '../../../redux/reducers';
 import { useSelector } from 'react-redux';
+import { LastRoom, GlobalStore } from '../../../redux/reducers';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
@@ -42,13 +41,12 @@ interface RoomProps {
 }
 
 export default React.memo((props: RoomProps) => {
+  const data = useSelector((state: GlobalStore) => state.data);
+
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
   
   const classes = useStyles();
-
-  // Redux
-  const data = useSelector((state: GlobalStore) => state.data);
   
   const chapter = data[props.lastRoom.chapterId];
   const side = chapter?.sides[props.lastRoom.sideNo];

@@ -59,7 +59,6 @@ export default React.memo((props: NavbarProps) => {
   const [loaded, setLoaded] = useState(false);
   const logo = logos[Math.floor(Math.random() * logos.length)];
   const classes = useStyles();
-  console.log('NAVBAR render');
 
   return (
     <AppBar className={ classes.appBar } position='fixed'>
