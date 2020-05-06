@@ -31,20 +31,18 @@ const useStyles = makeStyles((theme) => ({
 interface DrawerProps {
   setTitle: (title: string | undefined) => void,
   open: boolean,
-  setOpen: (open: boolean) => void,
+  setDrawerOpen: (open: boolean) => void,
 }
 
-export default (props: DrawerProps) => {
+export default React.memo((props: DrawerProps) => {
   const classes = useStyles();
 
-  console.log("DRAWER render");
-  
   const DrawerList = () => (
     <React.Fragment>
       <Toolbar className={ classes.toolbar } />
       <div className={ classes.drawerContainer }>
         <ItemList
-          closeDrawer={ () => props.setOpen(false) } 
+          closeDrawer={ () => props.setDrawerOpen(false) } 
           setTitle={ props.setTitle }
         />
       </div>
@@ -57,7 +55,7 @@ export default (props: DrawerProps) => {
         <Drawer
           className={ classes.drawerMobile }
           open={ props.open }
-          onClose={ () => props.setOpen(false) }
+          onClose={ () => props.setDrawerOpen(false) }
           anchor='top'
           ModalProps={{
             keepMounted: true,
@@ -84,4 +82,4 @@ export default (props: DrawerProps) => {
       </Hidden>
     </React.Fragment>
   );
-}
+});

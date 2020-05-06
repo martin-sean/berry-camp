@@ -34,8 +34,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-// THIS CLASS NEEDS TO SET THE NAVIGATION AND SET THE LAST ROOM
-
 interface ItemsListProps {
   closeDrawer: () => void, 
   setTitle: (title: string | undefined) => void,
@@ -77,6 +75,7 @@ export default (props: ItemsListProps) => {
 
   const ChapterList = () => {
     setTitle('Chapters');
+
     return (
       <React.Fragment>
         <ListItem>
@@ -174,6 +173,14 @@ export default (props: ItemsListProps) => {
     const checkpoint = side?.checkpoints[props.checkpointNo];
     setTitle(checkpoint?.name);
 
+    // Get the currently selected from redux
+    const currentRoom = useSelector((state: GlobalStore) => state.room);
+    // Check if chapter side and checkpoint match the current room
+    const current = 
+      currentRoom?.chapterId === props.chapterId &&
+      currentRoom?.sideNo === props.sideNo &&
+      currentRoom?.checkpointNo === props.checkpointNo;
+
     return (
       <React.Fragment>
         <ListItem>
@@ -191,6 +198,7 @@ export default (props: ItemsListProps) => {
               primary={ checkpoint.rooms[roomNo].name }
               secondary={ checkpoint.rooms[roomNo].debug_id }
               before={ roomNo }
+              selected={ roomNo === currentRoom?.roomNo && current }
               handleClick={ () => { 
                 props.closeDrawer();
                 setRoom({ 
@@ -211,14 +219,17 @@ export default (props: ItemsListProps) => {
     primary: string, 
     secondary?: string, 
     before: string | number | undefined,
+    selected?: boolean
     handleClick: () => void,
   }
 
   // Render an item in the list
   const Item = (props: ItemProps) => {
     return (
-      <ListItem button 
+      <ListItem
+        button
         onClick={ props.handleClick }
+        selected={ props.selected }
       > 
         <Typography className={ classes.indent } color="textSecondary">{ props.before }</Typography>
         <ListItemText primary={ props.primary } secondary={ props.secondary } />
@@ -235,12 +246,14 @@ export default (props: ItemsListProps) => {
 
   return (
     <List
+      component='nav'
       className={ classes.list }
       aria-labelledby='TODO'
     >
       {
         nav.checkpointNo && nav.sideNo && nav.chapterId ?
-          <RoomList chapterId={ nav.chapterId } sideNo={ nav.sideNo } checkpointNo={ nav.checkpointNo } closeDrawer={ props.closeDrawer } />
+          <RoomList chapterId={ nav.chapterId } sideNo={ nav.sideNo } checkpointNo={ nav.checkpointNo } closeDrawer={ props.closeDrawer } 
+          />
         : nav.sideNo && nav.chapterId ?
           <CheckpointList chapterId={ nav.chapterId } sideNo={ nav.sideNo } />
         : nav.chapterId ?

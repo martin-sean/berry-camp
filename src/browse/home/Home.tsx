@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { makeStyles, Grid, Toolbar, Paper } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default React.memo(() => {
+export default () => {
   // Redux
   const lastRoom = useSelector((state: GlobalStore) => state.room);
   const dispatch = useDispatch();
@@ -45,12 +45,15 @@ export default React.memo(() => {
   const classes = useStyles();
 
   // Set the document title
-  const setDocTitle = (title: string | undefined) => {
+  const setDocTitle = useCallback((title: string | undefined) => {
     document.title = 'Berry Camp · ' + (title || 'Error');
-  }
+  }, []);
 
-  // TODO: Use state manager instead
-  // Handle query params, Temporary until using Redux
+  const setDrawerOpen = useCallback((open: boolean) => {
+    setOpen(open);
+  }, [setOpen]);
+
+  // Handle query params
   useEffect(() => {
       // Load Query Params
     const params = new URLSearchParams(window.location.search);
@@ -59,8 +62,9 @@ export default React.memo(() => {
     const checkpointNo = params.get('checkpoint');
     const roomNo = params.get('room');
 
-    // Set the nav
-    dispatch<SetNavAction>({ type: SET_NAV,
+    // Set navigation
+    dispatch<SetNavAction>({
+      type: SET_NAV,
       nav: {
         ...( chapterId && { chapterId: chapterId }),
         ...( sideNo && { sideNo: sideNo }),
@@ -68,23 +72,22 @@ export default React.memo(() => {
       }
     });
 
-    // If any of the params are provided, set the room
+    // If all the params are provided, set the room
     if (chapterId && sideNo && checkpointNo && roomNo) {
       const room: LastRoom = { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo, roomNo: roomNo };
       dispatch<SetRoomAction>({ type: SET_ROOM , room: room })
     }
-
-    history.push('/');
-
-  }, [history]);
+    // Consume the params from the URL
+    history.replace('/');
+  }, [dispatch, history]);
 
   return (
     <React.Fragment>
       <div className={ classes.root }>
-        <Navbar open={ open } setOpen={ setOpen }/>
+        <Navbar open={ open } setDrawerOpen={ setDrawerOpen } />
         <Drawer
           open={ open }
-          setOpen={ setOpen }
+          setDrawerOpen={ setDrawerOpen }
           setTitle={ setDocTitle }
         />
         <div className={ classes.content }>
@@ -95,7 +98,10 @@ export default React.memo(() => {
                 lastRoom &&
                 <Paper className={ classes.room }>
                   <Room
-                    lastRoom={ lastRoom }
+                    chapterId={ lastRoom.chapterId }
+                    sideNo={ lastRoom.sideNo }
+                    checkpointNo={ lastRoom.checkpointNo }
+                    roomNo={ lastRoom.roomNo }
                     setTitle={ setDocTitle }
                   />
                 </Paper>
@@ -117,4 +123,4 @@ export default React.memo(() => {
       </div>
     </React.Fragment>
   );
-});
+}

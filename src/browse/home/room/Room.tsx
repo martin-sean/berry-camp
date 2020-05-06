@@ -8,7 +8,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import { Alert } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
-import { LastRoom, GlobalStore } from '../../../redux/reducers';
+import { GlobalStore } from '../../../redux/reducers';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
@@ -35,45 +35,48 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-interface RoomProps { 
-  lastRoom: LastRoom,
+interface RoomProps {
+  chapterId: string,
+  sideNo: string,
+  checkpointNo: string,
+  roomNo: string,
   setTitle: (title: string | undefined) => void
 }
 
 export default React.memo((props: RoomProps) => {
+  const classes = useStyles();
+  
   const data = useSelector((state: GlobalStore) => state.data);
 
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
   
-  const classes = useStyles();
-  
-  const chapter = data[props.lastRoom.chapterId];
-  const side = chapter?.sides[props.lastRoom.sideNo];
-  const checkpoint = side?.checkpoints[props.lastRoom.checkpointNo];
-  const room = checkpoint?.rooms[props.lastRoom.roomNo];
+  const chapter = data[props.chapterId];
+  const side = chapter?.sides[props.sideNo];
+  const checkpoint = side?.checkpoints[props.checkpointNo];
+  const room = checkpoint?.rooms[props.roomNo];
 
   props.setTitle(room?.name);
 
-  const image = imageHost + props.lastRoom.chapterId + 
-    '/' + props.lastRoom.sideNo +
-    '/' + props.lastRoom.checkpointNo +
-    '/' + props.lastRoom.roomNo + 
+  const image = imageHost + props.chapterId + 
+    '/' + props.sideNo +
+    '/' + props.checkpointNo +
+    '/' + props.roomNo + 
     '.png'
 
   const errorImage = '/img/error.jpg';
 
   useEffect(() => {
     setLoaded(false);
-  }, [props.lastRoom.chapterId, props.lastRoom.sideNo, props.lastRoom.checkpointNo, props.lastRoom.roomNo]);
+  }, [props.chapterId, props.sideNo, props.checkpointNo, props.roomNo]);
 
   const copyUrl = () => {
     navigator.clipboard.writeText(
       window.location.href.replace(window.location.search, '') +
-      `?chapter=${ props.lastRoom.chapterId }` +
-      `&side=${ props.lastRoom.sideNo }` +
-      `&checkpoint=${ props.lastRoom.checkpointNo }`+
-      `&room=${ props.lastRoom.roomNo  }`
+      `?chapter=${ props.chapterId }` +
+      `&side=${ props.sideNo }` +
+      `&checkpoint=${ props.checkpointNo }`+
+      `&room=${ props.roomNo  }`
     );
     setCopied(true);
   }
@@ -81,17 +84,12 @@ export default React.memo((props: RoomProps) => {
   return (
     <React.Fragment>
       <div className={ classes.imageWrapper }>
-        <Fade in={ !loaded }>
-          <div>
-          {
-              loaded ? null : 
-              <React.Fragment>
-                <Skeleton variant="rect" width={ '100%' } height={360} />
-              </React.Fragment>
-          }
-          </div>
-        </Fade>
-        
+        {
+            !loaded &&
+            <React.Fragment>
+              <Skeleton variant="rect" width={ '100%' } height={360} />
+            </React.Fragment>
+        }
         <Fade in={ loaded }>
           <img
             className={ `${ classes.image } pixelated` }
@@ -117,7 +115,7 @@ export default React.memo((props: RoomProps) => {
             <Divider className={ classes.divider } />
             <Grid container justify='space-between'>
               <Grid item>
-                <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.lastRoom.roomNo }</Typography>
+                <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.roomNo }</Typography>
                 <Typography color="textSecondary">Debug ID: { room?.debug_id }</Typography>
               </Grid>
               <Grid item className={ classes.center }>

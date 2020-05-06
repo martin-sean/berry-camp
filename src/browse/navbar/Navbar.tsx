@@ -52,7 +52,7 @@ const logos = [
 
 interface NavbarProps {
   open: boolean,
-  setOpen: (open: boolean) => void
+  setDrawerOpen: (open: boolean) => void
 }
 
 export default React.memo((props: NavbarProps) => {
@@ -83,7 +83,7 @@ export default React.memo((props: NavbarProps) => {
             edge='end' 
             color='inherit' 
             aria-label='menu' 
-            onClick={ () => props.setOpen(!props.open) }
+            onClick={ () => props.setDrawerOpen(!props.open) }
           >
             { props.open ? <ExpandLess /> : <ExpandMore /> }
           </IconButton>
