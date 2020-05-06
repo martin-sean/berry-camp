@@ -3,7 +3,7 @@ import { Actions } from "./actions";
 import { DataTree } from '../api/Data';
 
 // Chapter navigation tree data
-import data from '../api/chapter-tree.json';
+import data from '../api/data.json';
 
 // Represents a position in the drawer navigation menu
 export interface Navigation {

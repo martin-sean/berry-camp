@@ -13,6 +13,7 @@ import { GlobalStore, LastRoom } from '../../redux/reducers';
 import { useSelector, useDispatch } from 'react-redux';
 import { SetNavAction, SetRoomAction } from '../../redux/actions';
 import { SET_NAV, SET_ROOM } from '../../redux/actionTypes';
+import Nav from './nav';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -96,15 +97,18 @@ export default () => {
             <Grid item xs={12} lg={5}>
               {
                 lastRoom &&
-                <Paper className={ classes.room }>
-                  <Room
-                    chapterId={ lastRoom.chapterId }
-                    sideNo={ lastRoom.sideNo }
-                    checkpointNo={ lastRoom.checkpointNo }
-                    roomNo={ lastRoom.roomNo }
-                    setTitle={ setDocTitle }
-                  />
-                </Paper>
+                <React.Fragment>
+                  <Nav />
+                  <Paper className={ classes.room }>
+                    <Room
+                      chapterId={ lastRoom.chapterId }
+                      sideNo={ lastRoom.sideNo }
+                      checkpointNo={ lastRoom.checkpointNo }
+                      roomNo={ lastRoom.roomNo }
+                      setTitle={ setDocTitle }
+                    />
+                  </Paper>
+                </React.Fragment>
               }
             </Grid>
             <Grid item xs={12} lg={7}>
