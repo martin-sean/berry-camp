@@ -85,10 +85,10 @@ export default React.memo((props: RoomProps) => {
     <React.Fragment>
       <div className={ classes.imageWrapper }>
         {
-            !loaded &&
-            <React.Fragment>
-              <Skeleton variant="rect" width={ '100%' } height={360} />
-            </React.Fragment>
+          !loaded &&
+          <React.Fragment>
+            <Skeleton variant="rect" width={ '100%' } height={360} />
+          </React.Fragment>
         }
         <Fade in={ loaded }>
           <img

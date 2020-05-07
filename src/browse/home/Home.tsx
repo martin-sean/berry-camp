@@ -98,7 +98,6 @@ export default () => {
               {
                 lastRoom &&
                 <React.Fragment>
-                  <Nav />
                   <Paper className={ classes.room }>
                     <Room
                       chapterId={ lastRoom.chapterId }
@@ -108,6 +107,7 @@ export default () => {
                       setTitle={ setDocTitle }
                     />
                   </Paper>
+                  <Nav />
                 </React.Fragment>
               }
             </Grid>

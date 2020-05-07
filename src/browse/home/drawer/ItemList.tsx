@@ -9,12 +9,10 @@ import { SET_NAV, CLEAR_NAV, SET_ROOM } from '../../../redux/actionTypes';
 import { SetNavAction, ClearNavAction, SetRoomAction } from '../../../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  progress: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
   breadcrumbLink: {
-    cursor: 'pointer',
+    display: 'flex',
+    fontSize: '1rem',
+    letterSpacing: 'inherit',
   },
   list: {
     overflowY: "auto",
@@ -26,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     '&::-webkit-scrollbar-thumb': {
       backgroundColor: 'rgba(0, 0, 0, .2)',
-      borderRadius: '1em',
+      borderRadius: '1rem',
     }
   },
   indent: {
@@ -109,7 +107,7 @@ export default (props: ItemsListProps) => {
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
-              <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ backToChapter }>Chapter</Link> 
+              <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ backToChapter }>Chapter</Link> 
               <Typography color="textPrimary">Side</Typography>
             </Breadcrumbs>
           </ListItem>
@@ -141,8 +139,8 @@ export default (props: ItemsListProps) => {
       <React.Fragment>
         <ListItem>
           <Breadcrumbs separator="›">
-            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ backToChapter }>Chapter</Link>
-            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => backToSide(props.chapterId) }>Side</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ backToChapter }>Chapter</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => backToSide(props.chapterId) }>Side</Link>
             <Typography color="textPrimary">Checkpoint</Typography>
           </Breadcrumbs>
         </ListItem>
@@ -185,9 +183,9 @@ export default (props: ItemsListProps) => {
       <React.Fragment>
         <ListItem>
           <Breadcrumbs separator="›">
-            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ backToChapter }>Chapter</Link>
-            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => backToSide(props.chapterId) }>Side</Link>
-            <Link className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => backToCheckpoint(props.chapterId, props.sideNo) }>Checkpoint</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ backToChapter }>Chapter</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => backToSide(props.chapterId) }>Side</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => backToCheckpoint(props.chapterId, props.sideNo) }>Checkpoint</Link>
             <Typography color="textPrimary">Room</Typography>
           </Breadcrumbs>
         </ListItem>
@@ -230,6 +228,7 @@ export default (props: ItemsListProps) => {
         button
         onClick={ props.handleClick }
         selected={ props.selected }
+        autoFocus={ props.selected }
       > 
         <Typography className={ classes.indent } color="textSecondary">{ props.before }</Typography>
         <ListItemText primary={ props.primary } secondary={ props.secondary } />
