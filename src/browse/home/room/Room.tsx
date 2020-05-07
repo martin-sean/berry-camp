@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import  './Room.css';
 
 import Skeleton from '@material-ui/lab/Skeleton';
-import { makeStyles, Fade, Theme, Typography, Divider, Button, Snackbar, Grid, Slide } from '@material-ui/core'
+import { makeStyles, Fade, Theme, Typography, Divider, Button, Snackbar, Grid, Slide, Modal, Backdrop } from '@material-ui/core'
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import { Alert } from '@material-ui/lab';
@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     objectFit: 'cover',
     width: '100%',
     height: '360px',
+    cursor: 'pointer'
   },
   imageWrapper: {
     paddingBottom: theme.spacing(1),
@@ -32,7 +33,29 @@ const useStyles = makeStyles((theme: Theme) => ({
   center: {
     display: 'flex',
     alignItems: 'flex-end',
-  }
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  largeImage: {
+    display: 'block',
+    objectFit: 'cover',
+    cursor: 'pointer',
+    [theme.breakpoints.down('xs')]: {
+      width: 320,
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: 640,
+    },
+    [theme.breakpoints.up('md')]: {
+      width: 960,
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: 1280,
+    },
+  },
 }));
 
 interface RoomProps {
@@ -50,6 +73,7 @@ export default React.memo((props: RoomProps) => {
 
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(false);
   
   const chapter = data[props.chapterId];
   const side = chapter?.sides[props.sideNo];
@@ -83,6 +107,23 @@ export default React.memo((props: RoomProps) => {
 
   return (
     <React.Fragment>
+      <Modal
+        className={ classes.modal }
+        open={ open }
+        onClose={ () => setOpen(false) }
+        closeAfterTransition
+        BackdropComponent={ Backdrop }
+      >
+        <Fade in={ open }>
+          <img
+            className={ `${ classes.largeImage } pixelated` }
+            src={ image }
+            alt="Large screemshot of current room"
+            onClick={ () => setOpen(false) }
+          />
+        </Fade>
+      </Modal>
+
       <div className={ classes.imageWrapper }>
         {
           !loaded &&
@@ -97,6 +138,7 @@ export default React.memo((props: RoomProps) => {
             alt="Screenshot of current room"
             style={ loaded ? {} : { display: 'none'} }
             onLoad={ () => setLoaded(true) }
+            onClick={ () => setOpen(!open) }
             onError={ (e) => {
               (e.target as HTMLImageElement).onerror = null;
               (e.target as HTMLImageElement).src = errorImage
