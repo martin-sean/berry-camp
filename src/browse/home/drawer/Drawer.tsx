@@ -16,9 +16,6 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidthMobile,
     flexShrink: 0,
   },
-  toolbar: {
-    // height: '64px',
-  },
   toolbarSpacing: {
     minHeight: theme.mixins.toolbar.minHeight,
   },
