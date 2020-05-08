@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     // height: '64px',
   },
   toolbarSpacing: {
-    height: theme.mixins.toolbar.minHeight,
+    minHeight: theme.mixins.toolbar.minHeight,
   },
   drawerContainer: {
     overflow: 'auto',
