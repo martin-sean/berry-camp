@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidthMobile,
     flexShrink: 0,
   },
+  drawerDialog: {
+    zIndex: theme.zIndex.drawer + 1235,
+  },
   toolbar: {
     height: '64px',
   },
@@ -61,6 +64,7 @@ export default React.memo((props: DrawerProps) => {
             keepMounted: true,
           }}
           classes={{
+            root: classes.drawerDialog,
             paper: classes.drawerMobile,
           }}
         >

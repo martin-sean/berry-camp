@@ -1,5 +1,5 @@
-import React from 'react';
-import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography } from '@material-ui/core';
+import React, { useRef, useLayoutEffect } from 'react';
+import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography, RootRef } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -223,16 +223,26 @@ export default (props: ItemsListProps) => {
 
   // Render an item in the list
   const Item = (props: ItemProps) => {
+    const currentRef = useRef<HTMLElement>(null);
+
+    // Scroll the page to selected item
+    useLayoutEffect(() => {
+      if (props.selected) {
+        currentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+
     return (
-      <ListItem
-        button
-        onClick={ props.handleClick }
-        selected={ props.selected }
-        autoFocus={ props.selected }
-      > 
-        <Typography className={ classes.indent } color="textSecondary">{ props.before }</Typography>
-        <ListItemText primary={ props.primary } secondary={ props.secondary } />
-      </ListItem>
+      <RootRef rootRef={ currentRef }>
+        <ListItem
+          button
+          onClick={ props.handleClick }
+          selected={ props.selected }
+        > 
+          <Typography className={ classes.indent } color="textSecondary">{ props.before }</Typography>
+          <ListItemText primary={ props.primary } secondary={ props.secondary } />
+        </ListItem>
+      </RootRef>
     );
   }
   

@@ -61,7 +61,7 @@ export default React.memo((props: NavbarProps) => {
   const classes = useStyles();
 
   return (
-    <AppBar className={ classes.appBar } position='fixed'>
+    <AppBar className={ classes.appBar } position='absolute'>
       <Toolbar className={ classes.toolBar }>
         <Hidden smDown>
           <div className={ classes.container }>
