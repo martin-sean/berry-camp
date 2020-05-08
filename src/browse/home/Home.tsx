@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { makeStyles, Grid, Toolbar, Paper } from '@material-ui/core';
+import { makeStyles, Grid, Paper } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 
 import { useHistory } from 'react-router-dom';
@@ -19,17 +19,22 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
+  wrapper: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
   content: {
     flex: 1,
     padding: theme.spacing(3),
     overflow: 'hidden',
   },
   toolbar: {
-    height: '64px',
+    height: theme.mixins.toolbar.minHeight,
   },
   room: {
     padding: theme.spacing(3),
-  }
+  },
 }));
 
 export default () => {
@@ -85,44 +90,49 @@ export default () => {
   return (
     <React.Fragment>
       <div className={ classes.root }>
-        <Navbar open={ open } setDrawerOpen={ setDrawerOpen } />
+        <Navbar open={ open } setDrawerOpen={ setDrawerOpen }/>
+        {/* Left sidebar menu */}
         <Drawer
           open={ open }
           setDrawerOpen={ setDrawerOpen }
           setTitle={ setDocTitle }
         />
-        <div className={ classes.content }>
-          <Toolbar className={ classes.toolbar }/>
-          <Grid container spacing={3} direction='row-reverse'>
-            <Grid item xs={12} lg={5}>
-              {
-                lastRoom &&
-                <React.Fragment>
-                  <Paper className={ classes.room }>
-                    <Room
-                      chapterId={ lastRoom.chapterId }
-                      sideNo={ lastRoom.sideNo }
-                      checkpointNo={ lastRoom.checkpointNo }
-                      roomNo={ lastRoom.roomNo }
-                      setTitle={ setDocTitle }
-                    />
-                  </Paper>
-                  <Nav />
-                </React.Fragment>
-              }
+        {/* Right side content */}
+        <div className={ classes.wrapper }>
+          <div className={ classes.toolbar }/>
+          <div className={ classes.content }>
+            <Grid container spacing={3} direction='row-reverse'>
+              <Grid item xs={12} lg={5}>
+                {
+                  lastRoom &&
+                  <React.Fragment>
+                    <Paper className={ classes.room }>
+                      <Room
+                        chapterId={ lastRoom.chapterId }
+                        sideNo={ lastRoom.sideNo }
+                        checkpointNo={ lastRoom.checkpointNo }
+                        roomNo={ lastRoom.roomNo }
+                        setTitle={ setDocTitle }
+                      />
+                    </Paper>
+                    {/* Room navigation buttons */}
+                    <Nav />
+                  </React.Fragment>
+                }
+              </Grid>
+              <Grid item xs={12} lg={7}>
+                {
+                  lastRoom &&
+                  <React.Fragment>
+                    <Skeleton animation={false} height={ 50 }/>
+                    <Skeleton animation={false} height={ 50 }/>
+                    <Skeleton animation={false} height={ 50 }/>
+                    <Skeleton animation={false} height={ 50 }/>
+                  </React.Fragment>
+                }
+              </Grid>
             </Grid>
-            <Grid item xs={12} lg={7}>
-              {
-                lastRoom &&
-                <React.Fragment>
-                  <Skeleton animation={false} height={ 50 }/>
-                  <Skeleton animation={false} height={ 50 }/>
-                  <Skeleton animation={false} height={ 50 }/>
-                  <Skeleton animation={false} height={ 50 }/>
-                </React.Fragment>
-              }
-            </Grid>
-          </Grid>
+          </div>
         </div>
       </div>
     </React.Fragment>

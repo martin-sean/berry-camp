@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Drawer, Toolbar, Hidden } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Drawer, Hidden } from '@material-ui/core';
 import ItemList from './ItemList';
 
 const drawerWidthDesktop = 330;
@@ -16,11 +16,11 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidthMobile,
     flexShrink: 0,
   },
-  drawerDialog: {
-    zIndex: theme.zIndex.drawer + 1235,
-  },
   toolbar: {
-    height: '64px',
+    // height: '64px',
+  },
+  toolbarSpacing: {
+    height: theme.mixins.toolbar.minHeight,
   },
   drawerContainer: {
     overflow: 'auto',
@@ -39,10 +39,11 @@ interface DrawerProps {
 
 export default React.memo((props: DrawerProps) => {
   const classes = useStyles();
+  const theme = useTheme();
 
   const DrawerList = () => (
     <React.Fragment>
-      <Toolbar className={ classes.toolbar } />
+      <div className={ classes.toolbarSpacing }/>
       <div className={ classes.drawerContainer }>
         <ItemList
           closeDrawer={ () => props.setDrawerOpen(false) } 
@@ -56,6 +57,8 @@ export default React.memo((props: DrawerProps) => {
     <React.Fragment>
       <Hidden mdUp>
         <Drawer
+          // Use drawer zIndex instead of dialog to go under navbar
+          style={{ zIndex: theme.zIndex.drawer }}
           className={ classes.drawerMobile }
           open={ props.open }
           onClose={ () => props.setDrawerOpen(false) }
@@ -64,7 +67,6 @@ export default React.memo((props: DrawerProps) => {
             keepMounted: true,
           }}
           classes={{
-            root: classes.drawerDialog,
             paper: classes.drawerMobile,
           }}
         >

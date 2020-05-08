@@ -43,10 +43,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'block',
     objectFit: 'cover',
     cursor: 'pointer',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.up('xs')]: {
       width: 320,
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.up('sm')]: {
       width: 640,
     },
     [theme.breakpoints.up('md')]: {

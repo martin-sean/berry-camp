@@ -1,5 +1,5 @@
 import { SET_DATA, SET_ROOM, CLEAR_ROOM, SET_NAV, CLEAR_NAV } from './actionTypes';
-import { DataTree } from "../api/Data";
+import { DataTree } from '../api/Data'
 import { Navigation, defaultNav, LastRoom } from './reducers';
 
 export interface SetDataAction {
