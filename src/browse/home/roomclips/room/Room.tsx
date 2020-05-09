@@ -8,7 +8,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import { Alert } from '@material-ui/lab';
 import { useSelector } from 'react-redux';
-import { GlobalStore } from '../../../redux/reducers';
+import { GlobalStore } from '../../../../redux/reducers';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
@@ -63,13 +63,13 @@ interface RoomProps {
   sideNo: string,
   checkpointNo: string,
   roomNo: string,
-  setTitle: (title: string | undefined) => void
+  setDocTitle: (title: string | undefined) => void
 }
 
 export default React.memo((props: RoomProps) => {
   const classes = useStyles();
   
-  const data = useSelector((state: GlobalStore) => state.data);
+  const data = useSelector((store: GlobalStore) => store.data);
 
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -80,7 +80,7 @@ export default React.memo((props: RoomProps) => {
   const checkpoint = side?.checkpoints[props.checkpointNo];
   const room = checkpoint?.rooms[props.roomNo];
 
-  props.setTitle(room?.name);
+  props.setDocTitle(room?.name);
 
   const image = imageHost + props.chapterId + 
     '/' + props.sideNo +
@@ -107,6 +107,7 @@ export default React.memo((props: RoomProps) => {
 
   return (
     <React.Fragment>
+      {/* Image popup */}
       <Modal
         className={ classes.modal }
         open={ open }

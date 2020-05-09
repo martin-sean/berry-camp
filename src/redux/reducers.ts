@@ -13,7 +13,7 @@ export interface Navigation {
 }
 
 // Represents the last room the user viewed
-export interface LastRoom {
+export interface CurrentRoom {
   chapterId: string,
   sideNo: string,
   checkpointNo: string,
@@ -23,61 +23,58 @@ export interface LastRoom {
 // Define the redux store
 export interface GlobalStore {
   data: DataTree,
-  nav: Navigation,
-  room: LastRoom | null;
+  nav: Navigation | null,
+  room: CurrentRoom | null;
 }
 
 // Define the default structure of Navigation structure
-export const defaultNav: Navigation = { };
+export const defaultNav: Navigation = {};
 
 // Define the default state of the store
-const defaultState: GlobalStore = {
+const defaultStore: GlobalStore = {
   data: data,
-  nav: defaultNav,
+  nav: null,
   room: null,
 };
 
 // Main redux reducer
-export default (state: GlobalStore = defaultState, action: Actions): GlobalStore => {
+export default (store: GlobalStore = defaultStore, action: Actions): GlobalStore => {
   switch (action.type) {
     case SET_DATA:
       return {
-        ...state,
+        ...store,
         data: action.data,
       };
       
     case SET_ROOM:
       return {
-        ...state,
+        ...store,
         room: action.room,
       };
 
     case CLEAR_ROOM:
       return {
-        ...state,
+        ...store,
         room: null,
       };
 
     case SET_NAV:
       return {
-        ...state,
+        ...store,
         nav: {
-          ...state.nav,
+          ...defaultNav,
           ...action.nav,
         }
       };
 
     case CLEAR_NAV:
       return {
-        ...state,
-        nav: {
-          ...defaultNav,
-          ...action.nav,
-        }
+        ...store,
+        nav: null,
       };
     
     default:
-      return state;
+      return store;
   }
 
 }

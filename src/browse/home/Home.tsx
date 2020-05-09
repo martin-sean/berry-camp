@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { makeStyles, Grid, Paper } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core';
 
 import { useHistory } from 'react-router-dom';
 
 import Navbar from '../navbar';
 import Drawer from './drawer';
-import Room from './room';
 
-import { GlobalStore, LastRoom } from '../../redux/reducers';
-import { useSelector, useDispatch } from 'react-redux';
+import { CurrentRoom, GlobalStore } from '../../redux/reducers';
+import { useDispatch, useSelector } from 'react-redux';
 import { SetNavAction, SetRoomAction } from '../../redux/actions';
 import { SET_NAV, SET_ROOM } from '../../redux/actionTypes';
-import Nav from './nav';
+import Welcome from './welcome';
+import Navigation from './navigation';
+import RoomClips from './roomclips';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,27 +38,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default () => {
-  // Redux
-  const lastRoom = useSelector((state: GlobalStore) => state.room);
+  const classes = useStyles();
+
+  // Accept redux actions
   const dispatch = useDispatch();
 
-  // // Remove the params
+  // Get redux state
+  const currentRoom = useSelector((store: GlobalStore) => store.room);
+  const nav = useSelector((store: GlobalStore) => store.nav);
+
+  // Use browser history
   const history = useHistory();
 
-  // Open and close the mobile drawer
+  // Remember the drawer state
   const [open, setOpen] = useState(false);
 
-  const classes = useStyles();
+  // Open and close the drawer
+  const setDrawerOpen = useCallback((open: boolean) => {
+    setOpen(open);
+  }, [setOpen]);
 
   // Set the document title
   const setDocTitle = useCallback((title: string | undefined) => {
     document.title = 'Berry Camp · ' + (title || 'Error');
   }, []);
-
-  const setDrawerOpen = useCallback((open: boolean) => {
-    setOpen(open);
-  }, [setOpen]);
-
+  
   // Handle query params
   useEffect(() => {
       // Load Query Params
@@ -80,11 +84,13 @@ export default () => {
 
     // If all the params are provided, set the room
     if (chapterId && sideNo && checkpointNo && roomNo) {
-      const room: LastRoom = { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo, roomNo: roomNo };
+      const room: CurrentRoom = { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo, roomNo: roomNo };
       dispatch<SetRoomAction>({ type: SET_ROOM , room: room })
     }
+
     // Consume the params from the URL
     history.replace('/');
+
   }, [dispatch, history]);
 
   return (
@@ -101,37 +107,12 @@ export default () => {
         <div className={ classes.wrapper }>
           <div className={ classes.toolbar }/>
           <div className={ classes.content }>
-            <Grid container spacing={3} direction='row-reverse'>
-              <Grid item xs={12} lg={5}>
-                {
-                  lastRoom &&
-                  <React.Fragment>
-                    <Paper className={ classes.room }>
-                      <Room
-                        chapterId={ lastRoom.chapterId }
-                        sideNo={ lastRoom.sideNo }
-                        checkpointNo={ lastRoom.checkpointNo }
-                        roomNo={ lastRoom.roomNo }
-                        setTitle={ setDocTitle }
-                      />
-                    </Paper>
-                    {/* Room navigation buttons */}
-                    <Nav />
-                  </React.Fragment>
-                }
-              </Grid>
-              <Grid item xs={12} lg={7}>
-                {
-                  lastRoom &&
-                  <React.Fragment>
-                    <Skeleton animation={false} height={ 50 }/>
-                    <Skeleton animation={false} height={ 50 }/>
-                    <Skeleton animation={false} height={ 50 }/>
-                    <Skeleton animation={false} height={ 50 }/>
-                  </React.Fragment>
-                }
-              </Grid>
-            </Grid>
+           {/* Render view based on redux state */}
+           { 
+              currentRoom ? <RoomClips setDocTitle={ setDocTitle }/> :
+              nav ? <Navigation /> :
+              <Welcome />
+            }
           </div>
         </div>
       </div>

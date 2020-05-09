@@ -1,10 +1,9 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { GlobalStore } from '../../../redux/reducers';
 import { Button, makeStyles } from '@material-ui/core';
-import { SetRoomAction, SetNavAction } from '../../../redux/actions';
-import { SET_ROOM, SET_NAV } from '../../../redux/actionTypes';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { GlobalStore } from '../../../../redux/reducers';
+import { SetRoomAction, SetNavAction } from '../../../../redux/actions';
+import { SET_ROOM, SET_NAV } from '../../../../redux/actionTypes';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -20,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
 export default () => {
   const classes = useStyles();
 
-  const data = useSelector((state: GlobalStore) => state.data);
-  const currentRoom = useSelector((state: GlobalStore) => state.room);
+  const data = useSelector((store: GlobalStore) => store.data);
+  const currentRoom = useSelector((store: GlobalStore) => store.room);
   const dispatch = useDispatch();
 
   // Don't render if there's no room

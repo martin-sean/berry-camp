@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { AppBar, Fade, Hidden, Toolbar, Typography, IconButton, Theme } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons/';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch } from 'react-redux';
+import { ClearNavAction, ClearRoomAction } from '../../redux/actions';
+import { CLEAR_NAV, CLEAR_ROOM } from '../../redux/actionTypes';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -33,12 +36,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   title: {
     display: 'flex',
-    position: 'absolute',
     alignSelf: 'center',
+    position: 'absolute',
+    left: theme.spacing(2),
+    cursor: 'pointer',
   },
   titleIcon: {
     fontSize: '24pt',
-    paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
   },
   titleText: {
@@ -65,9 +69,15 @@ export default React.memo((props: NavbarProps) => {
   const [loaded, setLoaded] = useState(false);
   const logo = logos[Math.floor(Math.random() * logos.length)];
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const handleTitleClick = () => {
+    dispatch<ClearNavAction>({ type: CLEAR_NAV });
+    dispatch<ClearRoomAction>({ type: CLEAR_ROOM });
+  }
 
   const Title = () => (
-    <div className={ classes.title }>
+    <div onClick={ handleTitleClick } className={ classes.title }>
       <Typography className={ classes.titleIcon }><span role='img' aria-label='Berry'>🍓</span></Typography>
       <Typography component="div" className={ classes.titleText  }>camp</Typography>
     </div>

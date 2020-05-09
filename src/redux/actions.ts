@@ -1,6 +1,6 @@
 import { SET_DATA, SET_ROOM, CLEAR_ROOM, SET_NAV, CLEAR_NAV } from './actionTypes';
 import { DataTree } from '../api/Data'
-import { Navigation, defaultNav, LastRoom } from './reducers';
+import { Navigation, defaultNav, CurrentRoom } from './reducers';
 
 export interface SetDataAction {
   type: typeof SET_DATA,
@@ -9,7 +9,7 @@ export interface SetDataAction {
 
 export interface SetRoomAction {
   type: typeof SET_ROOM,
-  room: LastRoom,
+  room: CurrentRoom,
 }
 
 export interface ClearRoomAction {
@@ -35,7 +35,7 @@ export const setData = (data: DataTree): SetDataAction => {
   return { type: SET_DATA, data: data };
 }
 
-export const setRoom = (room: LastRoom): SetRoomAction => {
+export const setRoom = (room: CurrentRoom): SetRoomAction => {
   return { type: SET_ROOM, room: room };
 }
 

@@ -4,7 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { GlobalStore, LastRoom, Navigation } from '../../../redux/reducers';
+import { GlobalStore, CurrentRoom } from '../../../redux/reducers';
 import { SET_NAV, CLEAR_NAV, SET_ROOM } from '../../../redux/actionTypes';
 import { SetNavAction, ClearNavAction, SetRoomAction } from '../../../redux/actions';
 
@@ -44,30 +44,30 @@ export default (props: ItemsListProps) => {
   // Redux stuff
   const dispatch = useDispatch();
   // Current data
-  const data = useSelector((state: GlobalStore) => state.data);
+  const data = useSelector((store: GlobalStore) => store.data);
   // Current navigation
-  const nav = useSelector((state: GlobalStore) => state.nav);
+  const nav = useSelector((store: GlobalStore) => store.nav);
 
   const setTitle = props.setTitle;
 
   // Breadcrumb actions - a state manager might be nice right about now...
-  const backToChapter = () => {
+  const clearNav = () => {
     dispatch<ClearNavAction>({ type: CLEAR_NAV });
   }
 
-  const backToSide = (chapterId: string) => {
-    dispatch<ClearNavAction>({ type: CLEAR_NAV, nav: { chapterId: chapterId } });
+  const setNavChapter = (chapterId: string) => {
+    dispatch<SetNavAction>({ type: SET_NAV, nav: { chapterId: chapterId } });
   }
 
-  const backToCheckpoint = (chapterId: string, sideNo: string) => {
-    dispatch<ClearNavAction>({ type: CLEAR_NAV, nav: { chapterId: chapterId, sideNo: sideNo } });
+  const setNavSide = (chapterId: string, sideNo: string) => {
+    dispatch<SetNavAction>({ type: SET_NAV, nav: { chapterId: chapterId, sideNo: sideNo } });
   }
 
-  const setNavigation = (nav: Navigation) => {
-    dispatch<SetNavAction>({ type: SET_NAV, nav: nav });
+  const setNavCheckpoint = (chapterId: string, sideNo: string, checkpointNo: string) => {
+    dispatch<SetNavAction>({ type: SET_NAV, nav: { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo } });
   }
 
-  const setRoom = (room: LastRoom) => {
+  const setRoom = (room: CurrentRoom) => {
     dispatch<SetRoomAction>({ type: SET_ROOM, room: room });
   }
 
@@ -85,7 +85,7 @@ export default (props: ItemsListProps) => {
         { Object.keys(data).map((chapterId: string, index: number) => (
             <Item
               primary={ data[chapterId].name }
-              handleClick={ () => setNavigation({ chapterId: chapterId }) }
+              handleClick={ () => setNavChapter(chapterId) }
               before={ data[chapterId].chapter_no }
               key={ index }
             />
@@ -107,7 +107,7 @@ export default (props: ItemsListProps) => {
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
-              <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ backToChapter }>Chapter</Link> 
+              <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ clearNav }>Chapter</Link> 
               <Typography color="textPrimary">Side</Typography>
             </Breadcrumbs>
           </ListItem>
@@ -117,7 +117,7 @@ export default (props: ItemsListProps) => {
             <Item 
               primary={ chapter.sides[sideNo].name }
               before={ sideNo }
-              handleClick={ () => setNavigation({ sideNo: sideNo }) }
+              handleClick={ () => setNavSide(props.chapterId, sideNo) }
               key={ index }
             />
           ))}
@@ -139,8 +139,8 @@ export default (props: ItemsListProps) => {
       <React.Fragment>
         <ListItem>
           <Breadcrumbs separator="›">
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ backToChapter }>Chapter</Link>
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => backToSide(props.chapterId) }>Side</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ clearNav }>Chapter</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => setNavChapter(props.chapterId) }>Side</Link>
             <Typography color="textPrimary">Checkpoint</Typography>
           </Breadcrumbs>
         </ListItem>
@@ -149,7 +149,7 @@ export default (props: ItemsListProps) => {
           Object.keys(side.checkpoints).map((checkpointNo: string, index: number) => (
             <Item
               primary={ side.checkpoints[checkpointNo].name }
-              handleClick={ () => setNavigation({ checkpointNo: checkpointNo }) }
+              handleClick={ () => setNavCheckpoint(props.chapterId, props.sideNo, checkpointNo) }
               before={ checkpointNo }
               key={ index }
             />
@@ -172,7 +172,7 @@ export default (props: ItemsListProps) => {
     setTitle(checkpoint?.name);
 
     // Get the currently selected from redux
-    const currentRoom = useSelector((state: GlobalStore) => state.room);
+    const currentRoom = useSelector((store: GlobalStore) => store.room);
     // Check if chapter side and checkpoint match the current room
     const current = 
       currentRoom?.chapterId === props.chapterId &&
@@ -183,9 +183,9 @@ export default (props: ItemsListProps) => {
       <React.Fragment>
         <ListItem>
           <Breadcrumbs separator="›">
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ backToChapter }>Chapter</Link>
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => backToSide(props.chapterId) }>Side</Link>
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => backToCheckpoint(props.chapterId, props.sideNo) }>Checkpoint</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ clearNav }>Chapter</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => setNavChapter(props.chapterId) }>Side</Link>
+            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => setNavSide(props.chapterId, props.sideNo) }>Checkpoint</Link>
             <Typography color="textPrimary">Room</Typography>
           </Breadcrumbs>
         </ListItem>
@@ -260,12 +260,12 @@ export default (props: ItemsListProps) => {
       aria-labelledby='TODO'
     >
       {
-        nav.checkpointNo && nav.sideNo && nav.chapterId ?
+        nav && nav.checkpointNo && nav.sideNo && nav.chapterId ?
           <RoomList chapterId={ nav.chapterId } sideNo={ nav.sideNo } checkpointNo={ nav.checkpointNo } closeDrawer={ props.closeDrawer } 
           />
-        : nav.sideNo && nav.chapterId ?
+        : nav && nav.sideNo && nav.chapterId ?
           <CheckpointList chapterId={ nav.chapterId } sideNo={ nav.sideNo } />
-        : nav.chapterId ?
+        : nav && nav.chapterId ?
           <SideList chapterId={ nav.chapterId } />
         :
           <ChapterList />
