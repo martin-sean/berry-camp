@@ -54,7 +54,7 @@ export default React.memo((props: DrawerProps) => {
     <React.Fragment>
       <Hidden mdUp>
         <Drawer
-          // Use drawer zIndex instead of dialog to go under navbar
+          // Use drawer zIndex instead of dialog to position under navbar
           style={{ zIndex: theme.zIndex.drawer }}
           className={ classes.drawerMobile }
           open={ props.open }

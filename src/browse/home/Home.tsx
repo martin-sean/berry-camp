@@ -113,16 +113,19 @@ export default () => {
           setDrawerOpen={ setDrawerOpen }
           setTitle={ setDocTitle }
         />
+        
         {/* Right side content */}
         <div className={ classes.wrapper }>
           <div className={ classes.toolbar }/>
           <div className={ classes.content }>
-           {/* Render view based on redux state */}
-           { 
-              data && currentRoom ? <RoomClips setDocTitle={ setDocTitle }/> :
-              data && nav ? <Navigation /> :
+           {/* Decide view to render and pass redux state to components */}
+            { data && currentRoom ? (
+              <RoomClips data={ data } room={ currentRoom } setDocTitle={ setDocTitle }/> 
+            ) : data && nav ? (
+              <Navigation data={ data } nav={ nav}/> 
+            ) : (
               <Welcome />
-            }
+            )}
           </div>
         </div>
       </div>

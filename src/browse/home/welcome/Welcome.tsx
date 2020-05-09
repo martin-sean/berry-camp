@@ -9,7 +9,7 @@ const imagesUrl = 'https://cdn.berrycamp.com/file/berrycamp/static/welcome/image
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(3),
-    maxWidth: 900,
+    maxWidth: 824,
   },
   heading: {
     marginBottom: theme.spacing(3),
@@ -47,40 +47,42 @@ export default React.memo(() => {
   }, [setContent, setImage]);
   
   return (
-    <Paper className={ classes.paper }>
-      { content.length !== 0 ? (
-        <Typography className={ classes.heading } variant='h5'>{ content[0] }</Typography> 
-      ) : (
-        <Skeleton className={ classes.loadingHeading }/>
-      )}
+    <Fade in={true}>
+      <Paper className={ classes.paper }>
+        { content.length !== 0 ? (
+          <Typography className={ classes.heading } variant='h5'>{ content[0] }</Typography> 
+        ) : (
+          <Skeleton className={ classes.loadingHeading }/>
+        )}
 
-      { content.length !== 0 ? (
-        <Typography>{ content[1] }</Typography>
-      ) : (
-        <React.Fragment>
-          <Skeleton className={ classes.loadingText }/>
-          <Skeleton className={ classes.loadingText }/>
-        </React.Fragment>
-      )}
+        { content.length !== 0 ? (
+          <Typography>{ content[1] }</Typography>
+        ) : (
+          <React.Fragment>
+            <Skeleton className={ classes.loadingText }/>
+            <Skeleton className={ classes.loadingText }/>
+          </React.Fragment>
+        )}
 
-      { !loaded && (
-        <Skeleton className={ classes.logo } variant="rect" />
-      )}
-      <Fade in={ loaded }>
-        <img
-          className={ `${classes.logo} pixelated` }
-          src={ image }
-          style={ loaded ? {} : { display: 'none' } }
-          alt='Animation of madeline in a campsite in game'
-          onLoad={ () => setLoaded(true) }
-        />  
-      </Fade>
+        { !loaded && (
+          <Skeleton className={ classes.logo } variant="rect" />
+        )}
+        <Fade in={ loaded }>
+          <img
+            className={ `${classes.logo} pixelated` }
+            src={ image }
+            style={ loaded ? {} : { display: 'none' } }
+            alt='Animation of madeline in a campsite in game'
+            onLoad={ () => setLoaded(true) }
+          />  
+        </Fade>
 
-      { content.length !== 0 ? (
-        <Typography>{ content[2] }</Typography> 
-      ) : (
-        <Skeleton width='20%' className={ classes.loadingText }/>
-      )}
-    </Paper>
+        { content.length !== 0 ? (
+          <Typography>{ content[2] }</Typography> 
+        ) : (
+          <Skeleton width='20%' className={ classes.loadingText }/>
+        )}
+      </Paper>
+    </Fade>
   );
 });

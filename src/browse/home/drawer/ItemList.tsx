@@ -1,5 +1,5 @@
 import React, { useRef, useLayoutEffect } from 'react';
-import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography, RootRef } from '@material-ui/core';
+import { Breadcrumbs, Divider, List, ListItem, Link, ListItemText, Typography, RootRef, CircularProgress } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -30,7 +30,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   indent: {
     width: '30px',
-  }
+  },
+  listProgress: {
+    justifyContent: 'center',
+    height: 100,
+    padding: theme.spacing(2),
+  },
 }));
 
 interface ItemsListProps {
@@ -43,12 +48,11 @@ export default (props: ItemsListProps) => {
   const classes = useStyles();
 
   // Redux stuff
-  const dispatch = useDispatch();
-  // Current data
   const data = useSelector((store: GlobalStore) => store.data);
-  // Current navigation
   const nav = useSelector((store: GlobalStore) => store.nav);
+  const dispatch = useDispatch();
 
+  // Keep method out of props namespace for subcomponents
   const setTitle = props.setTitle;
 
   // Breadcrumb and item selection actions, manage the navigation and selected room in state
@@ -315,20 +319,25 @@ export default (props: ItemsListProps) => {
       className={ classes.list }
       aria-labelledby='TODO'
     >
-      {
-        // Check if data has loaded
-        !data ? errorMessage("Data") :
+      {/* Render progress until data is loaded */}
+      { data ? (
         <React.Fragment>
-          { nav && nav.checkpointNo && nav.sideNo && nav.chapterId ?
+          {/* Handle naviation position and render required list */}
+          { nav && nav.checkpointNo && nav.sideNo && nav.chapterId ? (
             <RoomList data={ data } chapterId={ nav.chapterId } sideNo={ nav.sideNo } checkpointNo={ nav.checkpointNo } closeDrawer={ props.closeDrawer }/>
-          : nav && nav.sideNo && nav.chapterId ?
+          ) : nav && nav.sideNo && nav.chapterId ? (
             <CheckpointList data={ data } chapterId={ nav.chapterId } sideNo={ nav.sideNo }/>
-          : nav && nav.chapterId ?
+          ) : nav && nav.chapterId ? (
             <SideList data={ data } chapterId={ nav.chapterId }/>
-          :
+          ) : (
             <ChapterList data={ data }/>
-          }
+          )}
         </React.Fragment>
+        ) : (
+          <ListItem className={ classes.listProgress }>
+            <CircularProgress size={ 50 } />
+          </ListItem>
+        )
       }
     </List>
   );
