@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { GlobalStore } from '../../../../redux/reducers';
 import { SetRoomAction, SetNavAction } from '../../../../redux/actions';
 import { SET_ROOM, SET_NAV } from '../../../../redux/actionTypes';
+import { DataTree } from '../../../../api/Data';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -16,17 +17,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+interface NavProps {
+  data: DataTree,
+}
+
+export default (props: NavProps) => {
   const classes = useStyles();
 
-  const data = useSelector((store: GlobalStore) => store.data);
   const currentRoom = useSelector((store: GlobalStore) => store.room);
   const dispatch = useDispatch();
 
   // Don't render if there's no room
   if (!currentRoom) { return null; }
 
-  const chapter = data[currentRoom.chapterId];
+  const chapter = props.data[currentRoom.chapterId];
   const side = chapter.sides[currentRoom.sideNo];
   const checkpoint = side.checkpoints[currentRoom.checkpointNo];
 

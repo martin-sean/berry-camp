@@ -5,8 +5,9 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { GlobalStore, CurrentRoom } from '../../../redux/reducers';
-import { SET_NAV, CLEAR_NAV, SET_ROOM } from '../../../redux/actionTypes';
-import { SetNavAction, ClearNavAction, SetRoomAction } from '../../../redux/actions';
+import { SET_NAV, CLEAR_NAV, SET_ROOM, CLEAR_ROOM } from '../../../redux/actionTypes';
+import { SetNavAction, ClearNavAction, SetRoomAction, ClearRoomAction } from '../../../redux/actions';
+import { DataTree } from '../../../api/Data';
 
 const useStyles = makeStyles((theme: Theme) => ({
   breadcrumbLink: {
@@ -50,13 +51,15 @@ export default (props: ItemsListProps) => {
 
   const setTitle = props.setTitle;
 
-  // Breadcrumb actions - a state manager might be nice right about now...
+  // Breadcrumb and item selection actions, manage the navigation and selected room in state
   const clearNav = () => {
     dispatch<ClearNavAction>({ type: CLEAR_NAV });
+    dispatch<ClearRoomAction>({ type: CLEAR_ROOM });
   }
 
   const setNavChapter = (chapterId: string) => {
     dispatch<SetNavAction>({ type: SET_NAV, nav: { chapterId: chapterId } });
+    dispatch<ClearRoomAction>({ type: CLEAR_ROOM });
   }
 
   const setNavSide = (chapterId: string, sideNo: string) => {
@@ -71,7 +74,11 @@ export default (props: ItemsListProps) => {
     dispatch<SetRoomAction>({ type: SET_ROOM, room: room });
   }
 
-  const ChapterList = () => {
+  interface ChapterListProps {
+    data: DataTree,
+  }
+
+  const ChapterList = (props: ChapterListProps) => {
     setTitle('Chapters');
 
     return (
@@ -82,11 +89,12 @@ export default (props: ItemsListProps) => {
           </Breadcrumbs>
         </ListItem>
         <Divider />
-        { Object.keys(data).map((chapterId: string, index: number) => (
+        { Object.keys(props.data).map((chapterId: string, index: number) => (
             <Item
-              primary={ data[chapterId].name }
+              data={ props.data }
+              primary={ props.data[chapterId].name }
               handleClick={ () => setNavChapter(chapterId) }
-              before={ data[chapterId].chapter_no }
+              before={ props.data[chapterId].chapter_no }
               key={ index }
             />
           ))
@@ -96,25 +104,33 @@ export default (props: ItemsListProps) => {
   }
 
   interface SideListProps {
+    data: DataTree,
     chapterId: string,
   }
   
   const SideList = (props: SideListProps) => {
-    const chapter = data[props.chapterId];
+    const chapter = props.data[props.chapterId];
     setTitle(chapter.name);
 
     return (
         <React.Fragment>
           <ListItem>
             <Breadcrumbs separator="›">
-              <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ clearNav }>Chapter</Link> 
+              <Link 
+                component='button'
+                className={ classes.breadcrumbLink }
+                color="textSecondary" onClick={ clearNav }
+              >
+                Chapter
+              </Link> 
               <Typography color="textPrimary">Side</Typography>
             </Breadcrumbs>
           </ListItem>
           <Divider />
           { !chapter ? errorMessage("Sides") :
             Object.keys(chapter.sides).map((sideNo: string, index: number) => (
-            <Item 
+            <Item
+              data={ props.data }
               primary={ chapter.sides[sideNo].name }
               before={ sideNo }
               handleClick={ () => setNavSide(props.chapterId, sideNo) }
@@ -126,12 +142,13 @@ export default (props: ItemsListProps) => {
   }
 
   interface CheckPointListProps {
+    data: DataTree,
     chapterId: string,
     sideNo: string,
   }
 
   const CheckpointList = (props: CheckPointListProps) => {
-    const chapter = data[props.chapterId];
+    const chapter = props.data[props.chapterId];
     const side = chapter?.sides[props.sideNo];
     setTitle(side?.name);
 
@@ -139,8 +156,22 @@ export default (props: ItemsListProps) => {
       <React.Fragment>
         <ListItem>
           <Breadcrumbs separator="›">
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ clearNav }>Chapter</Link>
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => setNavChapter(props.chapterId) }>Side</Link>
+            <Link 
+              component='button' 
+              className={ classes.breadcrumbLink }
+              color="textSecondary" 
+              onClick={ clearNav }
+            >
+              Chapter
+            </Link>
+            <Link 
+              component='button'
+              className={ classes.breadcrumbLink }
+              color="textSecondary"
+              onClick={ () => setNavChapter(props.chapterId) }
+            >
+              Side
+            </Link>
             <Typography color="textPrimary">Checkpoint</Typography>
           </Breadcrumbs>
         </ListItem>
@@ -148,6 +179,7 @@ export default (props: ItemsListProps) => {
         { !side ? errorMessage("Checkpoints") :
           Object.keys(side.checkpoints).map((checkpointNo: string, index: number) => (
             <Item
+              data={ props.data }
               primary={ side.checkpoints[checkpointNo].name }
               handleClick={ () => setNavCheckpoint(props.chapterId, props.sideNo, checkpointNo) }
               before={ checkpointNo }
@@ -159,6 +191,7 @@ export default (props: ItemsListProps) => {
   }
 
   interface RoomListProps {
+    data: DataTree,
     chapterId: string,
     sideNo: string,
     checkpointNo: string,
@@ -166,7 +199,7 @@ export default (props: ItemsListProps) => {
   }
 
   const RoomList = (props: RoomListProps) => {
-    const chapter = data[props.chapterId];
+    const chapter = props.data[props.chapterId];
     const side = chapter?.sides[props.sideNo];
     const checkpoint = side?.checkpoints[props.checkpointNo];
     setTitle(checkpoint?.name);
@@ -183,16 +216,38 @@ export default (props: ItemsListProps) => {
       <React.Fragment>
         <ListItem>
           <Breadcrumbs separator="›">
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ clearNav }>Chapter</Link>
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => setNavChapter(props.chapterId) }>Side</Link>
-            <Link component='button' className={ classes.breadcrumbLink } color="textSecondary" onClick={ () => setNavSide(props.chapterId, props.sideNo) }>Checkpoint</Link>
+            <Link
+              component='button'
+              className={ classes.breadcrumbLink }
+              color="textSecondary"
+              onClick={ clearNav }
+            >
+              Chapter
+            </Link>
+            <Link 
+              component='button'
+              className={ classes.breadcrumbLink }
+              color="textSecondary"
+              onClick={ () => setNavChapter(props.chapterId) }
+            >
+              Side
+            </Link>
+            <Link 
+              component='button'
+              className={ classes.breadcrumbLink }
+              color="textSecondary"
+              onClick={ () => setNavSide(props.chapterId, props.sideNo) }
+            >
+              Checkpoint
+            </Link>
             <Typography color="textPrimary">Room</Typography>
           </Breadcrumbs>
         </ListItem>
         <Divider />
         { !checkpoint ? errorMessage("Rooms") :
           Object.keys(checkpoint.rooms).map((roomNo: string, index: number) => (
-            <Item 
+            <Item
+              data={ props.data }
               primary={ checkpoint.rooms[roomNo].name }
               secondary={ checkpoint.rooms[roomNo].debug_id }
               before={ roomNo }
@@ -214,6 +269,7 @@ export default (props: ItemsListProps) => {
   }
   
   interface ItemProps {
+    data: DataTree,
     primary: string, 
     secondary?: string, 
     before: string | number | undefined,
@@ -260,15 +316,19 @@ export default (props: ItemsListProps) => {
       aria-labelledby='TODO'
     >
       {
-        nav && nav.checkpointNo && nav.sideNo && nav.chapterId ?
-          <RoomList chapterId={ nav.chapterId } sideNo={ nav.sideNo } checkpointNo={ nav.checkpointNo } closeDrawer={ props.closeDrawer } 
-          />
-        : nav && nav.sideNo && nav.chapterId ?
-          <CheckpointList chapterId={ nav.chapterId } sideNo={ nav.sideNo } />
-        : nav && nav.chapterId ?
-          <SideList chapterId={ nav.chapterId } />
-        :
-          <ChapterList />
+        // Check if data has loaded
+        !data ? errorMessage("Data") :
+        <React.Fragment>
+          { nav && nav.checkpointNo && nav.sideNo && nav.chapterId ?
+            <RoomList data={ data } chapterId={ nav.chapterId } sideNo={ nav.sideNo } checkpointNo={ nav.checkpointNo } closeDrawer={ props.closeDrawer }/>
+          : nav && nav.sideNo && nav.chapterId ?
+            <CheckpointList data={ data } chapterId={ nav.chapterId } sideNo={ nav.sideNo }/>
+          : nav && nav.chapterId ?
+            <SideList data={ data } chapterId={ nav.chapterId }/>
+          :
+            <ChapterList data={ data }/>
+          }
+        </React.Fragment>
       }
     </List>
   );

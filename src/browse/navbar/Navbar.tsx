@@ -24,15 +24,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   imageWrapper: {
     flex: 1,
-    maxWidth: 400,
+    maxWidth: 330,
     height: theme.mixins.toolbar.minHeight,
   },
   logo: {
-    width: '100%',
-    height: '100%',
     objectFit: 'cover',
-    WebkitMaskImage: 'linear-gradient(to right, rgba(0, 0, 0, 1.0) 50%, transparent);',
-    // mixBlendMode: 'screen',
+    width: '100%',
+    minHeight: theme.mixins.toolbar.minHeight,
+    maxHeight: theme.mixins.toolbar.minHeight,
   },
   title: {
     display: 'flex',
@@ -56,10 +55,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const logos = [
-  'logo_1.gif', 'logo_2.gif', 'logo_5.gif', 'logo_6.gif',
-];
-
 interface NavbarProps {
   open: boolean,
   setDrawerOpen: (open: boolean) => void
@@ -67,7 +62,6 @@ interface NavbarProps {
 
 export default React.memo((props: NavbarProps) => {
   const [loaded, setLoaded] = useState(false);
-  const logo = logos[Math.floor(Math.random() * logos.length)];
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -90,8 +84,8 @@ export default React.memo((props: NavbarProps) => {
           <Fade in={ loaded }>
             <div className={ classes.imageWrapper }>
               <img
-                className={ classes.logo }
-                src={ process.env.PUBLIC_URL + `/img/${ logo }` }
+                className={ `${ classes.logo } pixelated` }
+                src={ process.env.PUBLIC_URL + '/img/logo.png' }
                 alt='Animation of madeline in a campsite in game'
                 onLoad={ () => setLoaded(true) }
               />

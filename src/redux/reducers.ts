@@ -1,9 +1,8 @@
 import { SET_DATA, SET_ROOM, CLEAR_ROOM, SET_NAV, CLEAR_NAV } from './actionTypes';
 import { Actions } from "./actions";
-import { DataTree } from '../api/Data';
 
 // Chapter navigation tree data
-import data from '../api/data.json';
+import { DataTree } from '../api/Data';
 
 // Represents a position in the drawer navigation menu
 export interface Navigation {
@@ -22,7 +21,7 @@ export interface CurrentRoom {
 
 // Define the redux store
 export interface GlobalStore {
-  data: DataTree,
+  data: DataTree | null,
   nav: Navigation | null,
   room: CurrentRoom | null;
 }
@@ -32,7 +31,7 @@ export const defaultNav: Navigation = {};
 
 // Define the default state of the store
 const defaultStore: GlobalStore = {
-  data: data,
+  data: null,
   nav: null,
   room: null,
 };
