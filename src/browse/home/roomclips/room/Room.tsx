@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import  './Room.css';
 
 import Skeleton from '@material-ui/lab/Skeleton';
-import { makeStyles, Fade, Theme, Typography, Divider, Button, Snackbar, Grid, Slide, Modal, Backdrop } from '@material-ui/core'
+import { makeStyles, Fade, Theme, Typography, Divider, Button, Snackbar, Grid, Slide, Modal, Backdrop, useTheme, useMediaQuery } from '@material-ui/core'
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import { Alert } from '@material-ui/lab';
@@ -16,11 +16,25 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'block',
     objectFit: 'cover',
     width: '100%',
-    height: '360px',
-    cursor: 'pointer'
+    [theme.breakpoints.up('md')]: {
+      cursor: 'pointer',
+    },
   },
   imageWrapper: {
     paddingBottom: theme.spacing(1),
+  },
+  // Aspect ratio container
+  loadingImageContainer: {
+    width: '100%',
+    paddingTop: '56.25%',
+    position: 'relative',
+  },
+  loadingImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
   },
   info: {
     fontSize: '12pt',
@@ -68,9 +82,16 @@ interface RoomProps {
 
 export default React.memo((props: RoomProps) => {
   const classes = useStyles();
-
+ 
+  // Breakpoints for showing large image on click
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
+  
+  // Room image loaded
   const [loaded, setLoaded] = useState(false);
+  // Show Snackbar
   const [copied, setCopied] = useState(false);
+  // Large image dialog
   const [open, setOpen] = useState(false);
   
   const chapter = props.data[props.chapterId];
@@ -126,9 +147,9 @@ export default React.memo((props: RoomProps) => {
       <div className={ classes.imageWrapper }>
         {
           !loaded &&
-          <React.Fragment>
-            <Skeleton variant="rect" width={ '100%' } height={360} />
-          </React.Fragment>
+          <div className={ classes.loadingImageContainer }>
+            <Skeleton variant="rect" className={ classes.loadingImage } />
+          </div>
         }
         <Fade in={ loaded }>
           <img
@@ -137,7 +158,7 @@ export default React.memo((props: RoomProps) => {
             alt="Screenshot of current room"
             style={ loaded ? {} : { display: 'none'} }
             onLoad={ () => setLoaded(true) }
-            onClick={ () => setOpen(!open) }
+            onClick={ () => matches && setOpen(!open) }
             onError={ (e) => {
               (e.target as HTMLImageElement).onerror = null;
               (e.target as HTMLImageElement).src = errorImage

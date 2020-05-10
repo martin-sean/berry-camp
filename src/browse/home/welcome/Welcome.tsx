@@ -9,7 +9,7 @@ const imagesUrl = 'https://cdn.berrycamp.com/file/berrycamp/static/welcome/image
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(3),
-    maxWidth: 824,
+    maxWidth: 900,
   },
   heading: {
     marginBottom: theme.spacing(3),
@@ -22,12 +22,26 @@ const useStyles = makeStyles((theme) => ({
     transform: 'transform: scale(1, 0.80)',
     height: 35,
   },
-  logo: {
-    height: 450,
+  welcomeImage: {
     width: '100%',
     objectFit: 'cover',
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+  // Aspect ratio container
+  loadingImageContainer: {
+    position: 'relative',
+    width: '100%',
+    paddingTop: '56.25%',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
+  loadingImage: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
   },
 }));
 
@@ -65,11 +79,13 @@ export default React.memo(() => {
         )}
 
         { !loaded && (
-          <Skeleton className={ classes.logo } variant="rect" />
+          <div className={ classes.loadingImageContainer }>
+            <Skeleton className={ classes.loadingImage } variant="rect" />
+          </div>
         )}
         <Fade in={ loaded }>
           <img
-            className={ `${classes.logo} pixelated` }
+            className={ `${classes.welcomeImage} pixelated` }
             src={ image }
             style={ loaded ? {} : { display: 'none' } }
             alt='Animation of madeline in a campsite in game'
