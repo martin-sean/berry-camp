@@ -5,6 +5,7 @@ export interface DataTree {
 export interface Chapter {
   chapter_no?: number,
   name: string,
+  desc: string,
   official?: boolean,
   sides: {
     [key: string]: Side,
