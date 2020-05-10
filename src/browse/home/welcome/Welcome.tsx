@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
   },
+  accent: {
+    color: theme.palette.secondary.main,
+  }
 }));
 
 export default React.memo(() => {
@@ -64,13 +67,16 @@ export default React.memo(() => {
     <Fade in={true}>
       <Paper className={ classes.paper }>
         { content.length !== 0 ? (
-          <Typography className={ classes.heading } variant='h5'>{ content[0] }</Typography> 
+          <Typography className={ classes.heading } variant='h5'
+          >
+            Welcome to the Mount Celeste <span className={ classes.accent }>Berry Camp</span>!
+          </Typography> 
         ) : (
           <Skeleton className={ classes.loadingHeading }/>
         )}
 
         { content.length !== 0 ? (
-          <Typography>{ content[1] }</Typography>
+          <Typography>{ content[0] }</Typography>
         ) : (
           <React.Fragment>
             <Skeleton className={ classes.loadingText }/>
@@ -94,7 +100,7 @@ export default React.memo(() => {
         </Fade>
 
         { content.length !== 0 ? (
-          <Typography>{ content[2] }</Typography> 
+          <Typography>{ content[1] }</Typography> 
         ) : (
           <Skeleton width='20%' className={ classes.loadingText }/>
         )}

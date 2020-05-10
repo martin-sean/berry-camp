@@ -44,8 +44,8 @@ export default (props: NavigationProps) => {
         {/* Left Side */}
         <Grid item xs={ 12 } lg={ 7 } className={ classes.leftSide }>
           { chapter && (
-            // Why does chapter/side/checkpoint not evaluate to true on it's own? It's either this or !!chapter
-            <Fade in={ chapter && true }>
+            // Weirdly does not evalute to true on it's own so !! is required
+            <Fade in={ !!chapter }>
               <Paper className={ classes.paper }>
                 <Typography variant='h5'>
                   { chapter.chapter_no ? `Chapter: ${ chapter.chapter_no} - ${ chapter.name }` : chapter.name }
@@ -61,7 +61,7 @@ export default (props: NavigationProps) => {
           <Grid container spacing={ 3 } direction='column'>
             <Grid item className={ classes.side }>
               { side && (
-                <Fade in={ side && true }>
+                <Fade in={ !!side }>
                   <Paper className={ classes.paper }>
                     <Typography variant='h5'>{ `${ side.name } side` }</Typography>
                     <Typography color='textSecondary'>{ `${ Object.keys(side.checkpoints).length } checkpoints` }</Typography>
@@ -71,7 +71,7 @@ export default (props: NavigationProps) => {
             </Grid>
             <Grid item className={ classes.checkpoint }>
               { checkpoint && (
-                <Fade in={ checkpoint && true }>
+                <Fade in={ !!checkpoint }>
                   <Paper className={ classes.paper }>
                     <Typography variant='h5'>{ `${ checkpoint.name } (${ checkpoint.abbreviation })` }</Typography>
                     <Typography color='textSecondary'>{ `${ Object.keys(checkpoint.rooms).length } rooms` }</Typography>
