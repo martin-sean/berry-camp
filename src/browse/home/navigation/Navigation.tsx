@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navigation } from '../../../redux/reducers';
 import { makeStyles, Paper, Grid, Typography, Fade } from '@material-ui/core';
 import { DataTree } from '../../../api/Data';
+import pluralize from '../../../utils/pluralize';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,6 +39,9 @@ export default (props: NavigationProps) => {
   const side = props.nav.sideNo ? chapter?.sides[props.nav.sideNo] : undefined;
   const checkpoint = props.nav.checkpointNo ? side?.checkpoints[props.nav.checkpointNo] : undefined;
 
+  const [chapterLoaded, setChapterLoaded] = useState(false);
+  const [checkpointLoaded, setCheckpointLoaded] = useState(false);
+
   return (
     <React.Fragment>
       <Grid container spacing={ 3 }>
@@ -48,9 +52,10 @@ export default (props: NavigationProps) => {
             <Fade in={ !!chapter }>
               <Paper className={ classes.paper }>
                 <Typography variant='h5'>
-                  { chapter.chapter_no ? `Chapter: ${ chapter.chapter_no} - ${ chapter.name }` : chapter.name }
+                  { chapter.chapter_no ? `Chapter ${ chapter.chapter_no}: ${ chapter.name }` : chapter.name }
                 </Typography>
-                <Typography color='textSecondary'>{ `${ Object.keys(chapter.sides).length } sides` }</Typography>
+                <Typography color='textSecondary'>{ pluralize(Object.keys(chapter.sides).length, 'side') }</Typography>
+                <Typography>{ chapter.desc }</Typography>
               </Paper>
             </Fade>
           )}
@@ -64,7 +69,7 @@ export default (props: NavigationProps) => {
                 <Fade in={ !!side }>
                   <Paper className={ classes.paper }>
                     <Typography variant='h5'>{ `${ side.name } side` }</Typography>
-                    <Typography color='textSecondary'>{ `${ Object.keys(side.checkpoints).length } checkpoints` }</Typography>
+                    <Typography color='textSecondary'>{ pluralize(Object.keys(side.checkpoints).length, 'checkpoint') }</Typography>
                   </Paper>
                 </Fade>
               )}
@@ -74,7 +79,7 @@ export default (props: NavigationProps) => {
                 <Fade in={ !!checkpoint }>
                   <Paper className={ classes.paper }>
                     <Typography variant='h5'>{ `${ checkpoint.name } (${ checkpoint.abbreviation })` }</Typography>
-                    <Typography color='textSecondary'>{ `${ Object.keys(checkpoint.rooms).length } rooms` }</Typography>
+                    <Typography color='textSecondary'>{ pluralize(Object.keys(checkpoint.rooms).length, 'room') }</Typography>
                   </Paper>
                 </Fade>
               )}

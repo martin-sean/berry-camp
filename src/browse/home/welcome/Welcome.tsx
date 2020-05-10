@@ -66,14 +66,12 @@ export default React.memo(() => {
   return (
     <Fade in={true}>
       <Paper className={ classes.paper }>
-        { content.length !== 0 ? (
-          <Typography className={ classes.heading } variant='h5'
-          >
-            Welcome to the Mount Celeste <span className={ classes.accent }>Berry Camp</span>!
-          </Typography> 
-        ) : (
-          <Skeleton className={ classes.loadingHeading }/>
-        )}
+        <Typography
+          className={ classes.heading }
+          variant='h5'
+        >
+          Welcome to the Mount Celeste <span className={ classes.accent }>Berry Camp</span>!
+        </Typography>
 
         { content.length !== 0 ? (
           <Typography>{ content[0] }</Typography>
