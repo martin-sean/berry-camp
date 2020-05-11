@@ -288,7 +288,7 @@ export default (props: ItemsListProps) => {
     // Scroll the page to selected item
     useLayoutEffect(() => {
       if (props.selected) {
-        currentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        currentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     });
 
