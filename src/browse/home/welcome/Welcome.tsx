@@ -3,8 +3,10 @@ import { Paper, Typography, makeStyles, Fade } from '@material-ui/core';
 import fetchJson from '../../../utils/fetch-json';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const contentUrl = 'https://cdn.berrycamp.com/file/berrycamp/static/welcome/content.json';
-const imagesUrl = 'https://cdn.berrycamp.com/file/berrycamp/static/welcome/images/';
+const welcomeUrl = 'https://cdn.berrycamp.com/file/berrycamp/static/welcome/';
+const contentUrl = `${ welcomeUrl }content.json`;
+const quotesUrl = `${ welcomeUrl }quotes.json`;
+const imagesUrl = `${ welcomeUrl }images/`;
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -16,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
   },
   paragraph: {
     fontSize: '1.15rem',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
   loadingHeading: {
     transform: 'transform: scale(1, 0.80)',
@@ -28,8 +32,6 @@ const useStyles = makeStyles((theme) => ({
   welcomeImage: {
     width: '100%',
     objectFit: 'cover',
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
   },
   // Aspect ratio container
   loadingImageContainer: {
@@ -48,7 +50,15 @@ const useStyles = makeStyles((theme) => ({
   },
   accent: {
     color: theme.palette.secondary.main,
-  }
+  },
+  quoteWrapper: {
+    marginTop: theme.spacing(3),
+  },
+  quote: {
+    textAlign: 'center',
+    fontSize: '1.5rem',
+    fontStyle: 'italic',
+  },
 }));
 
 export default React.memo(() => {
@@ -56,56 +66,72 @@ export default React.memo(() => {
   const [content, setContent] = useState<string[]>([]);
   const [image, setImage] = useState<string>('');
   const [loaded, setLoaded] = useState(false);
+  const [quote, setQuote] = useState<string>('');
   
   useEffect(() => {
     // Fetch the page content
     fetchJson<string[]>(contentUrl).then((res) => {
       setContent(res);
     });
+    // Get a random quote to show
+    fetchJson<string[]>(quotesUrl).then((res) => {
+      const randomQuote = res[Math.floor(Math.random() * res.length)];
+      setQuote(randomQuote);
+    });
     // Select a random image to show
     setImage(`${ imagesUrl }${ Math.floor(Math.random() * 6) + 1 }.png`);
-  }, [setContent, setImage]);
+  }, [setContent, setQuote, setImage]);
   
   return (
     <Fade in={true}>
-      <Paper className={ classes.paper }>
-        <Typography
-          className={ classes.heading }
-          variant='h5'
-        >
-          Welcome to the Mount Celeste <span className={ classes.accent }>Berry Camp</span>!
-        </Typography>
+      <React.Fragment>
+        <Paper className={ classes.paper }>
+          <Typography
+            className={ classes.heading }
+            variant='h5'
+          >
+            Welcome to the Mount Celeste <span className={ classes.accent }>Berry Camp</span>!
+          </Typography>
 
-        { content.length !== 0 ? (
-          <Typography className={ classes.paragraph } color='textSecondary'>{ content[0] }</Typography>
-        ) : (
-          <React.Fragment>
+          { content ? (
+            <Typography className={ classes.paragraph } color='textSecondary'>{ content[0] }</Typography>
+          ) : (
+            <React.Fragment>
+              <Skeleton className={ classes.loadingText }/>
+              <Skeleton className={ classes.loadingText }/>
+            </React.Fragment>
+          )}
+
+          { content ? (
+            <Typography className={ classes.paragraph }>{ content[1] }</Typography> 
+          ) : (
+            <Skeleton width='20%' className={ classes.loadingText }/>
+          )}
+
+          { !loaded && (
+            <div className={ classes.loadingImageContainer }>
+              <Skeleton className={ classes.loadingImage } variant="rect" />
+            </div>
+          )}
+          <Fade in={ loaded }>
+            <img
+              className={ `${classes.welcomeImage} pixelated` }
+              src={ image }
+              style={ loaded ? {} : { display: 'none' } }
+              alt='Animation of madeline in a campsite in game'
+              onLoad={ () => setLoaded(true) }
+            />  
+          </Fade>
+        </Paper>
+        {/* Render a random quote */}
+        <Paper className={ `${ classes.paper } ${ classes.quoteWrapper }`}>
+          { quote ? (
+            <Typography className={ classes.quote } color='textSecondary'>"{ quote }"</Typography> 
+          ) : (
             <Skeleton className={ classes.loadingText }/>
-            <Skeleton className={ classes.loadingText }/>
-          </React.Fragment>
-        )}
-
-        { !loaded && (
-          <div className={ classes.loadingImageContainer }>
-            <Skeleton className={ classes.loadingImage } variant="rect" />
-          </div>
-        )}
-        <Fade in={ loaded }>
-          <img
-            className={ `${classes.welcomeImage} pixelated` }
-            src={ image }
-            style={ loaded ? {} : { display: 'none' } }
-            alt='Animation of madeline in a campsite in game'
-            onLoad={ () => setLoaded(true) }
-          />  
-        </Fade>
-
-        { content.length !== 0 ? (
-          <Typography className={ classes.paragraph }>{ content[1] }</Typography> 
-        ) : (
-          <Skeleton width='20%' className={ classes.loadingText }/>
-        )}
-      </Paper>
+          )}
+        </Paper>
+      </React.Fragment>
     </Fade>
   );
 });
