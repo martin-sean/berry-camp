@@ -8,6 +8,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import { Alert } from '@material-ui/lab';
 import { DataTree } from '../../../../api/Data';
+import { CurrentRoom } from '../../../../redux/reducers';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
@@ -73,10 +74,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface RoomProps {
   data: DataTree,
-  chapterId: string,
-  sideNo: string,
-  checkpointNo: string,
-  roomNo: string,
+  room: CurrentRoom,
   setDocTitle: (title: string | undefined) => void
 }
 
@@ -94,32 +92,32 @@ export default React.memo((props: RoomProps) => {
   // Large image dialog
   const [open, setOpen] = useState(false);
   
-  const chapter = props.data[props.chapterId];
-  const side = chapter?.sides[props.sideNo];
-  const checkpoint = side?.checkpoints[props.checkpointNo];
-  const room = checkpoint?.rooms[props.roomNo];
+  const chapter = props.data[props.room.chapterId];
+  const side = chapter?.sides[props.room.sideNo];
+  const checkpoint = side?.checkpoints[props.room.checkpointNo];
+  const room = checkpoint?.rooms[props.room.roomNo];
 
   props.setDocTitle(room?.name);
 
-  const image = imageHost + props.chapterId + 
-    '/' + props.sideNo +
-    '/' + props.checkpointNo +
-    '/' + props.roomNo + 
+  const image = imageHost + props.room.chapterId + 
+    '/' + props.room.sideNo +
+    '/' + props.room.checkpointNo +
+    '/' + props.room.roomNo + 
     '.png'
 
   const errorImage = '/img/error.jpg';
 
   useEffect(() => {
     setLoaded(false);
-  }, [props.chapterId, props.sideNo, props.checkpointNo, props.roomNo]);
+  }, [props.room.chapterId, props.room.sideNo, props.room.checkpointNo, props.room.roomNo]);
 
   const copyUrl = () => {
     navigator.clipboard.writeText(
       window.location.href.replace(window.location.search, '') +
-      `?chapter=${ props.chapterId }` +
-      `&side=${ props.sideNo }` +
-      `&checkpoint=${ props.checkpointNo }`+
-      `&room=${ props.roomNo  }`
+      `?chapter=${ props.room.chapterId }` +
+      `&side=${ props.room.sideNo }` +
+      `&checkpoint=${ props.room.checkpointNo }`+
+      `&room=${ props.room.roomNo  }`
     );
     setCopied(true);
   }
@@ -177,7 +175,7 @@ export default React.memo((props: RoomProps) => {
             <Divider className={ classes.divider } />
             <Grid container justify='space-between'>
               <Grid item>
-                <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.roomNo }</Typography>
+                <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.room.roomNo }</Typography>
                 <Typography color="textSecondary">Debug ID: { room?.debug_id }</Typography>
               </Grid>
               <Grid item className={ classes.center }>

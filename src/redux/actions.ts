@@ -47,6 +47,6 @@ export const setNav = (nav: Navigation): SetNavAction => {
   return { type: SET_NAV, nav: nav };
 }
 
-export const clearNav = (nav?: Navigation) => {
-  return { type: CLEAR_NAV, nav: nav };
+export const clearNav = () => {
+  return { type: CLEAR_NAV };
 }

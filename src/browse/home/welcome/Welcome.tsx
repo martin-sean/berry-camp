@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
   heading: {
     marginBottom: theme.spacing(3),
   },
+  paragraph: {
+    fontSize: '1.15rem',
+  },
   loadingHeading: {
     transform: 'transform: scale(1, 0.80)',
     height: 50,
@@ -74,7 +77,7 @@ export default React.memo(() => {
         </Typography>
 
         { content.length !== 0 ? (
-          <Typography>{ content[0] }</Typography>
+          <Typography className={ classes.paragraph } color='textSecondary'>{ content[0] }</Typography>
         ) : (
           <React.Fragment>
             <Skeleton className={ classes.loadingText }/>
@@ -98,7 +101,7 @@ export default React.memo(() => {
         </Fade>
 
         { content.length !== 0 ? (
-          <Typography>{ content[1] }</Typography> 
+          <Typography className={ classes.paragraph }>{ content[1] }</Typography> 
         ) : (
           <Skeleton width='20%' className={ classes.loadingText }/>
         )}

@@ -29,15 +29,12 @@ export default (props: RoomClipsProps) => {
           <Paper className={ classes.paper }>
             <Room
               data={ props.data }
-              chapterId={ props.room.chapterId }
-              sideNo={ props.room.sideNo }
-              checkpointNo={ props.room.checkpointNo }
-              roomNo={ props.room.roomNo }
+              room={ props.room }
               setDocTitle={ props.setDocTitle }
             />
           </Paper>
           {/* Room navigation buttons */}
-          <Nav data={ props.data }/>
+          <Nav data={ props.data } room={ props.room }/>
         </Grid>
         <Grid item xs={ 12 } lg= {7 }>
           <React.Fragment>

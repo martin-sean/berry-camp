@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, makeStyles, Grid } from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
-import { GlobalStore } from '../../../../redux/reducers';
+import { useDispatch } from 'react-redux';
+import { CurrentRoom } from '../../../../redux/reducers';
 import { SetRoomAction, SetNavAction } from '../../../../redux/actions';
 import { SET_ROOM, SET_NAV } from '../../../../redux/actionTypes';
 import { DataTree } from '../../../../api/Data';
@@ -16,31 +16,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface NavProps {
+  room: CurrentRoom,
   data: DataTree,
 }
 
 export default (props: NavProps) => {
   const classes = useStyles();
 
-  // Get the current room from the redux store
-  const currentRoom = useSelector((store: GlobalStore) => store.room);
   const dispatch = useDispatch();
 
-  // Don't render if there's no room
-  if (!currentRoom) { return null; }
-
   // Get the chapter side and checkpoint of the currently selected room
-  const chapter = props.data[currentRoom.chapterId];
-  const side = chapter.sides[currentRoom.sideNo];
-  const checkpoint = side.checkpoints[currentRoom.checkpointNo];
+  const chapter = props.data[props.room.chapterId];
+  const side = chapter.sides[props.room.sideNo];
+  const checkpoint = side.checkpoints[props.room.checkpointNo];
 
   // Get the previous and next room if they exist
-  const roomNo = parseInt(currentRoom.roomNo);
+  const roomNo = parseInt(props.room.roomNo);
   const previousRoom = checkpoint.rooms[roomNo - 1];
   const nextRoom = checkpoint.rooms[roomNo + 1];
 
   // Get the previous and next checkpoint if they exist
-  const checkpointNo = parseInt(currentRoom.checkpointNo);
+  const checkpointNo = parseInt(props.room.checkpointNo);
   const prevCheckpoint = side.checkpoints[checkpointNo - 1];
   const nextCheckpoint = side.checkpoints[checkpointNo + 1];
 
@@ -49,9 +45,9 @@ export default (props: NavProps) => {
     dispatch<SetRoomAction>({ 
       type: SET_ROOM, 
       room: {
-        chapterId: currentRoom.chapterId,
-        sideNo: currentRoom.sideNo,
-        checkpointNo: currentRoom.checkpointNo,
+        chapterId: props.room.chapterId,
+        sideNo: props.room.sideNo,
+        checkpointNo: props.room.checkpointNo,
         roomNo: roomNo.toString(),
       }
     })
@@ -62,16 +58,16 @@ export default (props: NavProps) => {
     dispatch<SetNavAction>({
       type: SET_NAV,
       nav: {
-        chapterId: currentRoom.chapterId,
-        sideNo: currentRoom.sideNo,
+        chapterId: props.room.chapterId,
+        sideNo: props.room.sideNo,
         checkpointNo: checkpointNo.toString(),
       }
     });
     dispatch<SetRoomAction>({
       type: SET_ROOM,
       room: {
-        chapterId: currentRoom.chapterId,
-        sideNo: currentRoom.sideNo,
+        chapterId: props.room.chapterId,
+        sideNo: props.room.sideNo,
         checkpointNo: checkpointNo.toString(),
         roomNo: roomNo.toString(),
       }
