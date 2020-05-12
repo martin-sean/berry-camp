@@ -135,7 +135,11 @@ export default (props: NavigationProps) => {
       <Grid container spacing={ 3 }>
         {/* Left Side */}
         <Grid item xs={ 12 } lg={ 7 }>
-          {/* TODO: Clips */}
+          {/* TODO: Placeholder */}
+          <Skeleton animation={ false } height={ 50 }/>
+          <Skeleton animation={ false } height={ 50 }/>
+          <Skeleton animation={ false } height={ 50 }/>
+          <Skeleton animation={ false } height={ 50 }/>
         </Grid>
         
         {/* Right Side */}

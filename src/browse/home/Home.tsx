@@ -30,12 +30,13 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flex: 1,
-    padding: theme.spacing(3),
+    paddingLeft: theme.spacing(3),
+    paddingRIght: theme.spacing(3),
     overflow: 'hidden',
   },
   divider: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   room: {
     padding: theme.spacing(3),

@@ -9,19 +9,32 @@ import Alert from '@material-ui/lab/Alert';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 const useStyles = makeStyles((theme) => ({
-  wrapper:{ 
+  wrapper:{
+    marginTop: theme.spacing(1),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  firstLink: {
+    marginRight: theme.spacing(1),
+  },
+  centerLink: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  },
+  lastLink: {
+    marginLeft: theme.spacing(1),
+  },
   link: {
-    fontSize: '1.25rem',
-    marginLeft: '0.5rem',
-    marginRight: '0.5rem',
+    fontSize: '1.1rem',
     whiteSpace: 'nowrap',
     letterSpacing: 'inherit',
     lineHeight: 'inherit',
-  }
+  },
+  
+  button: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 interface BreadCrumbsProps {
@@ -71,7 +84,7 @@ export default (props: BreadCrumbsProps) => {
         <Breadcrumbs separator='>'>
           <Tooltip placement="top" title="Select another chapter">
             <Link
-              className={ classes.link }
+              className={ `${ classes.link } ${ classes.firstLink }` }
               component='button'
               color='inherit'
               onClick={() => dispatch<ClearNavAction>({ type: CLEAR_NAV }) }
@@ -82,9 +95,9 @@ export default (props: BreadCrumbsProps) => {
           { chapter && (
             <Tooltip placement="top" title="Select another side">
               <Link
-                className={ classes.link }
+                className={ `${ classes.link } ${ classes.centerLink }` }
                 component='button'
-                color='inherit'
+                color={ !side ? 'textPrimary' : 'inherit' }
                 onClick={() => {
                   setNav({
                     chapterId: props.nav.chapterId
@@ -98,9 +111,9 @@ export default (props: BreadCrumbsProps) => {
           { chapter && side && (
             <Tooltip placement="top" title="Select another checkpoint">
               <Link
-                className={ classes.link }
+                className={ `${ classes.link } ${ classes.centerLink }` }
                 component='button'
-                color='inherit'
+                color={ !checkpoint ? 'textPrimary' : 'inherit' }
                 onClick={ () => {
                   setNav({ 
                     chapterId: props.nav.chapterId,
@@ -115,9 +128,9 @@ export default (props: BreadCrumbsProps) => {
           { chapter && side && checkpoint && (
             <Tooltip placement="top" title="Select another room">
               <Link
-                className={ classes.link }
+                className={ `${ classes.link } ${ classes.centerLink }` }
                 component='button'
-                color='inherit'
+                color={ !room ? 'textPrimary' : 'inherit' }
                 onClick={ () => {
                   setNav({
                     chapterId: props.nav.chapterId,
@@ -131,11 +144,16 @@ export default (props: BreadCrumbsProps) => {
             </Tooltip>
           )}
           { chapter && side && checkpoint && room && (
-            <Typography className={ classes.link }>{ room.name }</Typography>
+            <Typography
+              className={ `${ classes.link } ${ classes.lastLink }` }
+              color='textPrimary'
+            >
+              { room.name }
+            </Typography>
           )}
         </Breadcrumbs>
       </div>
-      <Button variant='outlined' onClick={ copyUrl }>Copy link</Button>
+      <Button className={ classes.button } variant='outlined' onClick={ copyUrl }>Copy link</Button>
     </div>
   );
 }

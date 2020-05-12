@@ -11,6 +11,7 @@ const imageCount = 7; // Number of welcome images (1 - n)
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    marginTop: theme.spacing(3),
     padding: theme.spacing(3),
     maxWidth: 900,
   },
@@ -51,9 +52,6 @@ const useStyles = makeStyles((theme) => ({
   },
   accent: {
     color: theme.palette.secondary.main,
-  },
-  quoteWrapper: {
-    marginTop: theme.spacing(3),
   },
   quote: {
     textAlign: 'center',
@@ -125,7 +123,7 @@ export default React.memo(() => {
           </Fade>
         </Paper>
         {/* Render a random quote */}
-        <Paper className={ `${ classes.paper } ${ classes.quoteWrapper }`}>
+        <Paper className={ `${ classes.paper }`}>
           { quote ? (
             <Typography className={ classes.quote } color='textSecondary'>"{ quote }"</Typography> 
           ) : (
