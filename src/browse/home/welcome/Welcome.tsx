@@ -7,6 +7,7 @@ const welcomeUrl = 'https://cdn.berrycamp.com/file/berrycamp/static/welcome/';
 const contentUrl = `${ welcomeUrl }content.json`;
 const quotesUrl = `${ welcomeUrl }quotes.json`;
 const imagesUrl = `${ welcomeUrl }images/`;
+const imageCount = 7; // Number of welcome images (1 - n)
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
   quote: {
     textAlign: 'center',
-    fontSize: '1.5rem',
+    fontSize: '1.25rem',
     fontStyle: 'italic',
   },
 }));
@@ -79,7 +80,7 @@ export default React.memo(() => {
       setQuote(randomQuote);
     });
     // Select a random image to show
-    setImage(`${ imagesUrl }${ Math.floor(Math.random() * 6) + 1 }.png`);
+    setImage(`${ imagesUrl }${ Math.floor(Math.random() * imageCount) + 1 }.png`);
   }, [setContent, setQuote, setImage]);
   
   return (
