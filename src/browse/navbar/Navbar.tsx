@@ -4,8 +4,8 @@ import { AppBar, Fade, Hidden, Toolbar, Typography, IconButton, Theme } from '@m
 import { ExpandLess, ExpandMore } from '@material-ui/icons/';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { ClearNavAction, ClearRoomAction } from '../../redux/actions';
-import { CLEAR_NAV, CLEAR_ROOM } from '../../redux/actionTypes';
+import { ClearNavAction } from 'redux/actions';
+import { CLEAR_NAV } from 'redux/actionTypes';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -67,7 +67,6 @@ export default React.memo((props: NavbarProps) => {
 
   const handleTitleClick = () => {
     dispatch<ClearNavAction>({ type: CLEAR_NAV });
-    dispatch<ClearRoomAction>({ type: CLEAR_ROOM });
   }
 
   const Title = () => (

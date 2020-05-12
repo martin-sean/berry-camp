@@ -15,6 +15,13 @@ const theme = createMuiTheme({
       main: '#F64D3A',
     },
   },
+  overrides: {
+    MuiTooltip: {
+      tooltip: {
+        fontSize: "1em",
+      }
+    }
+  }
 });
 
 export default () => {

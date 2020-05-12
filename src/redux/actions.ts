@@ -1,33 +1,23 @@
-import { SET_DATA, SET_ROOM, CLEAR_ROOM, SET_NAV, CLEAR_NAV } from './actionTypes';
-import { DataTree } from '../api/Data'
-import { Navigation, defaultNav, CurrentRoom } from './reducers';
+import { SET_DATA, SET_NAV, CLEAR_NAV } from './actionTypes';
+import { DataTree } from 'api/Data'
+import { NavActionProps } from './reducers';
 
 export interface SetDataAction {
   type: typeof SET_DATA,
   data: DataTree,
 }
 
-export interface SetRoomAction {
-  type: typeof SET_ROOM,
-  room: CurrentRoom,
-}
-
-export interface ClearRoomAction {
-  type: typeof CLEAR_ROOM,
-}
-
 export interface SetNavAction {
   type: typeof SET_NAV,
-  nav: Navigation;
+  nav: NavActionProps;
 }
 
 // Clear navigation (and set and provided values)
 export interface ClearNavAction {
   type: typeof CLEAR_NAV,
-  nav?: Navigation;
 }
 
-export type Actions = SetDataAction | SetRoomAction | ClearRoomAction | SetNavAction | ClearNavAction;
+export type Actions = SetDataAction | SetNavAction | ClearNavAction;
 
 // Actions
 
@@ -35,15 +25,7 @@ export const setData = (data: DataTree): SetDataAction => {
   return { type: SET_DATA, data: data };
 }
 
-export const setRoom = (room: CurrentRoom): SetRoomAction => {
-  return { type: SET_ROOM, room: room };
-}
-
-export const clearRoom = (): ClearRoomAction => {
-  return { type: CLEAR_ROOM };
-}
-
-export const setNav = (nav: Navigation): SetNavAction => {
+export const setNav = (nav: NavActionProps): SetNavAction => {
   return { type: SET_NAV, nav: nav };
 }
 

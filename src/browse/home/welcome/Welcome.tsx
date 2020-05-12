@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Paper, Typography, makeStyles, Fade } from '@material-ui/core';
-import fetchJson from '../../../utils/fetch-json';
+import fetchJson from 'utils/fetch-json';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 const welcomeUrl = 'https://cdn.berrycamp.com/file/berrycamp/static/welcome/';
@@ -94,7 +94,7 @@ export default React.memo(() => {
             Welcome to the Mount Celeste <span className={ classes.accent }>Berry Camp</span>!
           </Typography>
 
-          { content ? (
+          { content.length !== 0 ? (
             <Typography className={ classes.paragraph } color='textSecondary'>{ content[0] }</Typography>
           ) : (
             <React.Fragment>
@@ -103,7 +103,7 @@ export default React.memo(() => {
             </React.Fragment>
           )}
 
-          { content ? (
+          { content.length !== 0 ? (
             <Typography className={ classes.paragraph }>{ content[1] }</Typography> 
           ) : (
             <Skeleton width='20%' className={ classes.loadingText }/>

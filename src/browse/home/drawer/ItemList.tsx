@@ -4,10 +4,10 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { GlobalStore, CurrentRoom } from '../../../redux/reducers';
-import { SET_NAV, CLEAR_NAV, SET_ROOM, CLEAR_ROOM } from '../../../redux/actionTypes';
-import { SetNavAction, ClearNavAction, SetRoomAction, ClearRoomAction } from '../../../redux/actions';
-import { DataTree } from '../../../api/Data';
+import { GlobalStore, NavActionProps } from 'redux/reducers';
+import { SET_NAV, CLEAR_NAV } from 'redux/actionTypes';
+import { SetNavAction, ClearNavAction } from 'redux/actions';
+import { DataTree } from 'api/Data';
 
 const useStyles = makeStyles((theme: Theme) => ({
   breadcrumbLink: {
@@ -58,24 +58,14 @@ export default (props: ItemsListProps) => {
   // Breadcrumb and item selection actions, manage the navigation and selected room in state
   const clearNav = () => {
     dispatch<ClearNavAction>({ type: CLEAR_NAV });
-    dispatch<ClearRoomAction>({ type: CLEAR_ROOM });
   }
 
-  const setNavChapter = (chapterId: string) => {
-    dispatch<SetNavAction>({ type: SET_NAV, nav: { chapterId: chapterId } });
-    dispatch<ClearRoomAction>({ type: CLEAR_ROOM });
-  }
-
-  const setNavSide = (chapterId: string, sideNo: string) => {
-    dispatch<SetNavAction>({ type: SET_NAV, nav: { chapterId: chapterId, sideNo: sideNo } });
-  }
-
-  const setNavCheckpoint = (chapterId: string, sideNo: string, checkpointNo: string) => {
-    dispatch<SetNavAction>({ type: SET_NAV, nav: { chapterId: chapterId, sideNo: sideNo, checkpointNo: checkpointNo } });
-  }
-
-  const setRoom = (room: CurrentRoom) => {
-    dispatch<SetRoomAction>({ type: SET_ROOM, room: room });
+  // Set the navigation
+  const setNav = (nav: NavActionProps) => {
+    dispatch<SetNavAction>({
+      type: SET_NAV,
+      nav: nav,
+    });
   }
 
   interface ChapterListProps {
@@ -97,7 +87,7 @@ export default (props: ItemsListProps) => {
             <Item
               data={ props.data }
               primary={ props.data[chapterId].name }
-              handleClick={ () => setNavChapter(chapterId) }
+              handleClick={ () => setNav({ chapterId: chapterId }) }
               before={ props.data[chapterId].chapter_no }
               key={ index }
             />
@@ -137,7 +127,7 @@ export default (props: ItemsListProps) => {
               data={ props.data }
               primary={ chapter.sides[sideNo].name }
               before={ sideNo }
-              handleClick={ () => setNavSide(props.chapterId, sideNo) }
+              handleClick={ () => setNav({ chapterId: props.chapterId, sideNo: sideNo }) }
               key={ index }
             />
           ))}
@@ -172,7 +162,7 @@ export default (props: ItemsListProps) => {
               component='button'
               className={ classes.breadcrumbLink }
               color="textSecondary"
-              onClick={ () => setNavChapter(props.chapterId) }
+              onClick={ () => setNav({ chapterId: props.chapterId }) }
             >
               Side
             </Link>
@@ -185,7 +175,7 @@ export default (props: ItemsListProps) => {
             <Item
               data={ props.data }
               primary={ side.checkpoints[checkpointNo].name }
-              handleClick={ () => setNavCheckpoint(props.chapterId, props.sideNo, checkpointNo) }
+              handleClick={ () => setNav({ chapterId: props.chapterId, sideNo: props.sideNo, checkpointNo: checkpointNo }) }
               before={ checkpointNo }
               key={ index }
             />
@@ -208,14 +198,6 @@ export default (props: ItemsListProps) => {
     const checkpoint = side?.checkpoints[props.checkpointNo];
     setTitle(checkpoint?.name);
 
-    // Get the currently selected from redux
-    const currentRoom = useSelector((store: GlobalStore) => store.room);
-    // Check if chapter side and checkpoint match the current room
-    const current = 
-      currentRoom?.chapterId === props.chapterId &&
-      currentRoom?.sideNo === props.sideNo &&
-      currentRoom?.checkpointNo === props.checkpointNo;
-
     return (
       <React.Fragment>
         <ListItem>
@@ -232,7 +214,7 @@ export default (props: ItemsListProps) => {
               component='button'
               className={ classes.breadcrumbLink }
               color="textSecondary"
-              onClick={ () => setNavChapter(props.chapterId) }
+              onClick={ () => setNav({ chapterId: props.chapterId }) }
             >
               Side
             </Link>
@@ -240,7 +222,7 @@ export default (props: ItemsListProps) => {
               component='button'
               className={ classes.breadcrumbLink }
               color="textSecondary"
-              onClick={ () => setNavSide(props.chapterId, props.sideNo) }
+              onClick={ () => setNav({ chapterId: props.chapterId, sideNo: props.sideNo }) }
             >
               Checkpoint
             </Link>
@@ -255,10 +237,10 @@ export default (props: ItemsListProps) => {
               primary={ checkpoint.rooms[roomNo].name }
               secondary={ checkpoint.rooms[roomNo].debug_id }
               before={ roomNo }
-              selected={ roomNo === currentRoom?.roomNo && current }
+              selected={ roomNo === nav.roomNo }
               handleClick={ () => { 
                 props.closeDrawer();
-                setRoom({ 
+                setNav({ 
                   chapterId: props.chapterId,
                   sideNo: props.sideNo,
                   checkpointNo: props.checkpointNo,
@@ -323,11 +305,11 @@ export default (props: ItemsListProps) => {
       { data ? (
         <React.Fragment>
           {/* Handle naviation position and render required list */}
-          { nav && nav.checkpointNo && nav.sideNo && nav.chapterId ? (
+          { nav.checkpointNo && nav.sideNo && nav.chapterId ? (
             <RoomList data={ data } chapterId={ nav.chapterId } sideNo={ nav.sideNo } checkpointNo={ nav.checkpointNo } closeDrawer={ props.closeDrawer }/>
-          ) : nav && nav.sideNo && nav.chapterId ? (
+          ) : nav.sideNo && nav.chapterId ? (
             <CheckpointList data={ data } chapterId={ nav.chapterId } sideNo={ nav.sideNo }/>
-          ) : nav && nav.chapterId ? (
+          ) : nav.chapterId ? (
             <SideList data={ data } chapterId={ nav.chapterId }/>
           ) : (
             <ChapterList data={ data }/>

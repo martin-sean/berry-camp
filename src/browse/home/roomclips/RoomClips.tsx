@@ -3,8 +3,8 @@ import { Grid, Paper, makeStyles, Fade } from '@material-ui/core';
 import Nav from './roomnav';
 import Room from './room';
 import { Skeleton } from '@material-ui/lab';
-import { CurrentRoom } from '../../../redux/reducers';
-import { DataTree } from '../../../api/Data';
+import { DataTree } from 'api/Data';
+import { Navigation } from 'redux/reducers';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface RoomClipsProps {
   data: DataTree,
-  room: CurrentRoom,
+  nav: Navigation,
   setDocTitle: (title: string | undefined) => void,
 }
 
@@ -29,12 +29,12 @@ export default (props: RoomClipsProps) => {
           <Paper className={ classes.paper }>
             <Room
               data={ props.data }
-              room={ props.room }
+              nav={ props.nav }
               setDocTitle={ props.setDocTitle }
             />
           </Paper>
           {/* Room navigation buttons */}
-          <Nav data={ props.data } room={ props.room }/>
+          <Nav data={ props.data } nav={ props.nav }/>
         </Grid>
         <Grid item xs={ 12 } lg= {7 }>
           <React.Fragment>

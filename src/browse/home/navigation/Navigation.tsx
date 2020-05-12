@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Navigation } from '../../../redux/reducers';
+import { Navigation, NavActionProps } from 'redux/reducers';
 import { makeStyles, Paper, Grid, Typography, Fade, Button } from '@material-ui/core';
-import { DataTree } from '../../../api/Data';
-import pluralize from '../../../utils/pluralize';
+import { DataTree } from 'api/Data';
+import pluralize from 'utils/pluralize';
 import { Skeleton } from '@material-ui/lab';
 import { useDispatch } from 'react-redux';
-import { SetNavAction } from '../../../redux/actions';
-import { SET_NAV } from '../../../redux/actionTypes';
+import { SetNavAction } from 'redux/actions';
+import { SET_NAV } from 'redux/actionTypes';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -93,7 +93,7 @@ export default (props: NavigationProps) => {
   const nextCheckpointNo = checkpointNo ? checkpointNo + 1 : undefined;
   const nextCheckpoint = nextCheckpointNo ? side?.checkpoints[nextCheckpointNo] : undefined;
 
-  const setNav = (nav: Navigation) => {
+  const setNav = (nav: NavActionProps) => {
     dispatch<SetNavAction>({ type: SET_NAV, nav: nav });
   }
 
@@ -111,8 +111,8 @@ export default (props: NavigationProps) => {
   interface NavButtonsProps {
     prev: boolean,
     next: boolean,
-    prevNav: Navigation,
-    nextNav: Navigation,
+    prevNav: NavActionProps,
+    nextNav: NavActionProps,
   }
   
   // Navigation buttons
@@ -135,56 +135,61 @@ export default (props: NavigationProps) => {
       <Grid container spacing={ 3 }>
         {/* Left Side */}
         <Grid item xs={ 12 } lg={ 7 }>
-          {/* Chapter */}
-          { chapter && (
-            // Weirdly does not evalute to true on it's own so !! is required
-            <Fade in={ !!chapter }>
-              <Paper className={ classes.paper }>
-                {/* Heading / Navigation buttons inner grid */}
-                <Grid container spacing={ 3 }>
-                  {/* Heading and side count */}
-                  <Grid item xs={ 12 } sm={ 6 }>
-                    <Typography variant='h5'>
-                      { chapter.chapter_no ? `Chapter ${ chapter.chapter_no}: ${ chapter.name }` : chapter.name }
-                    </Typography>
-                    <Typography color='textSecondary'>{ pluralize(Object.keys(chapter.sides).length, 'side') }</Typography>
-                  </Grid>
-                  {/* Navigation buttons */}
-                  <Grid item xs={ 12 } sm={ 6 } className={ classes.navButtonContainer }>
-                    <NavButtons
-                      prev={ !!prevChapter }
-                      next={ !!nextChapter }
-                      prevNav={ prevChapterId ? { chapterId: prevChapterId.toString() } : { } }
-                      nextNav={ nextChapterId ? { chapterId: nextChapterId.toString() } : { } }
-                    />
-                  </Grid>
-                </Grid> 
-                {/* description */}
-                <Typography className={ classes.chapterDesc } color='textSecondary'>{ chapter.desc }</Typography>
-                {/* Render a placeholder while the chapter image loads */}
-                { !chapterLoaded && (
-                  <div className={ classes.loadingImageContainer }>
-                    <Skeleton className={ classes.loadingImage } variant='rect' />
-                  </div>
-                )}
-                <Fade in={ chapterLoaded }>
-                  <img
-                    src={ `${ chapterImageUrl }${ props.nav.chapterId }.png` }
-                    className={ classes.chapterImage }
-                    onLoad={ () => setChapterLoaded(true) }
-                    style={ chapterLoaded ? {} : { display: 'none' } }
-                    alt='Celeste chapter select screen showing the chapter positioned on a 3D mountain'
-                  />
-                </Fade>
-              </Paper>
-            </Fade>
-          )}
+          {/* TODO: Clips */}
         </Grid>
         
         {/* Right Side */}
         <Grid item xs={ 12 } lg={ 5 }>
           {/* Inner column grid */}
           <Grid container spacing={ 3 } direction='column'>
+            
+            {/* Chapter */}
+            <Grid item>
+              { chapter && (
+                // Weirdly does not evalute to true on it's own so !! is required
+                <Fade in={ !!chapter }>
+                  <Paper className={ classes.paper }>
+                    {/* Heading / Navigation buttons inner grid */}
+                    <Grid container spacing={ 3 }>
+                      {/* Heading and side count */}
+                      <Grid item xs={ 12 } sm={ 6 }>
+                        <Typography variant='h5'>
+                          { chapter.chapter_no ? `Chapter ${ chapter.chapter_no}: ${ chapter.name }` : chapter.name }
+                        </Typography>
+                        <Typography color='textSecondary'>{ pluralize(Object.keys(chapter.sides).length, 'side') }</Typography>
+                      </Grid>
+                      {/* Navigation buttons */}
+                      <Grid item xs={ 12 } sm={ 6 } className={ classes.navButtonContainer }>
+                        <NavButtons
+                          prev={ !!prevChapter }
+                          next={ !!nextChapter }
+                          prevNav={ prevChapterId ? { chapterId: prevChapterId.toString() } : {} }
+                          nextNav={ nextChapterId ? { chapterId: nextChapterId.toString() } : {} }
+                        />
+                      </Grid>
+                    </Grid> 
+                    {/* description */}
+                    <Typography className={ classes.chapterDesc } color='textSecondary'>{ chapter.desc }</Typography>
+                    {/* Render a placeholder while the chapter image loads */}
+                    { !chapterLoaded && (
+                      <div className={ classes.loadingImageContainer }>
+                        <Skeleton className={ classes.loadingImage } variant='rect' />
+                      </div>
+                    )}
+                    <Fade in={ chapterLoaded }>
+                      <img
+                        src={ `${ chapterImageUrl }${ props.nav.chapterId }.png` }
+                        className={ classes.chapterImage }
+                        onLoad={ () => setChapterLoaded(true) }
+                        style={ chapterLoaded ? {} : { display: 'none' } }
+                        alt='Celeste chapter select screen showing the chapter positioned on a 3D mountain'
+                      />
+                    </Fade>
+                  </Paper>
+                </Fade>
+              )}
+            </Grid>
+            
             {/* Side */}
             <Grid item>
               { side && (

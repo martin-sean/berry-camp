@@ -3,12 +3,10 @@ import React, { useState, useEffect } from 'react';
 import  './Room.css';
 
 import Skeleton from '@material-ui/lab/Skeleton';
-import { makeStyles, Fade, Theme, Typography, Divider, Button, Snackbar, Grid, Slide, Modal, Backdrop, useTheme, useMediaQuery } from '@material-ui/core'
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+import { makeStyles, Fade, Theme, Typography, Divider, Modal, Backdrop, useTheme, useMediaQuery } from '@material-ui/core'
 
-import { Alert } from '@material-ui/lab';
-import { DataTree } from '../../../../api/Data';
-import { CurrentRoom } from '../../../../redux/reducers';
+import { DataTree } from 'api/Data';
+import { Navigation } from 'redux/reducers';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
@@ -74,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface RoomProps {
   data: DataTree,
-  room: CurrentRoom,
+  nav: Navigation,
   setDocTitle: (title: string | undefined) => void
 }
 
@@ -87,40 +85,27 @@ export default React.memo((props: RoomProps) => {
   
   // Room image loaded
   const [loaded, setLoaded] = useState(false);
-  // Show Snackbar
-  const [copied, setCopied] = useState(false);
   // Large image dialog
   const [open, setOpen] = useState(false);
   
-  const chapter = props.data[props.room.chapterId];
-  const side = chapter?.sides[props.room.sideNo];
-  const checkpoint = side?.checkpoints[props.room.checkpointNo];
-  const room = checkpoint?.rooms[props.room.roomNo];
+  const chapter = props.data[props.nav.chapterId];
+  const side = chapter?.sides[props.nav.sideNo];
+  const checkpoint = side?.checkpoints[props.nav.checkpointNo];
+  const room = checkpoint?.rooms[props.nav.roomNo];
 
   props.setDocTitle(room?.name);
 
-  const image = imageHost + props.room.chapterId + 
-    '/' + props.room.sideNo +
-    '/' + props.room.checkpointNo +
-    '/' + props.room.roomNo + 
+  const image = imageHost + props.nav.chapterId + 
+    '/' + props.nav.sideNo +
+    '/' + props.nav.checkpointNo +
+    '/' + props.nav.roomNo + 
     '.png'
 
   const errorImage = '/img/error.jpg';
 
   useEffect(() => {
     setLoaded(false);
-  }, [props.room.chapterId, props.room.sideNo, props.room.checkpointNo, props.room.roomNo]);
-
-  const copyUrl = () => {
-    navigator.clipboard.writeText(
-      window.location.href.replace(window.location.search, '') +
-      `?chapter=${ props.room.chapterId }` +
-      `&side=${ props.room.sideNo }` +
-      `&checkpoint=${ props.room.checkpointNo }`+
-      `&room=${ props.room.roomNo  }`
-    );
-    setCopied(true);
-  }
+  }, [props.nav.chapterId, props.nav.sideNo, props.nav.checkpointNo, props.nav.roomNo]);
 
   return (
     <React.Fragment>
@@ -165,39 +150,22 @@ export default React.memo((props: RoomProps) => {
         </Fade>
       </div>
 
-      {
-        room ?
-          <React.Fragment>
+      { room ? (
+        <React.Fragment>
             <Typography variant="h5" color="textPrimary">{ room?.name }</Typography>
             <Typography className={ classes.info } color="textSecondary">{ chapter.chapter_no && `Chapter ${ chapter.chapter_no }: `}{ chapter?.name }</Typography>
             <Typography className={ classes.info } color="textSecondary">{ side?.name } Side</Typography>
             <Typography className={ classes.info } color="textSecondary">{ checkpoint?.name }</Typography>
             <Divider className={ classes.divider } />
-            <Grid container justify='space-between'>
-              <Grid item>
-                <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.room.roomNo }</Typography>
-                <Typography color="textSecondary">Debug ID: { room?.debug_id }</Typography>
-              </Grid>
-              <Grid item className={ classes.center }>
-                <Button variant='outlined' onClick={ copyUrl }>Copy link</Button>
-              </Grid>
-            </Grid>
-            <Snackbar
-              open={ copied }
-              onClose={ () => setCopied(false) }
-              anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } }
-              autoHideDuration={ 2000 }
-              TransitionComponent={ Slide }
-            >
-              <Alert variant='filled' severity='info' icon={ <FileCopyIcon /> }>Room link was copied</Alert>
-            </Snackbar>
+            <Typography color="textSecondary">Room ID: { checkpoint?.abbreviation + '-' + props.nav.roomNo }</Typography>
+            <Typography color="textSecondary">Debug ID: { room?.debug_id }</Typography>
           </React.Fragment>
-        :
-          <React.Fragment>
-            <Typography variant="h5" color="textPrimary">Room does not exist</Typography>
-            <Typography color="textSecondary">Please select a room from the menu</Typography>
-          </React.Fragment>
-      }
+      ) : (
+        <React.Fragment>
+          <Typography variant="h5" color="textPrimary">Room does not exist</Typography>
+          <Typography color="textSecondary">Please select a room from the menu</Typography>
+        </React.Fragment>
+      )}
     </React.Fragment>
   )
 });
