@@ -134,15 +134,6 @@ export default (props: NavigationProps) => {
     <React.Fragment>
       <Grid container spacing={ 3 }>
         {/* Left Side */}
-        <Grid item xs={ 12 } lg={ 7 }>
-          {/* TODO: Placeholder */}
-          <Skeleton animation={ false } height={ 50 }/>
-          <Skeleton animation={ false } height={ 50 }/>
-          <Skeleton animation={ false } height={ 50 }/>
-          <Skeleton animation={ false } height={ 50 }/>
-        </Grid>
-        
-        {/* Right Side */}
         <Grid item xs={ 12 } lg={ 5 }>
           {/* Inner column grid */}
           <Grid container spacing={ 3 } direction='column'>
@@ -247,8 +238,16 @@ export default (props: NavigationProps) => {
           </Grid>
           {/* End of inner grid */}
         </Grid>
+
+        {/* Right Side */}
+        <Grid item xs={ 12 } lg={ 7 }>
+          {/* TODO: Placeholder */}
+          <Skeleton animation={ false } height={ 50 }/>
+          <Skeleton animation={ false } height={ 50 }/>
+          <Skeleton animation={ false } height={ 50 }/>
+          <Skeleton animation={ false } height={ 50 }/>
+        </Grid>
       </Grid>
-      
     </React.Fragment>
   );
 }

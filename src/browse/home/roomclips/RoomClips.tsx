@@ -24,7 +24,7 @@ export default (props: RoomClipsProps) => {
 
   return (
     <Fade in={ true }>
-      <Grid container spacing={ 3 } direction='row-reverse'>
+      <Grid container spacing={ 3 }>
         <Grid item xs={ 12 } lg={ 5 }>
           <Paper className={ classes.paper }>
             <Room
