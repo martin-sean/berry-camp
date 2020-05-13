@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flex: 1,
     paddingLeft: theme.spacing(3),
-    paddingRIght: theme.spacing(3),
+    paddingRight: theme.spacing(3),
     overflow: 'hidden',
   },
   divider: {

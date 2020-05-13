@@ -38,10 +38,10 @@ export default (props: RoomClipsProps) => {
         </Grid>
         <Grid item xs={ 12 } lg= {7 }>
           <React.Fragment>
-            <Skeleton animation={false} height={ 50 }/>
-            <Skeleton animation={false} height={ 50 }/>
-            <Skeleton animation={false} height={ 50 }/>
-            <Skeleton animation={false} height={ 50 }/>
+            <Skeleton animation={ false } height={ 50 }/>
+            <Skeleton animation={ false } height={ 50 }/>
+            <Skeleton animation={ false } height={ 50 }/>
+            <Skeleton animation={ false } height={ 50 }/>
           </React.Fragment>
         </Grid>
       </Grid>
