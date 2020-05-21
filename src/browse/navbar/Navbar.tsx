@@ -3,9 +3,13 @@ import React, { useState } from 'react';
 import { AppBar, Fade, Hidden, Toolbar, Typography, IconButton, Theme } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons/';
 import { makeStyles } from '@material-ui/core/styles';
-import { useDispatch } from 'react-redux';
-import { ClearNavAction } from 'redux/actions';
-import { CLEAR_NAV } from 'redux/actionTypes';
+import { useDispatch, useSelector } from 'react-redux';
+import { ClearNavAction, clearNav, ClearAccessTokenAction, clearAccessToken, SetAccessTokenAction, setAccessToken } from 'redux/actions';
+
+import GoogleLogin, { GoogleLoginResponseOffline, GoogleLoginResponse, GoogleLogout } from 'react-google-login';
+import clientId from 'authentication/client';
+import { login, logout } from 'authentication/authenticate';
+import { GlobalStore } from 'redux/reducers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -64,9 +68,10 @@ export default React.memo((props: NavbarProps) => {
   const [loaded, setLoaded] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
+  const accessToken = useSelector((store: GlobalStore) => store.accessToken);
 
   const handleTitleClick = () => {
-    dispatch<ClearNavAction>({ type: CLEAR_NAV });
+    dispatch<ClearNavAction>(clearNav());
   }
 
   const Title = () => (
@@ -75,6 +80,28 @@ export default React.memo((props: NavbarProps) => {
       <Typography component="div" className={ classes.titleText  }>camp</Typography>
     </div>
   );
+
+  // Set an access token in the redux state
+  const setToken = (accessToken: string) => {
+    dispatch<SetAccessTokenAction>(setAccessToken(accessToken));
+  }
+
+  // Handle google login
+  const handleLogin = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+    if ((res as GoogleLoginResponse).getAuthResponse()) {
+      const auth = (res as GoogleLoginResponse).getAuthResponse();
+      login(auth.id_token, setToken);
+      console.log((res as GoogleLoginResponse).googleId);
+    } else if ((res as GoogleLoginResponseOffline).code) {
+      // Handle error
+    }
+  }
+
+  // TODO: Handle situation when google credentials expire and 
+  const handleLogout = () => {
+    logout();
+    dispatch<ClearAccessTokenAction>(clearAccessToken());
+  }
 
   return (
     <AppBar className={ classes.appBar } position='fixed'>
@@ -91,6 +118,25 @@ export default React.memo((props: NavbarProps) => {
             </div>
           </Fade>
           <Title />
+
+          { accessToken ? (
+            <GoogleLogout
+              clientId={ clientId }
+              onLogoutSuccess={ handleLogout }
+              buttonText='Sign out'
+            />
+          ) : (
+            <GoogleLogin
+              clientId={ clientId }
+              buttonText='Sign in'
+              onSuccess={ handleLogin }
+              onFailure={ handleLogin }
+              cookiePolicy='single_host_origin'
+              fetchBasicProfile={ false }
+              scope='openid'
+            />
+          )}
+          
           <Hidden mdUp>
             <IconButton 
               className={ classes.menuButton } 

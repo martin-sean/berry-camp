@@ -5,8 +5,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { GlobalStore, NavActionProps } from 'redux/reducers';
-import { SET_NAV, CLEAR_NAV } from 'redux/actionTypes';
-import { SetNavAction, ClearNavAction } from 'redux/actions';
+import { SetNavAction, ClearNavAction, setNav, clearNav } from 'redux/actions';
 import { DataTree } from 'api/Data';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -56,16 +55,13 @@ export default (props: ItemsListProps) => {
   const setTitle = props.setTitle;
 
   // Breadcrumb and item selection actions, manage the navigation and selected room in state
-  const clearNav = () => {
-    dispatch<ClearNavAction>({ type: CLEAR_NAV });
+  const clearNavigation = () => {
+    dispatch<ClearNavAction>(clearNav());
   }
 
   // Set the navigation
-  const setNav = (nav: NavActionProps) => {
-    dispatch<SetNavAction>({
-      type: SET_NAV,
-      nav: nav,
-    });
+  const setNavigation = (nav: NavActionProps) => {
+    dispatch<SetNavAction>(setNav(nav));
   }
 
   interface ChapterListProps {
@@ -87,7 +83,7 @@ export default (props: ItemsListProps) => {
             <Item
               data={ props.data }
               primary={ props.data[chapterId].name }
-              handleClick={ () => setNav({ chapterId: chapterId }) }
+              handleClick={ () => setNavigation({ chapterId: chapterId }) }
               before={ props.data[chapterId].chapter_no }
               key={ index }
             />
@@ -113,7 +109,7 @@ export default (props: ItemsListProps) => {
               <Link 
                 component='button'
                 className={ classes.breadcrumbLink }
-                color="textSecondary" onClick={ clearNav }
+                color="textSecondary" onClick={ clearNavigation }
               >
                 Chapter
               </Link> 
@@ -127,7 +123,7 @@ export default (props: ItemsListProps) => {
               data={ props.data }
               primary={ chapter.sides[sideNo].name }
               before={ sideNo }
-              handleClick={ () => setNav({ chapterId: props.chapterId, sideNo: sideNo }) }
+              handleClick={ () => setNavigation({ chapterId: props.chapterId, sideNo: sideNo }) }
               key={ index }
             />
           ))}
@@ -154,7 +150,7 @@ export default (props: ItemsListProps) => {
               component='button' 
               className={ classes.breadcrumbLink }
               color="textSecondary" 
-              onClick={ clearNav }
+              onClick={ clearNavigation }
             >
               Chapter
             </Link>
@@ -162,7 +158,7 @@ export default (props: ItemsListProps) => {
               component='button'
               className={ classes.breadcrumbLink }
               color="textSecondary"
-              onClick={ () => setNav({ chapterId: props.chapterId }) }
+              onClick={ () => setNavigation({ chapterId: props.chapterId }) }
             >
               Side
             </Link>
@@ -175,7 +171,7 @@ export default (props: ItemsListProps) => {
             <Item
               data={ props.data }
               primary={ side.checkpoints[checkpointNo].name }
-              handleClick={ () => setNav({ chapterId: props.chapterId, sideNo: props.sideNo, checkpointNo: checkpointNo }) }
+              handleClick={ () => setNavigation({ chapterId: props.chapterId, sideNo: props.sideNo, checkpointNo: checkpointNo }) }
               before={ checkpointNo }
               key={ index }
             />
@@ -206,7 +202,7 @@ export default (props: ItemsListProps) => {
               component='button'
               className={ classes.breadcrumbLink }
               color="textSecondary"
-              onClick={ clearNav }
+              onClick={ clearNavigation }
             >
               Chapter
             </Link>
@@ -214,7 +210,7 @@ export default (props: ItemsListProps) => {
               component='button'
               className={ classes.breadcrumbLink }
               color="textSecondary"
-              onClick={ () => setNav({ chapterId: props.chapterId }) }
+              onClick={ () => setNavigation({ chapterId: props.chapterId }) }
             >
               Side
             </Link>
@@ -222,7 +218,7 @@ export default (props: ItemsListProps) => {
               component='button'
               className={ classes.breadcrumbLink }
               color="textSecondary"
-              onClick={ () => setNav({ chapterId: props.chapterId, sideNo: props.sideNo }) }
+              onClick={ () => setNavigation({ chapterId: props.chapterId, sideNo: props.sideNo }) }
             >
               Checkpoint
             </Link>
@@ -240,7 +236,7 @@ export default (props: ItemsListProps) => {
               selected={ roomNo === nav.roomNo }
               handleClick={ () => { 
                 props.closeDrawer();
-                setNav({ 
+                setNavigation({ 
                   chapterId: props.chapterId,
                   sideNo: props.sideNo,
                   checkpointNo: props.checkpointNo,

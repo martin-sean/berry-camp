@@ -5,8 +5,7 @@ import { DataTree } from 'api/Data';
 import pluralize from 'utils/pluralize';
 import { Skeleton } from '@material-ui/lab';
 import { useDispatch } from 'react-redux';
-import { SetNavAction } from 'redux/actions';
-import { SET_NAV } from 'redux/actionTypes';
+import { SetNavAction, setNav } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -93,8 +92,8 @@ export default (props: NavigationProps) => {
   const nextCheckpointNo = checkpointNo ? checkpointNo + 1 : undefined;
   const nextCheckpoint = nextCheckpointNo ? side?.checkpoints[nextCheckpointNo] : undefined;
 
-  const setNav = (nav: NavActionProps) => {
-    dispatch<SetNavAction>({ type: SET_NAV, nav: nav });
+  const setNavigation = (nav: NavActionProps) => {
+    dispatch<SetNavAction>(setNav(nav));
   }
 
   // Reload chapter image on chapter change
@@ -120,10 +119,10 @@ export default (props: NavigationProps) => {
     return (
       <Grid container spacing={ 2 }>
         <Grid item xs={ 6 }>
-          <Button disabled={ !props.prev } variant='outlined' className={ classes.button } onClick={ () => setNav(props.prevNav) }>{ prevText }</Button>
+          <Button disabled={ !props.prev } variant='outlined' className={ classes.button } onClick={ () => setNavigation(props.prevNav) }>{ prevText }</Button>
         </Grid>
         <Grid item xs={ 6 }>
-          <Button disabled={ !props.next } variant='outlined' className={ classes.button } onClick={ () => setNav(props.nextNav) }>{ nextText }</Button>
+          <Button disabled={ !props.next } variant='outlined' className={ classes.button } onClick={ () => setNavigation(props.nextNav) }>{ nextText }</Button>
         </Grid>
       </Grid>
     );

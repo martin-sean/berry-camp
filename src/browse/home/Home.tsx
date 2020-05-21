@@ -5,14 +5,14 @@ import Navbar from '../navbar';
 import Drawer from './drawer';
 import { GlobalStore } from 'redux/reducers';
 import { useDispatch, useSelector } from 'react-redux';
-import { SetNavAction, SetDataAction } from 'redux/actions';
-import { SET_NAV, SET_DATA } from 'redux/actionTypes';
+import { SetNavAction, SetDataAction, setData, setNav, setAccessToken, SetAccessTokenAction } from 'redux/actions';
 import fetchJson from 'utils/fetch-json';
 import Welcome from './welcome';
 import Navigation from './navigation';
 import RoomClips from './roomclips';
 import { DataTree } from 'api/Data';
 import Breadcrumbs from './breadcrumbs';
+import { getNewAccessToken } from 'authentication/authenticate';
 
 const dataURL = 'https://cdn.berrycamp.com/file/berrycamp/data/data.json';
 
@@ -74,7 +74,7 @@ export default () => {
     // Fetch chapter tree data
     if (!data) {
       fetchJson<DataTree>(dataURL).then((data: DataTree) => {
-        dispatch<SetDataAction>({ type: SET_DATA, data: data })
+        dispatch<SetDataAction>(setData(data));
       });
     }
     
@@ -87,21 +87,27 @@ export default () => {
 
     // Set nav if at least chapter is provided
     if (chapterId) {
-      dispatch<SetNavAction>({
-        type: SET_NAV,
-        nav: {
+      dispatch<SetNavAction>(
+        setNav({
           chapterId: chapterId,
           ...( sideNo && { sideNo: sideNo }),
           ...( checkpointNo && { checkpointNo: checkpointNo }),
           ...( roomNo && { roomNo: roomNo })
-        }
-      });
+        })
+      );
     }
-
     // Consume the params from the URL
     history.replace('/');
-
   }, [dispatch, data, history]);
+
+  // Refresh the access token
+  useEffect(() => {
+    getNewAccessToken((accessToken: string) => dispatch<SetAccessTokenAction>(setAccessToken(accessToken)));
+  }, [dispatch])
+
+  useEffect(() => {
+
+  });
 
   return (
     <React.Fragment>

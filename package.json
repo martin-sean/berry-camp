@@ -11,20 +11,16 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^25.2.1",
-    "@types/react": "^16.9.32",
-    "@types/react-dom": "^16.9.6",
-    "@types/react-redux": "^7.1.8",
-    "@types/react-router-dom": "^5.1.5",
-    "@types/youtube": "^0.0.38",
     "dotenv": "^8.2.0",
+    "jwt-decode": "^2.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-google-login": "^5.1.19",
     "react-is": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "react-youtube": "^7.11.1",
+    "react-youtube": "^7.11.2",
     "redux": "^4.0.5",
     "typescript": "^3.8.3"
   },
@@ -48,5 +44,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.3",
+    "@types/jwt-decode": "^2.2.1",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/youtube": "0.0.38"
   }
 }

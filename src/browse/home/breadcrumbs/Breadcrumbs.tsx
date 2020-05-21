@@ -3,8 +3,7 @@ import { Navigation, NavActionProps } from 'redux/reducers';
 import { makeStyles, Typography, Breadcrumbs, Link, Tooltip, Snackbar, Slide, Button } from '@material-ui/core';
 import { DataTree } from 'api/Data';
 import { useDispatch } from 'react-redux';
-import { SetNavAction, ClearNavAction } from 'redux/actions';
-import { SET_NAV, CLEAR_NAV } from 'redux/actionTypes';
+import { SetNavAction, ClearNavAction, setNav, clearNav } from 'redux/actions';
 import Alert from '@material-ui/lab/Alert';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
@@ -49,8 +48,8 @@ export default (props: BreadCrumbsProps) => {
   // Show Snackbar
   const [copied, setCopied] = useState(false);
   
-  const setNav = (nav: NavActionProps) => {
-    dispatch<SetNavAction>({ type: SET_NAV, nav: nav });
+  const setNavigation = (nav: NavActionProps) => {
+    dispatch<SetNavAction>(setNav(nav));
   }
 
   const copyUrl = () => {
@@ -87,7 +86,7 @@ export default (props: BreadCrumbsProps) => {
               className={ `${ classes.link } ${ classes.firstLink }` }
               component='button'
               color='inherit'
-              onClick={() => dispatch<ClearNavAction>({ type: CLEAR_NAV }) }
+              onClick={() => dispatch<ClearNavAction>(clearNav()) }
             >
               Chapters
             </Link>
@@ -99,7 +98,7 @@ export default (props: BreadCrumbsProps) => {
                 component='button'
                 color={ !side ? 'textPrimary' : 'inherit' }
                 onClick={() => {
-                  setNav({
+                  setNavigation({
                     chapterId: props.nav.chapterId
                   })
                 }}
@@ -115,7 +114,7 @@ export default (props: BreadCrumbsProps) => {
                 component='button'
                 color={ !checkpoint ? 'textPrimary' : 'inherit' }
                 onClick={ () => {
-                  setNav({ 
+                  setNavigation({ 
                     chapterId: props.nav.chapterId,
                     sideNo: props.nav.sideNo
                   })
@@ -132,7 +131,7 @@ export default (props: BreadCrumbsProps) => {
                 component='button'
                 color={ !room ? 'textPrimary' : 'inherit' }
                 onClick={ () => {
-                  setNav({
+                  setNavigation({
                     chapterId: props.nav.chapterId,
                     sideNo: props.nav.sideNo,
                     checkpointNo: props.nav.checkpointNo
