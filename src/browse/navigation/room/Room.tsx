@@ -11,6 +11,12 @@ import { Navigation } from 'redux/reducers';
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
 const useStyles = makeStyles((theme: Theme) => ({
+  wrapper: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
   image: {
     display: 'block',
     objectFit: 'cover',
@@ -108,7 +114,7 @@ export default React.memo((props: RoomProps) => {
   }, [props.nav.chapterId, props.nav.sideNo, props.nav.checkpointNo, props.nav.roomNo]);
 
   return (
-    <React.Fragment>
+    <div className={ classes.wrapper }>
       {/* Image popup */}
       <Modal
         className={ classes.modal }
@@ -166,6 +172,6 @@ export default React.memo((props: RoomProps) => {
           <Typography color="textSecondary">Please select a room from the menu</Typography>
         </React.Fragment>
       )}
-    </React.Fragment>
+    </div>
   )
 });

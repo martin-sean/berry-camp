@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { makeStyles, Divider } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { makeStyles, Divider, Typography, Paper } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import Navbar from '../navbar';
 import Drawer from './drawer';
 import { GlobalStore } from 'redux/reducers';
 import { useDispatch, useSelector } from 'react-redux';
-import { SetNavAction, SetDataAction, setData, setNav, setAccessToken, SetAccessTokenAction } from 'redux/actions';
+import { SetNavAction, SetDataAction, setData, setNav } from 'redux/actions';
 import fetchJson from 'utils/fetch-json';
-import Welcome from './welcome';
 import Navigation from './navigation';
-import RoomClips from './roomclips';
 import { DataTree } from 'api/Data';
 import Breadcrumbs from './breadcrumbs';
-import { getNewAccessToken } from 'authentication/authenticate';
+import * as Path from 'pages/paths';
 
 const dataURL = 'https://cdn.berrycamp.com/file/berrycamp/data/data.json';
 
@@ -41,9 +38,19 @@ const useStyles = makeStyles((theme) => ({
   room: {
     padding: theme.spacing(3),
   },
+  welcomePaper: {
+    marginTop: theme.spacing(3),
+    padding: theme.spacing(3),
+  },
 }));
 
-export default () => {
+interface BrowseProps {
+  open: boolean;
+  setDrawerOpen: (open: boolean) => void;
+  setTitle: (title: string | undefined) => void;
+}
+
+export default (props: BrowseProps) => {
   const classes = useStyles();
 
   // Accept redux actions
@@ -55,19 +62,6 @@ export default () => {
 
   // Use browser history
   const history = useHistory();
-
-  // Remember the drawer state
-  const [open, setOpen] = useState(false);
-
-  // Open and close the drawer
-  const setDrawerOpen = useCallback((open: boolean) => {
-    setOpen(open);
-  }, [setOpen]);
-
-  // Set the document title
-  const setDocTitle = useCallback((title: string | undefined) => {
-    document.title = 'Berry Camp · ' + (title || 'Error');
-  }, []);
   
   // Handle query params
   useEffect(() => {
@@ -95,31 +89,20 @@ export default () => {
           ...( roomNo && { roomNo: roomNo })
         })
       );
+      // Consume the params from the URL
+      history.replace(Path.BROWSE);
     }
-    // Consume the params from the URL
-    history.replace('/');
   }, [dispatch, data, history]);
-
-  // Refresh the access token
-  useEffect(() => {
-    getNewAccessToken((accessToken: string) => dispatch<SetAccessTokenAction>(setAccessToken(accessToken)));
-  }, [dispatch])
-
-  useEffect(() => {
-
-  });
 
   return (
     <React.Fragment>
       <div className={ classes.root }>
-        <Navbar open={ open } setDrawerOpen={ setDrawerOpen }/>
         {/* Left sidebar menu */}
         <Drawer
-          open={ open }
-          setDrawerOpen={ setDrawerOpen }
-          setTitle={ setDocTitle }
+          open={ props.open }
+          setDrawerOpen={ props.setDrawerOpen }
+          setTitle={ props.setTitle }
         />
-        
         {/* Right side content */}
         <div className={ classes.wrapper }>
           <div className={ classes.toolbar }/>
@@ -130,15 +113,13 @@ export default () => {
                 {/* Navigation breadcrumbs */}
                 <Breadcrumbs data={ data } nav={ nav } />
                 <Divider className={ classes.divider } />
-                {/* Render room and clips */}
-                { nav.roomNo ? (
-                  <RoomClips data={ data } nav={ nav } setDocTitle={ setDocTitle }/>
-                ) : (
-                  <Navigation data={ data } nav={ nav }/> 
-                )}
+                {/* Render naviation */}
+                <Navigation data={ data } nav={ nav } setDocTitle={ props.setTitle }/> 
               </React.Fragment>
             ) : (
-              <Welcome />
+              <Paper className={ classes.welcomePaper }>
+                <Typography variant='h6' color='textSecondary'>Select a chapter from the menu to get started</Typography>
+              </Paper>
             )}
           </div>
         </div>

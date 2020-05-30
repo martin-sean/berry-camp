@@ -4,6 +4,12 @@ const loginUrl = '/v1/auth/login';
 const refreshUrl = '/v1/auth/refresh';
 const logoutUrl = '/v1/auth/logout';
 
+export interface CurrentUser {
+  userId: number;
+  username: string | null;
+  moderator: boolean;
+}
+
 // Log the user in and retrieve the access and refresh token
 export const login = async (idToken: string, setAccessToken: (accessToken: string) => void) => {
   fetch(loginUrl, {
@@ -26,6 +32,17 @@ export const login = async (idToken: string, setAccessToken: (accessToken: strin
       setAccessToken(accessToken);
     }
   });
+}
+
+// Decode the JWT access token and get the current user
+export const getCurrentUser = (accessToken: string | null): CurrentUser | null => {
+  if (!accessToken) return null;
+  try {
+    return JwtDecode(accessToken);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 // Log the user out and clear the refresh token
