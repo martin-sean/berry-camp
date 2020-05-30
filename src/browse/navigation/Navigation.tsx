@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  gridItem: {
+    height: '100%',
+  }
 }));
 
 const prevText = '◄ Prev';
@@ -221,46 +224,43 @@ export default (props: NavigationProps) => {
       <Grid container spacing={ 3 }>
         {/* Left Side */}
         <Grid item xs={ 12 } lg={ 5 }>
-          {/* Inner column grid */}
-          <Grid container spacing={ 3 } direction='column'>
-            {/* If the room is present render it */}
-            { room ? (
-              <Grid item>
-                <Fade in={ !!room }>
-                  <Paper className={ classes.paper }>
-                    <Room
-                      data={ props.data }
-                      nav={ props.nav }
-                      setDocTitle={ props.setDocTitle }
-                    />
-                  </Paper>
-                </Fade>
-              </Grid>
-            // Otherwise render the other navigation 
-            ) : (
-              <React.Fragment>
-                {/* Chapter */}
-                { chapter && (
-                  <Grid item>
-                    { ChapterView(chapter) }
-                  </Grid>
-                )}
-                {/* Side */}
-                { side && (
-                  <Grid item>
-                    { SideView(side) }
-                  </Grid>
-                )}
-                {/* Checkpoint */}
-                { checkpoint && (
-                  <Grid item>
-                    { CheckpointView(checkpoint) }
-                  </Grid>
-                )}
-              </React.Fragment>
-            )}
-          </Grid>
-          {/* End of inner grid */}
+          {/* If the room is present render it */}
+          { room ? (
+            <Grid item>
+              <Fade in={ !!room }>
+                <Paper className={ classes.paper }>
+                  <Room
+                    data={ props.data }
+                    nav={ props.nav }
+                    setDocTitle={ props.setDocTitle }
+                  />
+                </Paper>
+              </Fade>
+            </Grid>
+          ) : (
+            // Inner column grid
+            <Grid container spacing={ 3 } direction='column'>
+              {/* Chapter */}
+              { chapter && (
+                <Grid item>
+                  { ChapterView(chapter) }
+                </Grid>
+              )}
+              {/* Side */}
+              { side && (
+                <Grid item>
+                  { SideView(side) }
+                </Grid>
+              )}
+              {/* Checkpoint */}
+              { checkpoint && (
+                <Grid item>
+                  { CheckpointView(checkpoint) }
+                </Grid>
+              )}
+            </Grid>
+            // End of inner grid
+          )}
         </Grid>
 
         {/* Right Side */}
