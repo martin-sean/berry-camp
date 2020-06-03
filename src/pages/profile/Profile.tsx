@@ -3,8 +3,7 @@ import { makeStyles, Paper, Typography, Container, Chip } from '@material-ui/cor
 import { useParams } from 'react-router-dom';
 import { Skeleton } from '@material-ui/lab';
 import NavbarSpacer from 'pages/common/navbarspacer';
-
-const userUrl = '/v1/user/username';
+import urlSetter from 'api/url-setter';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,7 +34,7 @@ export default () => {
   const [user, setUser] = useState<UserType | null>(null);
 
   useEffect(() => {
-    fetch(`${ userUrl }/${ username }`, {
+    fetch(urlSetter(`/v1/user/username/${ username }`), {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

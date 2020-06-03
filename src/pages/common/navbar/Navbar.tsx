@@ -107,7 +107,6 @@ export default (props: NavbarProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  console.log("Nav rerender");
 
   const accessToken = useSelector((store: GlobalStore) => store.accessToken);
 

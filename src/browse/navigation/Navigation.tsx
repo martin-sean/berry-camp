@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Navigation, NavActionProps } from 'redux/reducers';
-import { makeStyles, Paper, Grid, Typography, Fade, Button } from '@material-ui/core';
+import { makeStyles, Paper, Grid, Typography, Fade, Button, Fab } from '@material-ui/core';
 import { DataTree, Chapter, Side, Checkpoint } from 'api/Data';
 import pluralize from 'utils/pluralize';
 import { Skeleton } from '@material-ui/lab';
 import { useDispatch } from 'react-redux';
 import { SetNavAction, setNav } from 'redux/actions';
 import Room from 'browse/navigation/room';
+import { AddToQueue } from '@material-ui/icons';
+import NewClip from './newclip';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -47,7 +49,15 @@ const useStyles = makeStyles((theme) => ({
   },
   gridItem: {
     height: '100%',
-  }
+  },
+  newClipButton: {
+    position: 'fixed',
+    bottom: theme.spacing(3),
+    right: theme.spacing(3),
+  },
+  newClipIcon: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 const prevText = '◄ Prev';
@@ -65,18 +75,20 @@ export default (props: NavigationProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // TODO: Look an alternative to all these undefined checks
+  // Chapter image loading
+  const [chapterLoaded, setChapterLoaded] = useState(false);
+  
+  // Show the new clip modal
+  const [newClipOpen, setNewClipOpen] = useState<boolean>(false);
 
   // Get the selected chapter, side and checkpoint if they exist
-  const chapter = props.nav.chapterId ? props.data[props.nav.chapterId] : undefined;
+  const chapterId = props.nav.chapterId;
+  const chapter = chapterId ? props.data[chapterId] : undefined;
   const side = props.nav.sideNo ? chapter?.sides[props.nav.sideNo] : undefined;
   const checkpoint = props.nav.checkpointNo ? side?.checkpoints[props.nav.checkpointNo] : undefined;
   const room = props.nav.roomNo ? checkpoint?.rooms[props.nav.roomNo] : undefined;
 
-  const [chapterLoaded, setChapterLoaded] = useState(false);
-
   // Check for previous and next chapters
-  const chapterId = props.nav.chapterId;
   const chapterKeys = Object.keys(props.data);
   const prevChapterId = chapterId ? chapterKeys[chapterKeys.indexOf(chapterId) - 1] : undefined;
   const prevChapter = prevChapterId ? props.data[prevChapterId] : undefined;
@@ -97,6 +109,11 @@ export default (props: NavigationProps) => {
   const nextCheckpointNo = checkpointNo ? checkpointNo + 1 : undefined;
   const nextCheckpoint = nextCheckpointNo ? side?.checkpoints[nextCheckpointNo] : undefined;
 
+  const setNewClipOpenCallback = useCallback((open: boolean) => {
+    setNewClipOpen(open);
+  }, [setNewClipOpen]);
+
+  // Set the current navigation in redux state
   const setNavigation = (nav: NavActionProps) => {
     dispatch<SetNavAction>(setNav(nav));
   }
@@ -221,22 +238,27 @@ export default (props: NavigationProps) => {
   // Main Navigation Body
   return (
     <React.Fragment>
+      {/* Render the new clip dialog */}
+      <NewClip open={ newClipOpen } setOpen={ setNewClipOpenCallback }/>
+
       <Grid container spacing={ 3 }>
         {/* Left Side */}
         <Grid item xs={ 12 } lg={ 5 }>
           {/* If the room is present render it */}
           { room ? (
-            <Grid item>
-              <Fade in={ !!room }>
-                <Paper className={ classes.paper }>
-                  <Room
-                    data={ props.data }
-                    nav={ props.nav }
-                    setDocTitle={ props.setDocTitle }
-                  />
-                </Paper>
-              </Fade>
-            </Grid>
+            <React.Fragment>
+              <Grid item>
+                <Fade in={ !!room }>
+                  <Paper className={ classes.paper }>
+                    <Room
+                      data={ props.data }
+                      nav={ props.nav }
+                      setDocTitle={ props.setDocTitle }
+                    />
+                  </Paper>
+                </Fade>
+              </Grid>
+            </React.Fragment> 
           ) : (
             // Inner column grid
             <Grid container spacing={ 3 } direction='column'>
@@ -272,6 +294,13 @@ export default (props: NavigationProps) => {
           <Skeleton animation={ false } height={ 50 }/>
         </Grid>
       </Grid>
+      {/* New clip button for current room */}
+      { room && (
+        <Fab variant="extended" className={ classes.newClipButton } onClick={ () => setNewClipOpen(true) }>
+          <AddToQueue className={ classes.newClipIcon } />
+          Submit Clip
+        </Fab>
+      )}
     </React.Fragment>
   );
 }

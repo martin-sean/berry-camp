@@ -3,8 +3,10 @@ import { TextField, Dialog, DialogTitle, DialogContent, DialogContentText, Dialo
 import { Check as CheckIcon, ErrorOutline as ErrorIcon } from '@material-ui/icons';
 import { useDispatch } from 'react-redux';
 import { SetAccessTokenAction, setAccessToken } from 'redux/actions';
+import urlSetter from 'api/url-setter';
 
 const usernamePattern = new RegExp('^\\w+$');
+const currentUserUrl = urlSetter('/v1/user/current');
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -52,7 +54,7 @@ export default (props: RegistrationProps) => {
 
     // If valid, check if the username is available
     if (valid) {
-      fetch(`/v1/auth/checkusername/${ username }`, {
+      fetch(urlSetter(`/v1/auth/checkusername/${ username }`), {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -76,12 +78,12 @@ export default (props: RegistrationProps) => {
       setError(true);
       setErrorMessage('Username has errors');
     }
-  }, 2000), []);
+  }, 1000), []);
 
   // Submit the new username
   const handleSubmit = () => {
     console.log(username);
-    fetch('/v1/user/current', {
+    fetch(currentUserUrl, {
       method: 'PATCH',
       headers: {
         'Accept': 'application/json',

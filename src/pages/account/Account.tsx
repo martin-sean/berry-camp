@@ -9,6 +9,9 @@ import { ClearAccessTokenAction, clearAccessToken } from 'redux/actions';
 import { useHistory } from 'react-router-dom';
 import * as Path from 'pages/paths';
 import NavbarSpacer from 'pages/common/navbarspacer';
+import urlSetter from 'api/url-setter';
+
+const currentUserUrl = urlSetter('/v1/user/current');
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,7 +61,7 @@ export default () => {
   }
 
   const deleteAccount = () => {
-    fetch('/v1/user/current', {
+    fetch(currentUserUrl, {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json',

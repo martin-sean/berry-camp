@@ -67,6 +67,9 @@ export default (props: SignInProps) => {
   // Google logout hook
   const { signOut } = useGoogleLogout({
     clientId: clientId,
+    fetchBasicProfile: false,
+    cookiePolicy: 'single_host_origin',
+    scope: 'openid',
   });
 
   // Set an access token in the redux state

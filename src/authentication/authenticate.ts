@@ -1,8 +1,9 @@
 import JwtDecode from 'jwt-decode';
+import UrlSetter from 'api/url-setter';
 
-const loginUrl = '/v1/auth/login';
-const refreshUrl = '/v1/auth/refresh';
-const logoutUrl = '/v1/auth/logout';
+const loginUrl = UrlSetter('/v1/auth/login');
+const refreshUrl = UrlSetter('/v1/auth/refresh');
+const logoutUrl = UrlSetter('/v1/auth/logout');
 
 export interface CurrentUser {
   userId: number;
