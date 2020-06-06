@@ -38,54 +38,60 @@ export default (props: VideoPickerProps) => {
   const defaultStartTime = props.startTime || 0;
   const defaultEndTime = defaultStartTime + 20;
 
-  // Remember the length of the video
+  // Remember the duration of the video
+  const [duration, setDuration] = useState<number>();
   const [startTime, setStartTime] = useState<number>(defaultStartTime);
   const [endTime, setEndTime] = useState<number>(defaultEndTime);
-  const [player, setPlayer] = useState<YT.Player | null>(null);
+  const [player, setPlayer] = useState<YT.Player>();
   const [marks, setMarks] = useState<Mark[]>([]);
 
   // Set the new range values
   const handleTimesChange = (event: any, newValue: number | number[]) => {
-    if ((newValue as number[])[1]) {
-      setStartTime((newValue as number[])[0]);
-      setEndTime((newValue as number[])[1]);
-    }
+    const times = newValue as number[];
+    setStartTime(times[0]);
+    setEndTime(times[1]);
   }
 
+  // Update the slider range marks
   const updateRange = useCallback((duration: number) => {
-    const spacer = endTime - startTime;
-    const startSpacer = startTime ? (startTime - spacer) : 0;
-    const rangeStart = startSpacer > 0 ? startSpacer : 0; // Set to 0 if negative
-    const endSpacer = endTime + spacer;
-    const rangeEnd = duration ? (endSpacer < duration ? endSpacer : duration) : 100;
+    const spacer = Math.max((endTime - startTime) / 2, 5);
+    const intervalNo = 30;
+    // Calculate and round the range
+    let startRange = Math.floor((startTime - spacer) / intervalNo) * intervalNo
+    let endRange = Math.ceil((endTime + spacer) / intervalNo) * intervalNo
+    // Limit the range from 0 to duration
+    startRange = startRange > 0 ? startRange : 0;
+    endRange = endRange < duration ? endRange : duration;
 
     // Set the slider marks
     setMarks([
-      { value: rangeStart, label: secondsToString(rangeStart) },
-      { value: rangeEnd, label: secondsToString(rangeEnd) }
+      { value: startRange, label: secondsToString(startRange) },
+      { value: endRange, label: `${ secondsToString(endRange) } (${ secondsToString(duration)})` }
     ]);
   }, [startTime, endTime])
 
   const secondsToString = (value: number) => {
     const minutes = Math.floor(value / 60);
     const seconds = Math.floor(value % 60);
-    return `${ minutes ? `${ minutes }m` : '' }${ seconds.toString().padStart(2, '0')}s`;
+    return `${ minutes ? `${ minutes.toString().padStart(1, '0') }` : '00' }:${ seconds.toString().padStart(2, '0')}`;
   }
 
   // Set the length of the video
   const handleReady = (event: { target: YT.Player }) => {
+    console.log("HANDLE READY");
     // Recalculate the range with the default values
     const duration = event.target.getDuration();
+    setDuration(duration);
     setPlayer(event.target);
     event.target.getIframe().focus();
-    // If start time provided, set the range
+    // If start time provided limit the range
     if (startTime !== 0) {
       updateRange(duration);
-    // Default otherwise
+    // Use full range otherwise
     } else {
-      startTime === 0 && setEndTime(duration);
+      setEndTime(duration);
       setMarks([
-        { value: startTime, label: secondsToString(startTime) },
+        { value: 0, label: secondsToString(startTime) },
         { value: duration, label: secondsToString(duration) }
       ]);
     }
@@ -93,24 +99,20 @@ export default (props: VideoPickerProps) => {
 
   // Set the props in the parent
   const handleCommited = () => {
-    console.log(`SET ${ startTime } ${ endTime }`);
-    player && updateRange(player.getDuration());
+    duration && updateRange(duration);
+    console.log(`start: ${startTime}, end: ${endTime}, duration: ${duration}`);
+    // player && player.seekTo(startTime, true);
     props.setTimes(startTime, endTime);
   }
   
-  // Restart the youtube video on start time update
+  // Restart the youtube video when time update
   useEffect(() => {
-    if (player) {
-      player.seekTo(startTime, true);
-    }
-  }, [startTime, player])
+    player && player.seekTo(startTime, true);
+  }, [player, startTime])
 
-   // Restart the youtube video on end time update
-   useEffect(() => {
-    if (player) {
-      player.seekTo(endTime, true);
-    }
-  }, [endTime, player])
+  useEffect(() => {
+    player && player.seekTo(endTime, true);
+  }, [player, endTime])
 
   // Set a timer to loop the youtube video
   useEffect(() => {

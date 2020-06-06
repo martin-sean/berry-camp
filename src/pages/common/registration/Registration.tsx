@@ -82,7 +82,6 @@ export default (props: RegistrationProps) => {
 
   // Submit the new username
   const handleSubmit = () => {
-    console.log(username);
     fetch(currentUserUrl, {
       method: 'PATCH',
       headers: {

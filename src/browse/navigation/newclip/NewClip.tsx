@@ -4,6 +4,7 @@ import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, B
 // import { useSelector } from 'react-redux';
 // import { GlobalStore } from 'redux/reducers';
 import VideoPicker from './VideoPicker';
+import YTLinkParser from 'utils/yt-link-parser';
 
 const useStyles = makeStyles((theme) => ({
   // fullWidthInput: {
@@ -78,42 +79,9 @@ export default (props: NewClipProps) => {
 
   // If the input matches a youtube link, try to format it
   const handleVideoIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const videoInput = event.currentTarget.value;
-    
-    let videoId: string | null = null;
-    let startTime: number | null = null;
-    let endTime: number | null = null;
-
-    // Handle Embedded link
-    if (videoInput.match(/youtube.com\/embed/)) {
-      // Video id
-      let matches = videoInput.match(/embed\/(\w+)/);
-      videoId = matches && matches[1];
-      // Start
-      matches = videoInput.match(/start=(\d+)/);
-      startTime = matches && parseInt(matches[1]);
-      // End
-      matches = videoInput.match(/end=(\d+)/);
-      endTime = matches && parseInt(matches[1]);
-    // Handle normal link
-    } else if (videoInput.match(/youtube.com/)) {
-       // Video id
-      let matches = videoInput.match(/v=(\w+)/)
-      videoId = matches && matches[1];
-      // Start
-      matches = videoInput.match(/t=(\d+)/);
-      startTime = matches && parseInt(matches[1]);
-    // Handle short link
-    } else if (videoInput.match(/youtu.be/)) {
-      // Video id
-      let matches = videoInput.match(/youtu.be\/(\w+)/)
-      videoId = matches && matches[1];
-      // Start
-      matches = videoInput.match(/t=(\d+)/);
-      startTime = matches && parseInt(matches[1]);
-    }
-
-    // Set values if they exists
+    const videoLink = event.currentTarget.value;
+    const { videoId, startTime, endTime } = YTLinkParser(videoLink);
+    // Set values if they exist
     videoId && setValue('videoId', videoId, true);
     startTime && setStartTime(startTime);
     endTime && setEndTime(endTime);
