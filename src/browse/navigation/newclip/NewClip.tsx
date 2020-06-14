@@ -1,38 +1,11 @@
 import React, { useState } from 'react';
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
-import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button, TextField, makeStyles, Chip } from '@material-ui/core';
-// import { useSelector } from 'react-redux';
-// import { GlobalStore } from 'redux/reducers';
+import { useForm } from 'react-hook-form';
+import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button, TextField } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import { GlobalStore } from 'redux/reducers';
 import VideoPicker from './VideoPicker';
 import YTLinkParser from 'utils/yt-link-parser';
-
-const useStyles = makeStyles((theme) => ({
-  // fullWidthInput: {
-  //   marginTop: theme.spacing(1),
-  //   marginBottom: theme.spacing(1),
-  // },
-  // halfWidthInput: {
-  //   marginTop: theme.spacing(1),
-  //   marginBottom: theme.spacing(1),
-  //   marginRight: theme.spacing(1),
-  // },
-  tagsWrapper: {
-    marginTop: theme.spacing(2),
-    display: 'flex',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-  },
-  tagInputRoot: {
-    padding: 0,
-    margin: 0,
-  },
-  tagInput: {
-    // flex: 1,
-  },
-  tagChip: {
-    margin: theme.spacing(0.5),
-  },
-}));
+import { Autocomplete, AutocompleteChangeReason } from '@material-ui/lab';
 
 interface NewClipProps {
   open: boolean,
@@ -40,44 +13,57 @@ interface NewClipProps {
 }
 
 export default (props: NewClipProps) => {
-  const classes = useStyles();
-
-  // const nav = useSelector((store: GlobalStore) => store.nav);
-
+  // Current room navigation
+  const nav = useSelector((store: GlobalStore) => store.nav);
+  // Selected video times
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
+  // Tag field error message
+  const [tagError, setTagError] = useState<string>();
+  const [tags, setTags] = useState<string[]>([]);
 
   interface FormData {
     name: string,
     description: string,
     videoId: string,
-    tags: string[],
   }
-
-  // Use form for field array
-  const { control } = useForm();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'tags',
-  });
 
   const { register, setValue, handleSubmit, watch, errors } = useForm<FormData>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
 
-  const onSubmit = (data: Record<string, any>) => {
-    console.log(JSON.stringify(data));
+  // Handle changes to the Autocomplete value
+  const handleAutocompleteChange = (event: React.ChangeEvent<any>, value: string[], reason: AutocompleteChangeReason) => {
+    const tags = value;
+    // Clear any tag errors
+    setTagError('');
+    // Modify newly created tag
+    if (reason === 'create-option' && tags.length) {
+      tags[tags.length - 1] = tags[tags.length - 1].trim().toLowerCase();
+      console.log(tags);
+    }
+    // Set new tags
+    setTags(tags);
   }
 
-  const tagAppend = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === 13 && event.target instanceof HTMLInputElement && event.target.value !== '') {
-      append({ tag: event.target.value });
-      event.target.value = '';
+  // Prevent wrong values from being added
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const input = event.target as HTMLInputElement;
+    // Capture enter key presses
+    if (event.keyCode === 13) {
+      // Trim first for leading/trailing space flexibility
+      input.value = input.value.trim().toLowerCase();
+      // Only allow single space separated words
+      if (!input.value.match(/^([A-Za-z]+\s)*[A-Za-z]+$/)) {
+        event.preventDefault();
+        event.stopPropagation();
+        setTagError('Can only contain words separated by single spaces');
+      }
     }
   }
 
-  // If the input matches a youtube link, try to format it
+  // If the input is in a youtube link format, extract the values
   const handleVideoIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const videoLink = event.currentTarget.value;
     const { videoId, startTime, endTime } = YTLinkParser(videoLink);
@@ -87,9 +73,30 @@ export default (props: NewClipProps) => {
     endTime && setEndTime(endTime);
   }
 
+  // Set the times when the user uses the video picker
   const setTimes = (startTime: number, endTime: number) => {
     setStartTime(startTime);
     setEndTime(endTime);
+  }
+
+  // Handle form submission
+  const onSubmit = (data: Record<string, any>) => {
+    // Build the response object
+    const submitData = {
+      ...nav,
+      ...data,
+      startTime,
+      endTime,
+      tags,
+    }
+    console.log(submitData);
+  }
+
+  // Handle button close
+  const handleClose = () => {
+    setStartTime(null);
+    setEndTime(null);
+    props.setOpen(false);
   }
 
   // Watch the current start and end time
@@ -169,43 +176,47 @@ export default (props: NewClipProps) => {
               <VideoPicker videoId={ currentVideoId } setTimes={ setTimes }/>
             )}
 
-            <div className={ classes.tagsWrapper }>
-              {fields.map((field, index) => (
-                <Controller
-                  className={ classes.tagChip }
-                  key={ field.id }
-                  control={ control }
-                  name={`tags[${index}].tag`}
-                  as={ Chip }
-                  onDelete={ () => remove(index) }
-                  label={ field.tag }
-                  defaultValue={ field.tag }
+            {/* Tags. Hacky but it works */}
+            <Autocomplete
+              multiple
+              freeSolo
+              autoHighlight
+              autoSelect
+              autoComplete
+              options={ ['wavedash', 'golden', 'meme'] }
+              onChange={ handleAutocompleteChange }
+              renderInput={(params) =>
+                <TextField
+                  { ...params }
+                  name='tag'
+                  placeholder='Add tag'
+                  size='small'
+                  margin='normal'
+                  error={ !!tagError }
+                  helperText={ tagError }
+                  InputProps={{
+                    ...params.InputProps,
+                    disableUnderline: true,
+                  }}
+                  inputProps={{
+                    ...params.inputProps,
+                    maxLength: 20,
+                    onKeyDown: handleKeyDown,
+                  }}
                 />
-              ))}
-              {/* Tags */}
-              <TextField
-                className={ classes.tagInput }
-                autoComplete='off'
-                placeholder='Press enter to add tags'
-                type='text'
-                onKeyDown={ tagAppend }
-                InputProps={{
-                  disableUnderline: true,
-                }}
-                size='small'
-                margin='normal'
-              />
-            </div>
+              }
+            />
           </DialogContent>
           <DialogActions>
             <Button
               variant='contained'
-              color='secondary'
-              onClick={ () => props.setOpen(false) }
+              onClick={ handleClose }
             >
               Cancel
             </Button>
             <Button
+              disabled={ startTime === null || endTime === null }
+              type='submit'
               variant='contained'
               color='primary'
             >

@@ -78,15 +78,18 @@ export default (props: VideoPickerProps) => {
 
   // Set the length of the video
   const handleReady = (event: { target: YT.Player }) => {
-    console.log("HANDLE READY");
     // Recalculate the range with the default values
     const duration = event.target.getDuration();
+    // Break if not actually ready (wrong video ID provided)
+    if (!duration) return;
+    
     setDuration(duration);
     setPlayer(event.target);
     event.target.getIframe().focus();
     // If start time provided limit the range
     if (startTime !== 0) {
       updateRange(duration);
+      props.setTimes(startTime, duration);
     // Use full range otherwise
     } else {
       setEndTime(duration);
@@ -94,14 +97,13 @@ export default (props: VideoPickerProps) => {
         { value: 0, label: secondsToString(startTime) },
         { value: duration, label: secondsToString(duration) }
       ]);
+      props.setTimes(0, duration);
     }
   }
 
   // Set the props in the parent
   const handleCommited = () => {
     duration && updateRange(duration);
-    console.log(`start: ${startTime}, end: ${endTime}, duration: ${duration}`);
-    // player && player.seekTo(startTime, true);
     props.setTimes(startTime, endTime);
   }
   
