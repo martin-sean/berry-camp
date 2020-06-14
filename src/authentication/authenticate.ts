@@ -1,5 +1,7 @@
 import JwtDecode from 'jwt-decode';
 import UrlSetter from 'api/url-setter';
+import { Dispatch } from 'redux';
+import { setAccessToken, SetAccessTokenAction } from 'redux/actions';
 
 const loginUrl = UrlSetter('/v1/auth/login');
 const refreshUrl = UrlSetter('/v1/auth/refresh');
@@ -53,8 +55,21 @@ export const logout = async () => {
   });
 }
 
-// Return false if access token has expired
-export const checkTokenExpiry = async (accessToken: string) => {
+// Check if token has expired, issue a new one if it has
+export const getNewTokenIfRequired = async (accessToken: string | null, dispatch: Dispatch<any>): Promise<string | null> => {
+  // Return current access token if it's still valid
+  if (accessToken && tokenStillValid(accessToken)) return accessToken;
+  // Token needs refreshing
+  const newAccessToken = await issueNewAccessToken();
+  // Check if refresh was successful
+  if (!newAccessToken) return null;
+  // Set the new accessToken
+  dispatch<SetAccessTokenAction>(setAccessToken(newAccessToken));
+  return newAccessToken;
+}
+
+// Check access token expiry. Return false if it needs refreshing
+export const tokenStillValid = (accessToken: string): boolean => {
   try {
     const { exp } = JwtDecode(accessToken);
     return Date.now.valueOf() < exp * 1000;
@@ -64,13 +79,11 @@ export const checkTokenExpiry = async (accessToken: string) => {
   }
 }
 
-// Get a new access token and set it
-export const getNewAccessToken = async (setAccessToken: (accessToken: string) => void) => {
-  fetch(refreshUrl, { 
+// Return a new access token or null if the user is not authenticated
+export const issueNewAccessToken = async (): Promise<string | null> => {
+  const res = await fetch(refreshUrl, {
     method: 'post',
     credentials: 'include',
-  }).then(async (res: any) => {
-    const accessToken = await res.text();
-    setAccessToken(accessToken);
   });
+  return res.ok ? await res.text() : null;
 }

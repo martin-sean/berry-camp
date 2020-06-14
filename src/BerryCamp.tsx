@@ -14,8 +14,7 @@ import Profile from 'pages/profile';
 import Account from 'pages/account';
 import Default from 'pages/default';
 
-import { getNewAccessToken, getCurrentUser } from 'authentication/authenticate';
-import { setAccessToken, SetAccessTokenAction } from 'redux/actions';
+import { getNewTokenIfRequired, getCurrentUser } from 'authentication/authenticate';
 import { useDispatch, useSelector } from 'react-redux';
 import Registration from 'pages/common/registration';
 import { GlobalStore } from 'redux/reducers';
@@ -55,14 +54,14 @@ export default () => {
   const setDocTitle = useCallback((title: string | undefined) => {
     document.title = 'Berry Camp · ' + (title || 'Error');
   }, []);
-
-  // Refresh the access token
-  useEffect(() => {
-    getNewAccessToken((accessToken: string) => dispatch<SetAccessTokenAction>(setAccessToken(accessToken)));
-  }, [dispatch])
-
+ 
   const accessToken = useSelector((store: GlobalStore) => store.accessToken);
   const currentUser = getCurrentUser(accessToken);
+ 
+  // Refresh the access token
+  useEffect(() => {
+    getNewTokenIfRequired(accessToken, dispatch);
+  }, [accessToken, dispatch])
 
   return ( 
     <ThemeProvider theme={ theme }>

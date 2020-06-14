@@ -1,11 +1,25 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button, TextField } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button, TextField, Snackbar, Slide, CircularProgress, makeStyles } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
 import VideoPicker from './VideoPicker';
 import YTLinkParser from 'utils/yt-link-parser';
-import { Autocomplete, AutocompleteChangeReason } from '@material-ui/lab';
+import { Autocomplete, AutocompleteChangeReason, Alert } from '@material-ui/lab';
+import { createNewClip, ClipData } from 'api/clip';
+
+const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    position: 'relative'
+  },
+  progress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  }
+}));
 
 interface NewClipProps {
   open: boolean,
@@ -13,6 +27,9 @@ interface NewClipProps {
 }
 
 export default (props: NewClipProps) => {
+  const classes = useStyles();
+  // Get the access token
+  const accessToken = useSelector((store: GlobalStore) => store.accessToken)
   // Current room navigation
   const nav = useSelector((store: GlobalStore) => store.nav);
   // Selected video times
@@ -21,6 +38,14 @@ export default (props: NewClipProps) => {
   // Tag field error message
   const [tagError, setTagError] = useState<string>();
   const [tags, setTags] = useState<string[]>([]);
+  // Show the snackbar
+  const [snackOpen, setSnackOpen] = useState<boolean>(false);
+  const [snackSuccess, setSnackSuccess] = useState<boolean>(false);
+  const [snackMessage, setSnackMessage] = useState<string>();
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
+  // Redux action dispatch
+  const dispatch = useDispatch();
 
   interface FormData {
     name: string,
@@ -41,7 +66,6 @@ export default (props: NewClipProps) => {
     // Modify newly created tag
     if (reason === 'create-option' && tags.length) {
       tags[tags.length - 1] = tags[tags.length - 1].trim().toLowerCase();
-      console.log(tags);
     }
     // Set new tags
     setTags(tags);
@@ -80,20 +104,34 @@ export default (props: NewClipProps) => {
   }
 
   // Handle form submission
-  const onSubmit = (data: Record<string, any>) => {
+  const onSubmit = async (data: Record<string, any>) => {
+    setSubmitting(true);
     // Build the response object
-    const submitData = {
+    const submitData: any = {
       ...nav,
       ...data,
-      startTime,
-      endTime,
+      startTime: startTime!,
+      endTime: endTime!,
       tags,
     }
-    console.log(submitData);
+    // Check for successful clip creation
+    if (await createNewClip(submitData as ClipData, accessToken, dispatch)) {
+      handleClose();
+      setSnackSuccess(true);
+      setSnackMessage("Clip submitted");
+    // Error occured during clip creation
+    } else {
+      setSnackSuccess(false);
+      setSnackMessage("An error occured submitting the clip")
+    }
+    setSnackOpen(true);
+    setSubmitting(false);
   }
 
   // Handle button close
   const handleClose = () => {
+    setSubmitting(false);
+    setTags([]);
     setStartTime(null);
     setEndTime(null);
     props.setOpen(false);
@@ -104,6 +142,17 @@ export default (props: NewClipProps) => {
 
   return (
     <React.Fragment>
+      {/* Submission alert */}
+      <Snackbar
+        open={ snackOpen }
+        onClose={ () => setSnackOpen(false) }
+        anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } }
+        autoHideDuration={ 4000 }
+        TransitionComponent={ Slide }
+      >
+        <Alert variant='filled' severity={ snackSuccess ? 'success' : 'error' }>{ snackMessage }</Alert>
+      </Snackbar>
+      {/* New clip dialog */}
       <Dialog
         open={ props.open }
         disableBackdropClick
@@ -214,14 +263,18 @@ export default (props: NewClipProps) => {
             >
               Cancel
             </Button>
-            <Button
-              disabled={ startTime === null || endTime === null }
-              type='submit'
-              variant='contained'
-              color='primary'
-            >
-              Create Clip
-            </Button>
+            <div className={ classes.wrapper }>
+              <Button
+                // Disable if awaiting response or missing a start and end time 
+                disabled={ submitting || startTime === null || endTime === null }
+                type='submit'
+                variant='contained'
+                color='primary'
+              >
+                Create Clip
+              </Button>
+              { submitting && <CircularProgress size={ 24 } className={ classes.progress }/> }
+            </div>
           </DialogActions>
         </form>
       </Dialog>
