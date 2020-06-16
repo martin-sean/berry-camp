@@ -1,5 +1,5 @@
 import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN } from './actionTypes';
-import { DataTree } from 'api/Data'
+import { DataTree } from 'api/data'
 import { NavActionProps } from './reducers';
 
 export interface SetDataAction {

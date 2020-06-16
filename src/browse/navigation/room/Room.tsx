@@ -5,7 +5,7 @@ import  './Room.css';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { makeStyles, Fade, Theme, Typography, Divider, Modal, Backdrop, useTheme, useMediaQuery } from '@material-ui/core'
 
-import { DataTree } from 'api/Data';
+import { DataTree } from 'api/data';
 import { Navigation } from 'redux/reducers';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'

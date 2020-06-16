@@ -14,7 +14,7 @@ import Profile from 'pages/profile';
 import Account from 'pages/account';
 import Default from 'pages/default';
 
-import { getNewTokenIfRequired, getCurrentUser } from 'authentication/authenticate';
+import { getNewTokenIfRequired, getCurrentUser } from 'api/authenticate';
 import { useDispatch, useSelector } from 'react-redux';
 import Registration from 'pages/common/registration';
 import { GlobalStore } from 'redux/reducers';

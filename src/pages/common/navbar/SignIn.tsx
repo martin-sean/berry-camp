@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 import GoogleLogin, { GoogleLoginResponseOffline, GoogleLoginResponse, useGoogleLogout } from 'react-google-login';
-import clientId from 'authentication/client';
-import { login, logout, getCurrentUser } from 'authentication/authenticate';
+import clientId from 'api/client';
+import { login, logout, getCurrentUser } from 'api/authenticate';
 import { useDispatch } from 'react-redux';
-import { SetAccessTokenAction, setAccessToken, ClearAccessTokenAction, clearAccessToken } from 'redux/actions';
+import { clearAccessToken } from 'redux/actions';
 import { Button, Menu, MenuItem, makeStyles, CircularProgress, Backdrop, Typography } from '@material-ui/core';
 import { Person, SupervisorAccount } from '@material-ui/icons';
 import { Link, useHistory } from 'react-router-dom';
@@ -72,26 +72,15 @@ export default (props: SignInProps) => {
     scope: 'openid',
   });
 
-  // Set an access token in the redux state
-  const setToken = (accessToken: string) => {
-    dispatch<SetAccessTokenAction>(setAccessToken(accessToken));
-    // Hide the backdrop
-    setShowBackdrop(false);
-  }
-
   // Handle google login
-  const handleLogin = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    if ((res as GoogleLoginResponse).getAuthResponse) {
-      const auth = (res as GoogleLoginResponse).getAuthResponse();
-      login(auth.id_token, setToken);
-    // } else if ((res as GoogleLoginResponseOffline).code) {
-    } else {
-      setShowBackdrop(false);
-    }
+  const handleLogin = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+    const auth = (res as GoogleLoginResponse).getAuthResponse();
+    const success = await login(auth.id_token, dispatch);
+    setShowBackdrop(!success);
   }
 
   // TODO: Handle situation when google credentials expire and 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Close menus
     setAnchorEl(null);
     props.closeParent && props.closeParent();
@@ -99,9 +88,9 @@ export default (props: SignInProps) => {
     // Sign out of Google
     signOut();
     // Logout of app and delete refresh cookie
-    logout();
+    await logout();
     // Clear the access token
-    dispatch<ClearAccessTokenAction>(clearAccessToken());
+    dispatch(clearAccessToken());
     // Navigate home
     history.push(Path.HOME);
   }

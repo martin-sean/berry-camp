@@ -3,7 +3,7 @@ import { Button, makeStyles, Grid } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { SetNavAction, setNav } from 'redux/actions';
 import { SET_NAV } from 'redux/actionTypes';
-import { DataTree } from 'api/Data';
+import { DataTree } from 'api/data';
 import { Navigation } from 'redux/reducers';
 
 const useStyles = makeStyles((theme) => ({

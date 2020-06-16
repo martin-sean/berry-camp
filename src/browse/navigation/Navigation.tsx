@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Navigation, NavActionProps } from 'redux/reducers';
 import { makeStyles, Paper, Grid, Typography, Fade, Button, Fab } from '@material-ui/core';
-import { DataTree, Chapter, Side, Checkpoint } from 'api/Data';
+import { DataTree, Chapter, Side, Checkpoint } from 'api/data';
 import pluralize from 'utils/pluralize';
 import { Skeleton } from '@material-ui/lab';
 import { useDispatch } from 'react-redux';

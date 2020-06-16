@@ -3,7 +3,7 @@ import { makeStyles, Paper, Typography, Container, Chip } from '@material-ui/cor
 import { useParams } from 'react-router-dom';
 import { Skeleton } from '@material-ui/lab';
 import NavbarSpacer from 'pages/common/navbarspacer';
-import urlSetter from 'api/url-setter';
+import { getUser } from 'api/user';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -30,35 +30,32 @@ const useStyles = makeStyles((theme) => ({
 export default () => {
   const classes = useStyles();
   const { username } = useParams();
-  type UserType = { username: string, moderator: boolean }
+  type UserType = { username: string, moderator: boolean };
   const [user, setUser] = useState<UserType | null>(null);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    fetch(urlSetter(`/v1/user/username/${ username }`), {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then(async (res) => {
-      if (res.ok) {
-        const user = await res.json() as UserType;
-        setUser(user);
-      }
-    });
+    // Fetch the user
+    const fetchUser = async () => {
+      const user: UserType | null = await getUser(username);
+      user ? setUser(user) : setNotFound(true);
+    }
+    fetchUser();
   }, [username, setUser]);
 
   return (
     <Container maxWidth='md'>
       <NavbarSpacer />
       <Paper className={ classes.paper }>
-        { user ? (
+        { user && !notFound ? (
           <div className={ classes.userHeading }>
             <Typography className={ classes.heading } variant='h5'>{ user.username }</Typography>
             { user.moderator && (
               <Chip className={ classes.chip } label="MODERATOR" color='primary' variant="outlined" />
             )}
           </div>
+        ) : notFound ? (
+          <Typography className={ classes.heading } variant='h5'>User not found</Typography>
         ) : (
           <Skeleton variant="rect" width={ 250 } height={ 30 }/>
         )}

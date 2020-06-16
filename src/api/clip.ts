@@ -1,6 +1,6 @@
 import urlSetter from 'api/url-setter';
 import { Dispatch } from 'redux';
-import { getNewTokenIfRequired } from 'authentication/authenticate';
+import { getNewTokenIfRequired } from 'api/authenticate';
 
 export interface ClipData {
   chapterId: string,

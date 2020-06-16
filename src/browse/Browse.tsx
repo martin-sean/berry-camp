@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SetNavAction, SetDataAction, setData, setNav } from 'redux/actions';
 import fetchJson from 'utils/fetch-json';
 import Navigation from './navigation';
-import { DataTree } from 'api/Data';
+import { DataTree } from 'api/data';
 import Breadcrumbs from './breadcrumbs';
 import * as Path from 'pages/paths';
 

@@ -8,14 +8,14 @@ const refreshUrl = UrlSetter('/v1/auth/refresh');
 const logoutUrl = UrlSetter('/v1/auth/logout');
 
 export interface CurrentUser {
-  userId: number;
-  username: string | null;
-  moderator: boolean;
+  userId: number,
+  username: string | null,
+  moderator: boolean,
 }
 
 // Log the user in and retrieve the access and refresh token
-export const login = async (idToken: string, setAccessToken: (accessToken: string) => void) => {
-  fetch(loginUrl, {
+export const login = async (idToken: string, dispatch: Dispatch<any>): Promise<boolean> => {
+  const res = await fetch(loginUrl, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -24,17 +24,16 @@ export const login = async (idToken: string, setAccessToken: (accessToken: strin
     body: JSON.stringify({
       idToken: idToken,
     })
-  }).then((res: any) => {
-    // Check if response is ok
-    if (res.ok) {
-      return res.text();
-    }
-  }).then((accessToken: string) => {
-    // Check if access token text exists in response
-    if (accessToken) {
-      setAccessToken(accessToken);
-    }
   });
+    
+  // Check if response is ok
+  if (res.ok) {
+    const accessToken = await res.text();
+    dispatch(setAccessToken(accessToken));
+    return true;
+  }
+  // Could not login
+  return false;
 }
 
 // Decode the JWT access token and get the current user
@@ -50,7 +49,7 @@ export const getCurrentUser = (accessToken: string | null): CurrentUser | null =
 
 // Log the user out and clear the refresh token
 export const logout = async () => {
-  fetch(logoutUrl, {
+  await fetch(logoutUrl, {
     method: 'GET',
   });
 }

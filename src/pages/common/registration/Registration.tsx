@@ -1,12 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, makeStyles, debounce } from '@material-ui/core';
+import { TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, makeStyles, debounce, CircularProgress } from '@material-ui/core';
 import { Check as CheckIcon, ErrorOutline as ErrorIcon } from '@material-ui/icons';
 import { useDispatch } from 'react-redux';
-import { SetAccessTokenAction, setAccessToken } from 'redux/actions';
-import urlSetter from 'api/url-setter';
+import { setNewUsername, validateUsername } from 'api/user';
 
 const usernamePattern = new RegExp('^\\w+$');
-const currentUserUrl = urlSetter('/v1/user/current');
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -16,7 +14,17 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     margin: theme.spacing(1),
     marginTop: theme.spacing(1.85),
-  }
+  },
+  submitWrapper: {
+    position: 'relative',
+  },
+  progress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
 interface RegistrationProps {
@@ -30,13 +38,9 @@ export default (props: RegistrationProps) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // Store a valid username to submit
   const [username, setUsername] = useState<string | null>(null);
- 
+  // Submitting status
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const dispatch = useDispatch();
-
-  // Issue a new access token when the username is updated
-  const issueNewAccessToken = (accessToken: string) => {
-    dispatch<SetAccessTokenAction>(setAccessToken(accessToken));
-  }
 
   // Grab the username form the event and debouce checking validity
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,30 +53,21 @@ export default (props: RegistrationProps) => {
   }
 
   // Debounce the username check to to every 500ms, useCallback to persist function during rerenders 
-  const onUsernameChange = useCallback(debounce((username: string) => {
-    const valid = usernamePattern.test(username);
+  const onUsernameChange = useCallback(debounce(async (username: string) => {
+    const valid = usernamePattern.test(username) && username.length >= 3;
 
     // If valid, check if the username is available
     if (valid) {
-      fetch(urlSetter(`/v1/auth/checkusername/${ username }`), {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      }).then(async (res) => {
-        if (res.ok) {
-          type AvailableResponse = { available: boolean };
-          const { available } = await res.json() as AvailableResponse;
-          setError(!available);
-          setErrorMessage(`'${ username }' ${ available ? 'is available' : 'is already taken' }`);
-          // Save the username for submission
-          if (available) setUsername(username);
-        } else {
-          setError(true);
-          setErrorMessage("Could not reach the server. Please contact the Admin.")
-        }
-      }); 
+      try {
+        const available = await validateUsername(username, props.accessToken);
+        setError(!available);
+        setErrorMessage(`'${ username }' ${ available ? 'is available' : 'is already taken' }`);
+        // Save for submission if available
+        if (available) setUsername(username);
+      } catch (error) {
+        setError(true);
+        setErrorMessage("Could not validate username. Please contact the Admin.")
+      }
     // Message isn't valid, immediately set message  
     } else {
       setError(true);
@@ -81,30 +76,13 @@ export default (props: RegistrationProps) => {
   }, 1000), []);
 
   // Submit the new username
-  const handleSubmit = () => {
-    fetch(currentUserUrl, {
-      method: 'PATCH',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ props.accessToken }`
-      },
-      body: JSON.stringify({
-        username: username,
-      })
-    }).then((res: any) => {
-      // Check if response is ok
-      if (res.ok) {
-        return res.text();
-      }
-    }).then((accessToken: string) => {
-      // Check if access token text exists in response
-      if (accessToken) {
-        // Close the modal
-        setOpen(false);
-        issueNewAccessToken(accessToken);
-      }
-    });
+  const handleSubmit = async () => {
+    // Username must be present
+    if (!username) return;
+    setSubmitting(true);
+    await setNewUsername(username, props.accessToken, dispatch);
+    setSubmitting(false);
+    setOpen(false);
   }
 
   return (
@@ -142,7 +120,10 @@ export default (props: RegistrationProps) => {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button disabled={ !username } variant='contained' onClick={ handleSubmit }>Submit</Button>
+          <div className={ classes.submitWrapper }>
+            <Button disabled={ submitting || !username } variant='contained' onClick={ handleSubmit }>Submit</Button>
+            { submitting && <CircularProgress className={ classes.progress } size={ 24 }/> }
+          </div>
         </DialogActions>
       </Dialog>
     </React.Fragment>

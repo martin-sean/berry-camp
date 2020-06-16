@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navigation, NavActionProps } from 'redux/reducers';
 import { makeStyles, Typography, Breadcrumbs, Link, Tooltip, Snackbar, Slide, Button } from '@material-ui/core';
-import { DataTree } from 'api/Data';
+import { DataTree } from 'api/data';
 import { useDispatch } from 'react-redux';
 import { SetNavAction, ClearNavAction, setNav, clearNav } from 'redux/actions';
 import Alert from '@material-ui/lab/Alert';

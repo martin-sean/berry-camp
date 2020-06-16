@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { makeStyles, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, FormControlLabel, Checkbox, Container } from '@material-ui/core';
+import { makeStyles, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, FormControlLabel, Checkbox, Container, CircularProgress } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
-import { logout } from 'authentication/authenticate';
+import { logout } from 'api/authenticate';
 import { useGoogleLogout } from 'react-google-login';
-import clientId from 'authentication/client';
-import { ClearAccessTokenAction, clearAccessToken } from 'redux/actions';
+import clientId from 'api/client';
+import { clearAccessToken } from 'redux/actions';
 import { useHistory } from 'react-router-dom';
 import * as Path from 'pages/paths';
 import NavbarSpacer from 'pages/common/navbarspacer';
-import urlSetter from 'api/url-setter';
-
-const currentUserUrl = urlSetter('/v1/user/current');
+import { deleteAccount } from 'api/user';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,6 +30,16 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
+  submitWrapper: {
+    position: 'relative',
+  },
+  progress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
 export default () => {
@@ -39,6 +47,7 @@ export default () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteClips, setDeleteClips] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const accessToken = useSelector((store: GlobalStore) => store.accessToken);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -48,44 +57,42 @@ export default () => {
     clientId: clientId,
   });
 
+  // Toggle delete clips checkbox
   const handleDeleteClipsChange = () => {
     setDeleteClips(!deleteClips)
   }
 
+  // Handle confirmation checkbox
   const handleConfirmChange = () => {
     setConfirm(!confirm);
   }
 
+  // Toggle the deletion dialog
   const toggleOpen = () => {
     setShowDeleteDialog(!showDeleteDialog);
   }
 
-  const deleteAccount = () => {
-    fetch(currentUserUrl, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ accessToken }`
-      },
-      body: JSON.stringify({
-        'deleteAccount': true,
-        'deleteClips': deleteClips,
-      }),
-    }).then((res) => {
-      if (res.ok) {
-        // Sign out of google
-        signOut();
-        // Delete access token
-        dispatch<ClearAccessTokenAction>(clearAccessToken());
-        // Delete refresh cookie
-        logout();
-        history.push(Path.HOME);
-      }
-    });
+  // Handle account deletion
+  const handleDelete = async () => {
+    // Don't bother if there is no access token
+    if (!accessToken) return;
+
+    setSubmitting(true);
+    // Await successful deletion response
+    if (await deleteAccount(deleteClips, accessToken)) {
+      setSubmitting(false);
+      // Sign out of google
+      signOut();
+      // Delete access token
+      dispatch(clearAccessToken());
+      // Delete refresh cookie
+      logout();
+      // Navigate home
+      history.push(Path.HOME);
+    } 
   }
 
-  // TODO: Handle this better, redirect to home page with an error message
+  // TODO: Handle this better, redirect to home page with an error message / snackbar popup / dialog etc.
   if(!accessToken) {
     return null;
   }
@@ -126,7 +133,10 @@ export default () => {
             }
           />
           <Button variant='contained' onClick={ toggleOpen }>Cancel</Button>
-          <Button variant='contained' onClick={ deleteAccount } disabled={ !confirm } color='secondary'>Delete Account</Button>
+          <div className={ classes.submitWrapper }>
+            <Button variant='contained' onClick={ handleDelete } disabled={ !confirm || submitting } color='secondary'>Delete Account</Button>
+            { submitting && <CircularProgress className={ classes.progress } size={ 24 }/> }
+          </div>
         </DialogActions>
       </Dialog>
       <Paper className={ classes.paper }>
