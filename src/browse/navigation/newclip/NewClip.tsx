@@ -9,6 +9,8 @@ import { Autocomplete, AutocompleteChangeReason, Alert } from '@material-ui/lab'
 import { createNewClip, ClipData } from 'api/clip';
 import { CheckBox as CheckboxIcon, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon } from '@material-ui/icons';
 
+const TAG_LIMIT = 12;
+
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     position: 'relative'
@@ -63,16 +65,18 @@ export default (props: NewClipProps) => {
   });
 
   // Handle changes to the Autocomplete value
-  const handleAutocompleteChange = (event: React.ChangeEvent<any>, value: string[], reason: AutocompleteChangeReason) => {
-    const tags = value;
+  const handleAutocompleteChange = (event: React.ChangeEvent<any>, newTags: string[], reason: AutocompleteChangeReason) => {
+    // Don't add new options if tag limit has been reached
+    if (tags.length >= TAG_LIMIT && reason === 'select-option') return;
+
     // Clear any tag errors
     setTagError('');
     // Modify newly created tag
     if (reason === 'create-option' && tags.length) {
-      tags[tags.length - 1] = tags[tags.length - 1].trim().toLowerCase();
+      newTags[newTags.length - 1] = newTags[newTags.length - 1].trim().toLowerCase();
     }
     // Set new tags
-    setTags(tags);
+    setTags(newTags);
   }
 
   // Prevent wrong values from being added
@@ -82,8 +86,13 @@ export default (props: NewClipProps) => {
     if (event.keyCode === 13) {
       // Trim first for leading/trailing space flexibility
       input.value = input.value.trim().toLowerCase();
+      // Limit number of tags
+      if (tags.length >= TAG_LIMIT) {
+        event.preventDefault();
+        event.stopPropagation();
+        setTagError('Maximum number of tags reached');
       // Only allow single space separated words
-      if (!input.value.match(/^([A-Za-z]+\s)*[A-Za-z]+$/)) {
+      } else if (!input.value.match(/^([A-Za-z]+\s)*[A-Za-z]+$/)) {
         event.preventDefault();
         event.stopPropagation();
         setTagError('Can only contain words separated by single spaces');
@@ -233,9 +242,8 @@ export default (props: NewClipProps) => {
             <Autocomplete
               multiple
               freeSolo
-              // autoHighlight
-              // autoSelect
               autoComplete
+              value={ tags }
               options={ ['wavedash', 'golden', 'meme'] }
               onChange={ handleAutocompleteChange }
               renderInput={(params) =>
@@ -247,6 +255,7 @@ export default (props: NewClipProps) => {
                   margin='normal'
                   error={ !!tagError }
                   helperText={ tagError }
+                  disabled={ tags.length >= TAG_LIMIT }
                   InputProps={{
                     ...params.InputProps,
                     disableUnderline: true,
@@ -265,6 +274,7 @@ export default (props: NewClipProps) => {
                     checkedIcon={ <CheckboxIcon fontSize='small'/> }
                     className={ classes.checkbox }
                     checked={ selected }
+                    disabled={ tags.length >= TAG_LIMIT }
                     color='default'
                   />
                   { option }
