@@ -83,12 +83,13 @@ export default () => {
       setSubmitting(false);
       // Sign out of google
       signOut();
-      // Delete access token
-      dispatch(clearAccessToken());
-      // Delete refresh cookie
-      logout();
-      // Navigate home
-      history.push(Path.HOME);
+      // Await deletion of refresh token cookie
+      if (await logout()) {
+        // Delete access token
+        dispatch(clearAccessToken());
+        // Navigate home
+        history.push(Path.HOME);
+      }
     } 
   }
 

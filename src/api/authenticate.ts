@@ -49,9 +49,10 @@ export const getCurrentUser = (accessToken: string | null): CurrentUser | null =
 
 // Log the user out and clear the refresh token
 export const logout = async () => {
-  await fetch(logoutUrl, {
+  const res = await fetch(logoutUrl, {
     method: 'GET',
   });
+  return res.ok;
 }
 
 // Check if token has expired, issue a new one if it has

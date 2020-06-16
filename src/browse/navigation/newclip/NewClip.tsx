@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button, TextField, Snackbar, Slide, CircularProgress, makeStyles } from '@material-ui/core';
+import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button, TextField, Snackbar, Slide, CircularProgress, Checkbox, makeStyles } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
 import VideoPicker from './VideoPicker';
 import YTLinkParser from 'utils/yt-link-parser';
 import { Autocomplete, AutocompleteChangeReason, Alert } from '@material-ui/lab';
 import { createNewClip, ClipData } from 'api/clip';
+import { CheckBox as CheckboxIcon, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -18,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     marginTop: -12,
     marginLeft: -12,
+  },
+  checkbox: {
+    marginRight: 8,
   }
 }));
 
@@ -229,8 +233,8 @@ export default (props: NewClipProps) => {
             <Autocomplete
               multiple
               freeSolo
-              autoHighlight
-              autoSelect
+              // autoHighlight
+              // autoSelect
               autoComplete
               options={ ['wavedash', 'golden', 'meme'] }
               onChange={ handleAutocompleteChange }
@@ -254,6 +258,18 @@ export default (props: NewClipProps) => {
                   }}
                 />
               }
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    icon={ <CheckBoxOutlineBlankIcon fontSize='small'/> }
+                    checkedIcon={ <CheckboxIcon fontSize='small'/> }
+                    className={ classes.checkbox }
+                    checked={ selected }
+                    color='default'
+                  />
+                  { option }
+                </React.Fragment>
+              )}
             />
           </DialogContent>
           <DialogActions>
