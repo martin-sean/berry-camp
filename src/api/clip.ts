@@ -54,7 +54,7 @@ interface Tag {
 /**
  * Search for clips
  */
-export const getClips = async (chapterId?: string, sideNo?: number, checkpointNo?: number, roomNo?: number): Promise<ClipData[] | null> => {
+export const getClips = async (chapterId?: string, sideNo?: number, checkpointNo?: number, roomNo?: number): Promise<ClipData[] | undefined> => {
   const url = '/v1/clip' +
     `${ chapterId ? `?chapterId=${ chapterId }` : '' }` +
     `${ sideNo ? `&sideNo=${ sideNo }` : '' }` +
@@ -68,7 +68,7 @@ export const getClips = async (chapterId?: string, sideNo?: number, checkpointNo
       'Content-Type': 'application/json',
     },
   });
-  return res.ok ? res.json() : null;
+  return res.ok ? res.json() : undefined;
 }
 
 interface Author {

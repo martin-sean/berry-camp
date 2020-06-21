@@ -189,7 +189,7 @@ export default (props: NewClipProps) => {
               Submit a new clip for the current room. Try to keep the clip short and contained within the room (a few seconds before and after is fine).
             </DialogContentText>
             <TextField
-              inputRef={ register({ maxLength: 32 }) }
+              inputRef={ register({ maxLength: 64 }) }
               fullWidth
               variant='filled'
               autoComplete='off'
@@ -199,7 +199,7 @@ export default (props: NewClipProps) => {
               error={ !!errors.name }
               helperText={ errors.name?.message }
               inputProps={{
-                maxLength: 32,
+                maxLength: 64,
               }}
               margin='normal'
             />

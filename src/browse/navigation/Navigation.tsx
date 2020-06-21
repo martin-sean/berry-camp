@@ -80,7 +80,8 @@ export default (props: NavigationProps) => {
   const accessToken = useSelector((store: GlobalStore) => store.accessToken);
 
   // Save clips from database
-  const [clips, setClips] = useState<ClipData[] | null>();
+  // undefined = loading, [] = None found, null = error
+  const [clips, setClips] = useState<ClipData[] | undefined | null>();
 
   // Chapter image loading
   const [chapterLoaded, setChapterLoaded] = useState(false);
@@ -174,6 +175,15 @@ export default (props: NavigationProps) => {
       unmounted = true;
     }
   }, [chapterId, sideNo, checkpointNo, roomNo, setClips]);
+
+  // Check for server timeout
+  useEffect(() => {
+    const awaitClips = () => { 
+      if(!clips) setClips(null);
+    }
+    const timeout = setTimeout(awaitClips, 10000);
+    return () => clearTimeout(timeout);
+  })
 
   // Navigation buttons
   interface NavButtonsProps {
@@ -350,14 +360,17 @@ export default (props: NavigationProps) => {
               { clips.map((clip, index) => <ClipItem key={ index } clip={ clip } handleSelect={ setClipCallback }/>) }
             </List>
           // No clips
-          ) : clips?.length === 0 ? (
-            <div className={ classes.centeredWrapper }>
-              <Typography variant='h5' color='textSecondary'>No clips found</Typography>
-            </div>
-          // Loading
           ) : (
             <div className={ classes.centeredWrapper }>
-              <CircularProgress color='primary' size={ 56 }/>
+              { clips && clips.length === 0 ? (
+                <Typography variant='h5' color='textSecondary'>No clips found</Typography>
+              // Loading
+              ) : clips === undefined ? (
+                <CircularProgress color='primary' size={ 56 }/>
+              // Error
+              ) : (
+                <Typography variant='h5' color='secondary'>An error occured while loading clips</Typography>
+              )}
             </div>
           )}
         </Grid>
