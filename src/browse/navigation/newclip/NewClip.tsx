@@ -6,7 +6,7 @@ import { GlobalStore } from 'redux/reducers';
 import VideoPicker from './VideoPicker';
 import YTLinkParser from 'utils/yt-link-parser';
 import { Autocomplete, AutocompleteChangeReason, Alert } from '@material-ui/lab';
-import { createNewClip, ClipData } from 'api/clip';
+import { createNewClip, NewClipData } from 'api/clip';
 import { CheckBox as CheckboxIcon, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon } from '@material-ui/icons';
 
 const TAG_LIMIT = 12;
@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 interface NewClipProps {
   open: boolean,
   setOpen: (open: boolean) => void,
+  refreshClips: () => void,
 }
 
 export default (props: NewClipProps) => {
@@ -120,18 +121,24 @@ export default (props: NewClipProps) => {
   const onSubmit = async (data: Record<string, any>) => {
     setSubmitting(true);
     // Build the response object
-    const submitData: any = {
-      ...nav,
-      ...data,
+    const submitData: NewClipData = {
+      chapterId: nav.chapterId,
+      sideNo: parseInt(nav.sideNo),
+      checkpointNo: parseInt(nav.checkpointNo),
+      roomNo: parseInt(nav.roomNo),
+      ...(data.name && { name: data.name as string }),
+      ...(data.description && { description: data.description as string }),
+      videoId: data.videoId as string,
       startTime: startTime!,
       endTime: endTime!,
       tags,
     }
     // Check for successful clip creation
-    if (await createNewClip(submitData as ClipData, accessToken, dispatch)) {
+    if (await createNewClip(submitData, accessToken, dispatch)) {
       handleClose();
       setSnackSuccess(true);
       setSnackMessage("Clip submitted");
+      props.refreshClips();
     // Error occured during clip creation
     } else {
       setSnackSuccess(false);
@@ -182,7 +189,7 @@ export default (props: NewClipProps) => {
               Submit a new clip for the current room. Try to keep the clip short and contained within the room (a few seconds before and after is fine).
             </DialogContentText>
             <TextField
-              inputRef={ register({ maxLength: 64 }) }
+              inputRef={ register({ maxLength: 32 }) }
               fullWidth
               variant='filled'
               autoComplete='off'
@@ -192,7 +199,7 @@ export default (props: NewClipProps) => {
               error={ !!errors.name }
               helperText={ errors.name?.message }
               inputProps={{
-                maxLength: 64,
+                maxLength: 32,
               }}
               margin='normal'
             />

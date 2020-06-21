@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Navigation, NavActionProps } from 'redux/reducers';
-import { makeStyles, Paper, Grid, Typography, Fade, Button, Fab } from '@material-ui/core';
+import { Navigation, NavActionProps, GlobalStore } from 'redux/reducers';
+import { makeStyles, Paper, Grid, Typography, Fade, Button, Fab, CircularProgress, List } from '@material-ui/core';
 import { DataTree, Chapter, Side, Checkpoint } from 'api/data';
 import pluralize from 'utils/pluralize';
 import { Skeleton } from '@material-ui/lab';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SetNavAction, setNav } from 'redux/actions';
 import Room from 'browse/navigation/room';
 import { AddToQueue } from '@material-ui/icons';
 import NewClip from './newclip';
+import RoomNav from './roomnav';
+import { getClips, ClipData } from 'api/clip';
+import Clip from './clip/Clip';
+import commonStyles from 'utils/common-styles';
+import ClipItem from './clipitem';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,18 +30,6 @@ const useStyles = makeStyles((theme) => ({
   },
   chapterImage: {
     width: '100%',
-  },
-  loadingImageContainer: {
-    position: 'relative',
-    width: '100%',
-    paddingTop: '56.5%',
-  },
-  loadingImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
   },
   button: {
     width: '100%',
@@ -58,6 +51,12 @@ const useStyles = makeStyles((theme) => ({
   newClipIcon: {
     marginRight: theme.spacing(1),
   },
+  centeredWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: theme.spacing(3),
+  },
 }));
 
 const prevText = '◄ Prev';
@@ -73,11 +72,22 @@ const chapterImageUrl = 'https://f002.backblazeb2.com/file/berrycamp/static/navi
 
 export default (props: NavigationProps) => {
   const classes = useStyles();
+  const commonClasses = commonStyles();
+
   const dispatch = useDispatch();
+
+  // Check if logged in
+  const accessToken = useSelector((store: GlobalStore) => store.accessToken);
+
+  // Save clips from database
+  const [clips, setClips] = useState<ClipData[] | null>();
 
   // Chapter image loading
   const [chapterLoaded, setChapterLoaded] = useState(false);
   
+  // Show the clip modal
+  const [clip, setClip] = useState<ClipData>();
+
   // Show the new clip modal
   const [newClipOpen, setNewClipOpen] = useState<boolean>(false);
 
@@ -109,19 +119,61 @@ export default (props: NavigationProps) => {
   const nextCheckpointNo = checkpointNo ? checkpointNo + 1 : undefined;
   const nextCheckpoint = nextCheckpointNo ? side?.checkpoints[nextCheckpointNo] : undefined;
 
+  const roomNo = props.nav.roomNo ? parseInt(props.nav.roomNo) : undefined;
+
+  const setClipCallback = useCallback((clip?: ClipData) => {
+    setClip(clip);
+  }, [setClip]);
+
+  // Callback to set the NewClip dialog open status
   const setNewClipOpenCallback = useCallback((open: boolean) => {
     setNewClipOpen(open);
   }, [setNewClipOpen]);
+
+  // Clear the clips and trigger a refresh
+  const refreshClipsCallback = useCallback(() => {
+    setClips(undefined);
+  }, [setClips]);
 
   // Set the current navigation in redux state
   const setNavigation = (nav: NavActionProps) => {
     dispatch<SetNavAction>(setNav(nav));
   }
 
+  // Track the scroll position for displaying the FAB
+  const [hideFab, setHideFab] = useState<boolean>(false);
+  useEffect(() => {
+    // Only continue of on room page
+    if (!props.nav.roomNo) return;
+
+    const handleScroll = () => setHideFab(window.pageYOffset > 50);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [props.nav.roomNo, setHideFab]);
+
   // Reload chapter image on chapter change
   useEffect(() => {
     setChapterLoaded(false);
   }, [props.nav.chapterId, setChapterLoaded]);
+
+  // Load clip data
+  useEffect(() => {
+    let unmounted = false;
+    // Clear the clips
+    setClips(undefined);
+    // Declare function to set the clips
+    const fetchClips = async () => {
+      const clips = await getClips(chapterId, sideNo, checkpointNo, roomNo);
+      if (!unmounted) setClips(clips);
+    }
+    // Wait before fetching clips
+    const timeout = setTimeout(fetchClips, 1000);
+    // Cleanup
+    return () => {
+      clearTimeout(timeout);
+      unmounted = true;
+    }
+  }, [chapterId, sideNo, checkpointNo, roomNo, setClips]);
 
   // Navigation buttons
   interface NavButtonsProps {
@@ -172,8 +224,8 @@ export default (props: NavigationProps) => {
         <Typography className={ classes.chapterDesc } color='textSecondary'>{ chapter.desc }</Typography>
         {/* Render a placeholder while the chapter image loads */}
         { !chapterLoaded && (
-          <div className={ classes.loadingImageContainer }>
-            <Skeleton className={ classes.loadingImage } variant='rect' />
+          <div className={ commonClasses.aspectBox }>
+            <Skeleton className={ commonClasses.aspectContent } variant='rect' />
           </div>
         )}
         <Fade in={ chapterLoaded }>
@@ -203,8 +255,8 @@ export default (props: NavigationProps) => {
             <NavButtons
               prev={ !!prevSide }
               next={ !!nextSide }
-              prevNav={ prevSideNo ? { chapterId: chapterId, sideNo: prevSideNo.toString() } : { } }
-              nextNav={ nextSideNo ? { chapterId: chapterId, sideNo: nextSideNo.toString() } : { } }
+              prevNav={ prevSideNo ? { chapterId: chapterId, sideNo: prevSideNo.toString() } : {} }
+              nextNav={ nextSideNo ? { chapterId: chapterId, sideNo: nextSideNo.toString() } : {} }
             />
           </Grid>
         </Grid>
@@ -238,8 +290,12 @@ export default (props: NavigationProps) => {
   // Main Navigation Body
   return (
     <React.Fragment>
+      {/* Render Clip dialog */}
+      {/* TODO: Save mute in state */}
+      { clip && <Clip clip={ clip } close={ setClipCallback } mute={ false }/> }
+      
       {/* Render the new clip dialog */}
-      <NewClip open={ newClipOpen } setOpen={ setNewClipOpenCallback }/>
+      <NewClip open={ newClipOpen } setOpen={ setNewClipOpenCallback } refreshClips={ refreshClipsCallback }/>
 
       <Grid container spacing={ 3 }>
         {/* Left Side */}
@@ -257,6 +313,7 @@ export default (props: NavigationProps) => {
                     />
                   </Paper>
                 </Fade>
+                <RoomNav data={ props.data } nav={ props.nav }/>
               </Grid>
             </React.Fragment> 
           ) : (
@@ -285,18 +342,29 @@ export default (props: NavigationProps) => {
           )}
         </Grid>
 
-        {/* Right Side */}
+        {/* Render the clips*/}
         <Grid item xs={ 12 } lg={ 7 }>
-          {/* TODO: Placeholder */}
-          <Skeleton animation={ false } height={ 50 }/>
-          <Skeleton animation={ false } height={ 50 }/>
-          <Skeleton animation={ false } height={ 50 }/>
-          <Skeleton animation={ false } height={ 50 }/>
+          {/* Loaded */}
+          { clips && clips.length > 0 ? (
+            <List classes={{ root: commonClasses.noPadding }}>
+              { clips.map((clip, index) => <ClipItem key={ index } clip={ clip } handleSelect={ setClipCallback }/>) }
+            </List>
+          // No clips
+          ) : clips?.length === 0 ? (
+            <div className={ classes.centeredWrapper }>
+              <Typography variant='h5' color='textSecondary'>No clips found</Typography>
+            </div>
+          // Loading
+          ) : (
+            <div className={ classes.centeredWrapper }>
+              <CircularProgress color='primary' size={ 56 }/>
+            </div>
+          )}
         </Grid>
       </Grid>
       {/* New clip button for current room */}
-      { room && (
-        <Fab variant="extended" className={ classes.newClipButton } onClick={ () => setNewClipOpen(true) }>
+      { room && accessToken && (
+        <Fab disabled={ hideFab } variant="extended" className={ classes.newClipButton } onClick={ () => setNewClipOpen(true) }>
           <AddToQueue className={ classes.newClipIcon } />
           Submit Clip
         </Fab>

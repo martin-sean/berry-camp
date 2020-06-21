@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Typography, makeStyles, Fade } from '@material-ui/core';
 import fetchJson from 'utils/fetch-json';
 import Skeleton from '@material-ui/lab/Skeleton';
+import commonStyles from 'utils/common-styles';
 
 const welcomeUrl = 'https://cdn.berrycamp.com/file/berrycamp/static/welcome/';
 const contentUrl = `${ welcomeUrl }content.json`;
@@ -35,20 +36,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     objectFit: 'cover',
   },
-  // Aspect ratio container
   loadingImageContainer: {
-    position: 'relative',
-    width: '100%',
-    paddingTop: '56.25%',
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-  },
-  loadingImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
   },
   accent: {
     color: theme.palette.secondary.main,
@@ -65,6 +55,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default React.memo(() => {
   const classes = useStyles();
+  const commonClasses = commonStyles();
+
   const [content, setContent] = useState<string[]>([]);
   const [image, setImage] = useState<string>('');
   const [loaded, setLoaded] = useState(false);
@@ -111,8 +103,8 @@ export default React.memo(() => {
           )}
 
           { !loaded && (
-            <div className={ classes.loadingImageContainer }>
-              <Skeleton className={ classes.loadingImage } variant="rect" />
+            <div className={ commonClasses.aspectBox }>
+              <Skeleton className={ commonClasses.aspectContent } variant="rect" />
             </div>
           )}
           <Fade in={ loaded }>

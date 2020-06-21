@@ -4,9 +4,9 @@ import  './Room.css';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 import { makeStyles, Fade, Theme, Typography, Divider, Modal, Backdrop, useTheme, useMediaQuery } from '@material-ui/core'
-
 import { DataTree } from 'api/data';
 import { Navigation } from 'redux/reducers';
+import commonStyles from 'utils/common-styles';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
@@ -27,19 +27,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   imageWrapper: {
     paddingBottom: theme.spacing(1),
-  },
-  // Aspect ratio container
-  loadingImageContainer: {
-    width: '100%',
-    paddingTop: '56.25%',
-    position: 'relative',
-  },
-  loadingImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
   },
   info: {
     fontSize: '12pt',
@@ -84,7 +71,8 @@ interface RoomProps {
 
 export default React.memo((props: RoomProps) => {
   const classes = useStyles();
- 
+  const commonClasses = commonStyles();
+
   // Breakpoints for showing large image on click
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('md'));
@@ -136,8 +124,8 @@ export default React.memo((props: RoomProps) => {
       <div className={ classes.imageWrapper }>
         {
           !loaded &&
-          <div className={ classes.loadingImageContainer }>
-            <Skeleton variant="rect" className={ classes.loadingImage } />
+          <div className={ commonClasses.aspectBox }>
+            <Skeleton variant="rect" className={ commonClasses.aspectContent } />
           </div>
         }
         <Fade in={ loaded }>

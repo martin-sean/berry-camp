@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
 import * as Path from 'pages/paths';
 import NavbarSpacer from 'pages/common/navbarspacer';
 import { deleteAccount } from 'api/user';
-
+ 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default () => {
   const classes = useStyles();
+
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteClips, setDeleteClips] = useState(false);
   const [confirm, setConfirm] = useState(false);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { makeStyles, Divider, Typography, Paper } from '@material-ui/core';
+import { makeStyles, Typography, Paper } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Drawer from './drawer';
 import { GlobalStore } from 'redux/reducers';
@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
-    overflow: 'hidden',
   },
   divider: {
     marginTop: theme.spacing(1),
@@ -112,7 +111,6 @@ export default (props: BrowseProps) => {
               <React.Fragment>
                 {/* Navigation breadcrumbs */}
                 <Breadcrumbs data={ data } nav={ nav } />
-                <Divider className={ classes.divider } />
                 {/* Render naviation */}
                 <Navigation data={ data } nav={ nav } setDocTitle={ props.setTitle }/> 
               </React.Fragment>

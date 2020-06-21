@@ -10,6 +10,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 const useStyles = makeStyles((theme) => ({
   wrapper:{
     marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',

@@ -1,25 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Youtube from 'react-youtube';
+import YouTube from 'react-youtube';
 import { Slider, makeStyles, Mark } from '@material-ui/core';
+import commonStyles from 'utils/common-styles';
+import { formatSeconds } from 'utils/clip-time';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  // Aspect ratio container
-  playerContainer: {
-    width: '100%',
-    paddingTop: '56.25%',
-    position: 'relative',
-  },
-  player: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
   },
   slider: {
     width: '80%',
@@ -34,6 +23,8 @@ interface VideoPickerProps {
 
 export default (props: VideoPickerProps) => {
   const classes = useStyles();
+  const commonClasses = commonStyles();
+
   // Set the default selected clip times
   const defaultStartTime = props.startTime || 0;
   const defaultEndTime = defaultStartTime + 20;
@@ -65,16 +56,10 @@ export default (props: VideoPickerProps) => {
 
     // Set the slider marks
     setMarks([
-      { value: startRange, label: secondsToString(startRange) },
-      { value: endRange, label: `${ secondsToString(endRange) } (${ secondsToString(duration)})` }
+      { value: startRange, label: formatSeconds(startRange) },
+      { value: endRange, label: `${ formatSeconds(endRange) } (${ formatSeconds(duration)})` }
     ]);
   }, [startTime, endTime])
-
-  const secondsToString = (value: number) => {
-    const minutes = Math.floor(value / 60);
-    const seconds = Math.floor(value % 60);
-    return `${ minutes ? `${ minutes.toString().padStart(1, '0') }` : '00' }:${ seconds.toString().padStart(2, '0')}`;
-  }
 
   // Set the length of the video
   const handleReady = (event: { target: YT.Player }) => {
@@ -94,8 +79,8 @@ export default (props: VideoPickerProps) => {
     } else {
       setEndTime(duration);
       setMarks([
-        { value: 0, label: secondsToString(startTime) },
-        { value: duration, label: secondsToString(duration) }
+        { value: 0, label: formatSeconds(startTime) },
+        { value: duration, label: formatSeconds(duration) }
       ]);
       props.setTimes(0, duration);
     }
@@ -121,7 +106,7 @@ export default (props: VideoPickerProps) => {
     let interval: NodeJS.Timeout;
     if (player) {
       interval = setInterval(() => {
-        if (player.getPlayerState() === Youtube.PlayerState.PLAYING) {
+        if (player.getPlayerState() === YouTube.PlayerState.PLAYING) {
           const currentTime = player.getCurrentTime();
           if (currentTime > endTime || currentTime < startTime ) {
             player.seekTo(startTime, true);
@@ -134,9 +119,9 @@ export default (props: VideoPickerProps) => {
 
   return (
     <div className={ classes.wrapper }>
-      <div className={ classes.playerContainer }>
-        <Youtube
-          className={ classes.player }
+      <div className={ commonClasses.aspectBox }>
+        <YouTube
+          className={ commonClasses.aspectContent }
           videoId={ props.videoId }
           onReady={ handleReady }
           opts={{
@@ -163,7 +148,7 @@ export default (props: VideoPickerProps) => {
           min={ marks[0].value }
           max={ marks[1].value }
           marks={ marks }
-          valueLabelFormat={ secondsToString }
+          valueLabelFormat={ formatSeconds }
           onChange={ handleTimesChange }
           onChangeCommitted={ handleCommited }
         />

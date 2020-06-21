@@ -42,7 +42,6 @@ export const getCurrentUser = (accessToken: string | null): CurrentUser | null =
   try {
     return JwtDecode(accessToken);
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
@@ -74,7 +73,6 @@ export const tokenStillValid = (accessToken: string): boolean => {
     const { exp } = JwtDecode(accessToken);
     return Date.now.valueOf() < exp * 1000;
   } catch (error) {
-    console.log(error);
     return false;
   }
 }

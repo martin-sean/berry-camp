@@ -74,9 +74,11 @@ export default (props: SignInProps) => {
 
   // Handle google login
   const handleLogin = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    const auth = (res as GoogleLoginResponse).getAuthResponse();
-    const success = await login(auth.id_token, dispatch);
-    setShowBackdrop(!success);
+    if ((res as GoogleLoginResponse).getAuthResponse !== undefined) {
+      const auth = (res as GoogleLoginResponse).getAuthResponse();
+      await login(auth.id_token, dispatch);
+    }
+    setShowBackdrop(false);
   }
 
   // TODO: Handle situation when google credentials expire and 
