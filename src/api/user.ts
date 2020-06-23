@@ -1,6 +1,4 @@
 import urlSetter from "./url-setter";
-import { Dispatch } from "redux";
-import { setAccessToken } from "redux/actions";
 
 const currentUserUrl = urlSetter('/v1/user/current');
 
@@ -22,7 +20,7 @@ export const validateUsername = async (username: string, accessToken: string) =>
 }
 
 // Update account username
-export const setNewUsername = async (username: string, accessToken: string, dispatch: Dispatch<any>) => {
+export const setNewUsername = async (username: string, accessToken: string): Promise<string | null> => {
   const res = await fetch(currentUserUrl, {
     method: 'PATCH',
     headers: {
@@ -34,12 +32,7 @@ export const setNewUsername = async (username: string, accessToken: string, disp
       username: username,
     })
   });
-  
-  // Set the new access token
-  if (res.ok) {
-    const newAccessToken = await res.text();
-    dispatch(setAccessToken(newAccessToken));
-  }
+  return res.ok ? res.text() : null; 
 }
 
 // Get a user by username

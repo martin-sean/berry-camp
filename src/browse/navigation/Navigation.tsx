@@ -359,8 +359,8 @@ export default (props: NavigationProps) => {
             <List classes={{ root: commonClasses.noPadding }}>
               { clips.map((clip, index) => <ClipItem key={ index } clip={ clip } handleSelect={ setClipCallback }/>) }
             </List>
-          // No clips
           ) : (
+            // No clips
             <div className={ classes.centeredWrapper }>
               { clips && clips.length === 0 ? (
                 <Typography variant='h5' color='textSecondary'>No clips found</Typography>

@@ -115,9 +115,11 @@ export default (props: ClipProps) => {
       interval = setInterval(() => {
         if (player.getPlayerState() === YouTube.PlayerState.PLAYING) {
           const currentTime = player.getCurrentTime();
-          setSliderValue(currentTime);
           if (currentTime > props.clip.end_time || currentTime < props.clip.start_time ) {
             player.seekTo(props.clip.start_time, true);
+            setSliderValue(props.clip.start_time);
+          } else {
+            setSliderValue(currentTime);
           }
         }
       }, 1000);

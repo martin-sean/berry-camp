@@ -59,7 +59,7 @@ export default (props: ClipItemProps) => {
   // TODO: Fix
   const handleClipDelete = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: number) => {
     event.stopPropagation();
-    // if (!accessToken) return;
+    if (!accessToken) return;
     await deleteClip(id, accessToken || '');
   }
 

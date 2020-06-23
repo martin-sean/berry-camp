@@ -3,6 +3,7 @@ import { TextField, Dialog, DialogTitle, DialogContent, DialogContentText, Dialo
 import { Check as CheckIcon, ErrorOutline as ErrorIcon } from '@material-ui/icons';
 import { useDispatch } from 'react-redux';
 import { setNewUsername, validateUsername } from 'api/user';
+import { setAccessToken } from 'redux/actions';
 
 const usernamePattern = new RegExp('^\\w+$');
 
@@ -33,7 +34,6 @@ interface RegistrationProps {
 
 export default (props: RegistrationProps) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
   const [error, setError] = useState<boolean | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // Store a valid username to submit
@@ -80,14 +80,14 @@ export default (props: RegistrationProps) => {
     // Username must be present
     if (!username) return;
     setSubmitting(true);
-    await setNewUsername(username, props.accessToken, dispatch);
+    const newAccessToken = await setNewUsername(username, props.accessToken);
     setSubmitting(false);
-    setOpen(false);
+    newAccessToken && dispatch(setAccessToken(newAccessToken));
   }
 
   return (
     <React.Fragment>
-      <Dialog open={ open }>
+      <Dialog open={ true }>
         <DialogTitle>Enter a username</DialogTitle>
         <DialogContent>
           <DialogContentText>
