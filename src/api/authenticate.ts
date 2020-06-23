@@ -1,7 +1,5 @@
 import JwtDecode from 'jwt-decode';
 import UrlSetter from 'api/url-setter';
-import { Dispatch } from 'redux';
-import { setAccessToken, SetAccessTokenAction } from 'redux/actions';
 
 const loginUrl = UrlSetter('/v1/auth/login');
 const refreshUrl = UrlSetter('/v1/auth/refresh');
@@ -14,7 +12,7 @@ export interface CurrentUser {
 }
 
 // Log the user in and retrieve the access and refresh token
-export const login = async (idToken: string, dispatch: Dispatch<any>): Promise<boolean> => {
+export const login = async (idToken: string): Promise<string | null> => {
   const res = await fetch(loginUrl, {
     method: 'POST',
     headers: {
@@ -25,15 +23,7 @@ export const login = async (idToken: string, dispatch: Dispatch<any>): Promise<b
       idToken: idToken,
     })
   });
-    
-  // Check if response is ok
-  if (res.ok) {
-    const accessToken = await res.text();
-    dispatch(setAccessToken(accessToken));
-    return true;
-  }
-  // Could not login
-  return false;
+  return res.ok ? await res.text() : null;
 }
 
 // Decode the JWT access token and get the current user
@@ -55,16 +45,11 @@ export const logout = async () => {
 }
 
 // Check if token has expired, issue a new one if it has
-export const getNewTokenIfRequired = async (accessToken: string | null, dispatch: Dispatch<any>): Promise<string | null> => {
+export const getNewTokenIfRequired = async (accessToken: string | null): Promise<string | null> => {
   // Return current access token if it's still valid
   if (accessToken && tokenStillValid(accessToken)) return accessToken;
   // Token needs refreshing
-  const newAccessToken = await issueNewAccessToken();
-  // Check if refresh was successful
-  if (!newAccessToken) return null;
-  // Set the new accessToken
-  dispatch<SetAccessTokenAction>(setAccessToken(newAccessToken));
-  return newAccessToken;
+  return issueNewAccessToken();
 }
 
 // Check access token expiry. Return false if it needs refreshing

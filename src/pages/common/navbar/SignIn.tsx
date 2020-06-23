@@ -4,7 +4,7 @@ import GoogleLogin, { GoogleLoginResponseOffline, GoogleLoginResponse, useGoogle
 import clientId from 'api/client';
 import { login, logout, getCurrentUser } from 'api/authenticate';
 import { useDispatch } from 'react-redux';
-import { clearAccessToken } from 'redux/actions';
+import { clearAccessToken, setAccessToken } from 'redux/actions';
 import { Button, Menu, MenuItem, makeStyles, CircularProgress, Backdrop, Typography } from '@material-ui/core';
 import { Person, SupervisorAccount } from '@material-ui/icons';
 import { Link, useHistory } from 'react-router-dom';
@@ -76,7 +76,8 @@ export default (props: SignInProps) => {
   const handleLogin = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     if ((res as GoogleLoginResponse).getAuthResponse !== undefined) {
       const auth = (res as GoogleLoginResponse).getAuthResponse();
-      await login(auth.id_token, dispatch);
+      const accessToken = await login(auth.id_token);
+      accessToken && dispatch(setAccessToken(accessToken));
     }
     setShowBackdrop(false);
   }

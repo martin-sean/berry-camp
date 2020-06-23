@@ -18,6 +18,7 @@ import { getNewTokenIfRequired, getCurrentUser } from 'api/authenticate';
 import { useDispatch, useSelector } from 'react-redux';
 import Registration from 'pages/common/registration';
 import { GlobalStore } from 'redux/reducers';
+import { setAccessToken } from 'redux/actions';
 
 const theme = createMuiTheme({
   palette: {
@@ -60,7 +61,11 @@ export default () => {
  
   // Refresh the access token
   useEffect(() => {
-    getNewTokenIfRequired(accessToken, dispatch);
+    const refresh = async () => {
+      const newAccessToken = await getNewTokenIfRequired(accessToken);
+      newAccessToken && dispatch(setAccessToken(newAccessToken));
+    }
+    refresh();
   }, [accessToken, dispatch])
 
   return ( 
