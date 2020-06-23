@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button, TextField, Snackbar, Slide, CircularProgress, Checkbox, makeStyles } from '@material-ui/core';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
 import VideoPicker from './VideoPicker';
 import YTLinkParser from 'utils/yt-link-parser';
@@ -50,9 +50,6 @@ export default (props: NewClipProps) => {
   const [snackSuccess, setSnackSuccess] = useState<boolean>(false);
   const [snackMessage, setSnackMessage] = useState<string>();
   const [submitting, setSubmitting] = useState<boolean>(false);
-
-  // Redux action dispatch
-  const dispatch = useDispatch();
 
   interface FormData {
     name: string,
@@ -134,7 +131,7 @@ export default (props: NewClipProps) => {
       tags,
     }
     // Check for successful clip creation
-    if (await createNewClip(submitData, accessToken, dispatch)) {
+    if (await createNewClip(submitData, accessToken)) {
       handleClose();
       setSnackSuccess(true);
       setSnackMessage("Clip submitted");

@@ -1,5 +1,4 @@
 import urlSetter from 'api/url-setter';
-import { Dispatch } from 'redux';
 import { getNewTokenIfRequired } from 'api/authenticate';
 
 export interface NewClipData {
@@ -18,9 +17,9 @@ export interface NewClipData {
 /**
  * Create a new clip, return a promise containing a boolean indicating whether successful
  */ 
-export const createNewClip = async (clipData: NewClipData, accessToken: string | null, dispatch: Dispatch<any>): Promise<boolean> => {
+export const createNewClip = async (clipData: NewClipData, accessToken: string | null): Promise<boolean> => {
   // Refresh access token if required
-  const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
+  const newAccessToken = await getNewTokenIfRequired(accessToken);
   if (!newAccessToken) return false;
   // Fetch the response
   const res = await fetch(urlSetter('/v1/clip'), {
