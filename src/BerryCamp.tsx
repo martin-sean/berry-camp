@@ -42,6 +42,13 @@ const theme = createMuiTheme({
 export default () => {
   // Remember the drawer state
   const [open, setOpen] = useState(false);
+  const [showUsernameDialog, setShowUsernameDialog] = useState<boolean>(false);
+  // Authentication
+  const accessToken = useSelector((store: GlobalStore) => store.accessToken);
+  const currentUser = getCurrentUser(accessToken);
+  
+  const requestUsername = Boolean(accessToken && showUsernameDialog);
+  const requiresUsername = Boolean(accessToken && currentUser && !currentUser.username);
   
   // Accept redux actions
   const dispatch = useDispatch();
@@ -56,8 +63,10 @@ export default () => {
     document.title = 'Berry Camp · ' + (title || 'Error');
   }, []);
  
-  const accessToken = useSelector((store: GlobalStore) => store.accessToken);
-  const currentUser = getCurrentUser(accessToken);
+  // Allow the user to change their username
+  const setShowUsernameDialogCallback = useCallback((open: boolean) => {
+    setShowUsernameDialog(open);
+  }, [setShowUsernameDialog]);
  
   // Refresh the access token
   useEffect(() => {
@@ -71,8 +80,14 @@ export default () => {
   return ( 
     <ThemeProvider theme={ theme }>
       <CssBaseline />
-      {/* If the current user has no username, request it */}
-      { accessToken && currentUser && !currentUser.username && (<Registration accessToken={ accessToken }/>)}
+      {/* Open username dialog if requested or required */}
+      { (requestUsername || requiresUsername) && (
+        <Registration
+          accessToken={ accessToken! }
+          requiresUsername={ requiresUsername }
+          setShowUsernameDialog={ setShowUsernameDialogCallback }
+        />
+      )}
       {/* Navbar */}
       <Navbar open={ open } setDrawerOpen={ setDrawerOpen } />
       {/* Main content */}
@@ -81,7 +96,9 @@ export default () => {
         <Route exact path={ Path.ABOUT } component={ About }/>
         <Route exact path={ Path.PRIVACY } component={ Privacy }/>
         <Route exact path={ Path.PROFILE } component={ Profile }/>
-        <Route exact path={ Path.ACCOUNT } component={ Account }/>
+        <Route exact path={ Path.ACCOUNT }>
+          <Account setShowUsernameDialog={ setShowUsernameDialogCallback }/>
+        </Route>
         <Route exact path={ Path.BROWSE }>
           <Browse open={ open } setDrawerOpen={ setDrawerOpen } setTitle={ setDocTitle }/>
         </Route>

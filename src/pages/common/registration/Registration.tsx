@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
 
 interface RegistrationProps {
   accessToken: string,
+  requiresUsername: boolean,
+  setShowUsernameDialog: (open: boolean) => void,
 }
 
 export default (props: RegistrationProps) => {
@@ -83,6 +85,7 @@ export default (props: RegistrationProps) => {
     const newAccessToken = await setNewUsername(username, props.accessToken);
     setSubmitting(false);
     newAccessToken && dispatch(setAccessToken(newAccessToken));
+    props.setShowUsernameDialog(false);
   }
 
   return (
@@ -120,6 +123,13 @@ export default (props: RegistrationProps) => {
           </div>
         </DialogContent>
         <DialogActions>
+          <Button
+            variant='contained'
+            onClick={ () => props.setShowUsernameDialog(false) }
+            disabled={ props.requiresUsername }
+            color='default'>
+              Cancel
+          </Button>
           <div className={ classes.submitWrapper }>
             <Button disabled={ submitting || !username } variant='contained' onClick={ handleSubmit }>Submit</Button>
             { submitting && <CircularProgress className={ classes.progress } size={ 24 }/> }

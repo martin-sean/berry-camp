@@ -42,7 +42,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+interface AccountProps {
+  setShowUsernameDialog: (open: boolean) => void,
+}
+
+export default (props: AccountProps) => {
   const classes = useStyles();
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -94,10 +98,14 @@ export default () => {
     } 
   }
 
-  // TODO: Handle this better, redirect to home page with an error message / snackbar popup / dialog etc.
-  if(!accessToken) {
-    return null;
-  }
+  if(!accessToken) return (
+    <Container maxWidth='md'>
+      <NavbarSpacer />
+      <Paper className={ classes.paper }>
+        <Typography variant='h5'>Not logged in</Typography>
+      </Paper>
+    </Container>
+  );
 
   return (
     <Container maxWidth='md'>
@@ -143,7 +151,13 @@ export default () => {
       </Dialog>
       <Paper className={ classes.paper }>
         <Typography className={ classes.heading } variant='h5'>Account</Typography>
-        <Typography className={ classes.paragraph } color='textSecondary'>Todo</Typography>
+        <Button
+          variant='outlined'
+          size='small'
+          onClick={ () => props.setShowUsernameDialog(true) }
+          color='default'>
+            Change username
+          </Button>
       </Paper>
 
       <Paper className={ classes.paper }>
