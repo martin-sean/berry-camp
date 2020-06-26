@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import commonStyles from 'utils/common-styles';
-import { makeStyles, ListItem, Paper, Typography, Chip, IconButton } from '@material-ui/core';
+import { makeStyles, ListItem, Paper, Typography, Chip, IconButton, Box } from '@material-ui/core';
 import { ClipData } from 'api/clip';
 import { formatSecondsWords } from 'utils/clip-time';
 import { Skeleton } from '@material-ui/lab';
@@ -18,11 +18,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  flexRow: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   thumbnailWrapper: {
     minWidth: '120px',
     marginRight: theme.spacing(2),
@@ -30,11 +25,10 @@ const useStyles = makeStyles(theme => ({
   thumbnail: {
     objectFit: 'cover',
   },
-  moreButton: {
-    // height: '100%',
-  },
   tag: {
     margin: theme.spacing(0.5),
+    maxWidth: 100,
+    textOverflow: 'ellipsis',
   },
   duration: {
     marginLeft: theme.spacing(1),
@@ -81,7 +75,7 @@ export default (props: ClipItemProps) => {
       >
         <Paper className={ classes.clipPaper }>
           {/* Left Side */}
-          <div className={ classes.flexRow }>
+          <Box display='flex' flexDirection='row' alignItems='center'>
             <div className={ classes.thumbnailWrapper }>
               <div className={ commonClasses.aspectBox }>
                 { thumbnailLoaded && <Skeleton className={ commonClasses.aspectContent }/>}
@@ -95,13 +89,15 @@ export default (props: ClipItemProps) => {
               </div>
             </div>
             <Typography variant='h6'>{ props.clip.name || 'Untitled' }</Typography>
-          </div>
+          </Box>
           {/* Right side */}
-          <div className={ classes.flexRow }>
+          <Box display='flex' flexDirection='row' alignItems='center'>
             {/* Render first two tags */}
-            { props.clip.tags.slice(0, 2).map((tag, index) => (
-              <Chip key={ index } className={ classes.tag } label={ tag.name }/>
-            ))}
+            <Box display='flex' flexDirection='row' flexWrap='wrap' justifyContent='flex-end'>
+              { props.clip.tags.slice(0, 2).map((tag, index) => (
+                <Chip key={ index } className={ classes.tag } label={ tag.name }/>
+              ))}
+            </Box>
             {/* Clip Length */}
             <Typography
               className={ classes.duration } 
@@ -113,7 +109,6 @@ export default (props: ClipItemProps) => {
             {/* Render options if moderator or author */}
             { (isModerator || isAuthor) && (
               <IconButton
-                className={ classes.moreButton }
                 aria-label="more"
                 aria-controls="clip-actions-menu"
                 aria-haspopup="true"
@@ -123,7 +118,7 @@ export default (props: ClipItemProps) => {
                 <MoreVert/>
               </IconButton>
             )}
-          </div>
+          </Box>
         </Paper>
       </ListItem>
     </React.Fragment>
