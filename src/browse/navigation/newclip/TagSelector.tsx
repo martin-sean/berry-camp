@@ -14,6 +14,60 @@ interface TagSelectorProps {
   setTags: (tags: string[]) => void,
 }
 
+const options: string[] = [
+  'golden',
+  'speedrun',
+  'casual',
+  'meme',
+  'dashless',
+  'demodash',
+  'bubs drop',
+  'neutral jump',
+  'ultra',
+  'wavedash',
+  'hyper',
+  'super',
+  'wall bounce',
+  'dash jump',
+  'reverse super',
+  'cornerboost',
+  'zipper',
+  'dream block',
+  'dream hyper',
+  'badeline',
+  'madeline',
+  'theo',
+  'granny',
+  'oshiro',
+  'bird',
+  'dust bunny',
+  'kevin',
+  'wind',
+  'snowball',
+  'feather',
+  'platform',
+  'bubble',
+  'key skip',
+  'door skip',
+  'search skip',
+  'bumper',
+  'jelly',
+  'jellyvator',
+  'crystal heart',
+  'cassette',
+  'death',
+  'ice skip',
+  'conveyor',
+  'switch',
+  'coffee jump',
+  'fish',
+  'pink crystal',
+  'key',
+  'cloud',
+  'seeker'
+];
+
+
 /**
  * Render a tags selector
  */
@@ -67,7 +121,7 @@ export default (props: TagSelectorProps) => {
       freeSolo
       autoComplete
       value={ props.tags }
-      options={ ['wavedash', 'golden', 'meme'] }
+      options={ options }
       onChange={ handleAutocompleteChange }
       renderInput={(params) =>
         <TextField
