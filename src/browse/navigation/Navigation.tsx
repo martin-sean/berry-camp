@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Navigation, NavActionProps, GlobalStore } from 'redux/reducers';
 import { makeStyles, Paper, Grid, Typography, Fade, Button, Fab, CircularProgress, List, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
-import { DataTree, Chapter, Side, Checkpoint } from 'api/data';
+import { DataTree, Chapter, Side, Checkpoint } from 'api/chapterdata';
 import pluralize from 'utils/pluralize';
 import { Skeleton } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, makeStyles, Grid } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { setNav } from 'redux/actions';
-import { DataTree } from 'api/data';
+import { DataTree } from 'api/chapterdata';
 import { Navigation } from 'redux/reducers';
 
 const useStyles = makeStyles((theme) => ({

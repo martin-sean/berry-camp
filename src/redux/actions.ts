@@ -1,5 +1,5 @@
 import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, CLEAR_NOTIFICATION, SET_NOTIFICATION } from './actionTypes';
-import { DataTree } from 'api/data'
+import { DataTree } from 'api/chapterdata'
 import { NavActionProps, Notification } from './reducers';
 
 interface SetDataAction {

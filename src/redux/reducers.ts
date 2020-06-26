@@ -2,7 +2,7 @@ import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, SET
 import { Actions } from "./actions";
 
 // Chapter navigation tree data
-import { DataTree } from 'api/data';
+import { DataTree } from 'api/chapterdata';
 
 // Represents a position in the drawer navigation menu
 export interface Navigation {

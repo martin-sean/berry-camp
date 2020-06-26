@@ -4,7 +4,7 @@ import  './Room.css';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 import { makeStyles, Fade, Theme, Typography, Divider, Modal, Backdrop, useTheme, useMediaQuery } from '@material-ui/core'
-import { DataTree } from 'api/data';
+import { DataTree } from 'api/chapterdata';
 import { Navigation } from 'redux/reducers';
 import commonStyles from 'utils/common-styles';
 

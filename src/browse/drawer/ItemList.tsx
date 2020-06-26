@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { GlobalStore, NavActionProps } from 'redux/reducers';
 import { setNav, clearNav } from 'redux/actions';
-import { DataTree } from 'api/data';
+import { DataTree } from 'api/chapterdata';
 
 const useStyles = makeStyles((theme: Theme) => ({
   breadcrumbLink: {
