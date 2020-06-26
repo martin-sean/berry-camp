@@ -131,7 +131,7 @@ export default (props: RegistrationProps) => {
               Cancel
           </Button>
           <div className={ classes.submitWrapper }>
-            <Button disabled={ submitting || !username } variant='contained' onClick={ handleSubmit }>Submit</Button>
+            <Button disabled={ submitting || !username } variant='contained' onClick={ handleSubmit } color='primary'>Submit</Button>
             { submitting && <CircularProgress className={ classes.progress } size={ 24 }/> }
           </div>
         </DialogActions>

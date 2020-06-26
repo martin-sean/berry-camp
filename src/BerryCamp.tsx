@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
-import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
+import { createMuiTheme, CssBaseline, ThemeProvider, Snackbar, Slide } from '@material-ui/core';
 
 import { Switch, Route } from 'react-router-dom';
 import * as Path from 'pages/paths';
@@ -18,7 +18,9 @@ import { getNewTokenIfRequired, getCurrentUser } from 'api/authenticate';
 import { useDispatch, useSelector } from 'react-redux';
 import Registration from 'pages/common/registration';
 import { GlobalStore } from 'redux/reducers';
-import { setAccessToken } from 'redux/actions';
+import { setAccessToken, clearNotification } from 'redux/actions';
+import { Alert } from '@material-ui/lab';
+import { FileCopy as FileCopyIcon } from '@material-ui/icons';
 
 const theme = createMuiTheme({
   palette: {
@@ -49,9 +51,12 @@ export default () => {
   
   const requestUsername = Boolean(accessToken && showUsernameDialog);
   const requiresUsername = Boolean(accessToken && currentUser && !currentUser.username);
-  
+
   // Accept redux actions
   const dispatch = useDispatch();
+    
+  // Messages
+  const notification = useSelector((store: GlobalStore) => store.notification);
 
   // Open and close the drawer
   const setDrawerOpen = useCallback((open: boolean) => {
@@ -77,9 +82,35 @@ export default () => {
     refresh();
   }, [accessToken, dispatch])
 
+  // Determine notification icon
+  const getNotificationIcon = () => {
+    switch(notification.icon) {
+      case 'file': return <FileCopyIcon />;
+    }
+    return undefined;
+  }
+
   return ( 
     <ThemeProvider theme={ theme }>
       <CssBaseline />
+      
+      {/* Snackbar message alerts */}
+      <Snackbar
+        open={ notification.show }
+        onClose={ () => dispatch(clearNotification()) }
+        anchorOrigin={ { vertical: 'bottom', horizontal: 'left' } }
+        autoHideDuration={ notification?.duration }
+        TransitionComponent={ Slide }
+      >
+        <Alert
+          variant='filled'
+          severity={ notification.type }
+          icon={ getNotificationIcon() }
+        >
+            { notification.message }
+          </Alert>
+      </Snackbar>
+
       {/* Open username dialog if requested or required */}
       { (requestUsername || requiresUsername) && (
         <Registration

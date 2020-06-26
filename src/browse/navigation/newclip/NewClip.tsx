@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button, TextField, Snackbar, Slide, CircularProgress, Checkbox, makeStyles } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button,
+  TextField, CircularProgress, makeStyles } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
 import VideoPicker from './VideoPicker';
 import YTLinkParser from 'utils/yt-link-parser';
-import { Autocomplete, AutocompleteChangeReason, Alert } from '@material-ui/lab';
-import { createNewClip, NewClipData } from 'api/clip';
-import { CheckBox as CheckboxIcon, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon } from '@material-ui/icons';
-
-const TAG_LIMIT = 12;
+import { createNewClip, NewClipData, ClipData, editClip } from 'api/clip';
+import TagSelector from './TagSelector';
+import { setNotification } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -22,15 +21,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: -12,
     marginLeft: -12,
   },
-  checkbox: {
-    marginRight: 8,
-  }
 }));
 
 interface NewClipProps {
   open: boolean,
   setOpen: (open: boolean) => void,
   refreshClips: () => void,
+  clipData?: ClipData, // Previous clip data provided = editing
 }
 
 export default (props: NewClipProps) => {
@@ -39,17 +36,13 @@ export default (props: NewClipProps) => {
   const accessToken = useSelector((store: GlobalStore) => store.accessToken)
   // Current room navigation
   const nav = useSelector((store: GlobalStore) => store.nav);
-  // Selected video times
-  const [startTime, setStartTime] = useState<number | null>(null);
-  const [endTime, setEndTime] = useState<number | null>(null);
-  // Tag field error message
-  const [tagError, setTagError] = useState<string>();
-  const [tags, setTags] = useState<string[]>([]);
-  // Show the snackbar
-  const [snackOpen, setSnackOpen] = useState<boolean>(false);
-  const [snackSuccess, setSnackSuccess] = useState<boolean>(false);
-  const [snackMessage, setSnackMessage] = useState<string>();
+  // Selected video times and tags, load values if editing clip
+  const [startTime, setStartTime] = useState<number | null>(props.clipData?.start_time || null);
+  const [endTime, setEndTime] = useState<number | null>(props.clipData?.end_time || null);
+  const [tags, setTags] = useState<string[]>(props.clipData?.tags.map(tag => tag.name) || []);
+
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   interface FormData {
     name: string,
@@ -60,43 +53,13 @@ export default (props: NewClipProps) => {
   const { register, setValue, handleSubmit, watch, errors } = useForm<FormData>({
     mode: 'onChange',
     reValidateMode: 'onChange',
+    // Load default values if editing clip
+    defaultValues: {
+      videoId: props.clipData?.video_id,
+      name: props.clipData?.name,
+      description: props.clipData?.description
+    }
   });
-
-  // Handle changes to the Autocomplete value
-  const handleAutocompleteChange = (event: React.ChangeEvent<any>, newTags: string[], reason: AutocompleteChangeReason) => {
-    // Don't add new options if tag limit has been reached
-    if (tags.length >= TAG_LIMIT && reason === 'select-option') return;
-
-    // Clear any tag errors
-    setTagError('');
-    // Modify newly created tag
-    if (reason === 'create-option' && tags.length) {
-      newTags[newTags.length - 1] = newTags[newTags.length - 1].trim().toLowerCase();
-    }
-    // Set new tags
-    setTags(newTags);
-  }
-
-  // Prevent wrong values from being added
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const input = event.target as HTMLInputElement;
-    // Capture enter key presses
-    if (event.keyCode === 13) {
-      // Trim first for leading/trailing space flexibility
-      input.value = input.value.trim().toLowerCase();
-      // Limit number of tags
-      if (tags.length >= TAG_LIMIT) {
-        event.preventDefault();
-        event.stopPropagation();
-        setTagError('Maximum number of tags reached');
-      // Only allow single space separated words
-      } else if (!input.value.match(/^([A-Za-z]+\s)*[A-Za-z]+$/)) {
-        event.preventDefault();
-        event.stopPropagation();
-        setTagError('Can only contain words separated by single spaces');
-      }
-    }
-  }
 
   // If the input is in a youtube link format, extract the values
   const handleVideoIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,15 +77,20 @@ export default (props: NewClipProps) => {
     setEndTime(endTime);
   }
 
+  // Set the tags
+  const setTagsCallback = useCallback((tags: string[]) => {
+    setTags(tags);
+  }, [setTags]);
+
   // Handle form submission
   const onSubmit = async (data: Record<string, any>) => {
     setSubmitting(true);
     // Build the response object
     const submitData: NewClipData = {
-      chapterId: nav.chapterId,
-      sideNo: parseInt(nav.sideNo),
-      checkpointNo: parseInt(nav.checkpointNo),
-      roomNo: parseInt(nav.roomNo),
+      ...(!props.clipData && { chapterId: nav.chapterId }),
+      ...(!props.clipData && { sideNo: parseInt(nav.sideNo) }),
+      ...(!props.clipData && { checkpointNo: parseInt(nav.checkpointNo) }),
+      ...(!props.clipData && { roomNo: parseInt(nav.roomNo) }),
       ...(data.name && { name: data.name as string }),
       ...(data.description && { description: data.description as string }),
       videoId: data.videoId as string,
@@ -130,28 +98,73 @@ export default (props: NewClipProps) => {
       endTime: endTime!,
       tags,
     }
+    // Submit or edit clip
+    props.clipData ? await handleEditClip(submitData) : await handleNewClip(submitData);
+  }
+
+  // Submit a new clip
+  const handleNewClip = async (submitData: NewClipData) => {
     // Check for successful clip creation
     if (await createNewClip(submitData, accessToken)) {
-      handleClose();
-      setSnackSuccess(true);
-      setSnackMessage("Clip submitted");
+      dispatch(setNotification({
+        show: true,
+        message: 'Clip submitted',
+        type: 'success',
+        icon: 'none',
+        duration: 2000
+      }));
+      props.setOpen(false);
       props.refreshClips();
     // Error occured during clip creation
     } else {
-      setSnackSuccess(false);
-      setSnackMessage("An error occured submitting the clip")
+      dispatch(setNotification({
+        show: true,
+        message: "An error occured submitting the clip. Please try again",
+        type: 'error',
+        icon: 'none',
+        duration: 4000 
+      }));
     }
-    setSnackOpen(true);
-    setSubmitting(false);
   }
 
-  // Handle button close
-  const handleClose = () => {
-    setSubmitting(false);
-    setTags([]);
-    setStartTime(null);
-    setEndTime(null);
-    props.setOpen(false);
+  // Submit an existing edited clip
+  const handleEditClip = async (submitData: NewClipData) => {
+    // Don't bother updating if there is no clip data
+    if (!props.clipData) return;
+
+    // Determine if tags need updating
+    let updateTags: boolean;
+    // Update if the number of tags have changed
+    if (props.clipData.tags.length !== submitData.tags.length) {
+      updateTags = true;
+    // Number of tags have not changed
+    } else {
+      // Get the common new and old tags. If the length is different, there are new tags 
+      const commonTags = props.clipData.tags.filter(tag => submitData.tags.includes(tag.name));
+      updateTags = commonTags.length !== props.clipData.tags.length || commonTags.length !== submitData.tags.length;
+    }
+
+    // Check for successful clip creation
+    if (await editClip(props.clipData.id, submitData, accessToken, updateTags)) {
+      dispatch(setNotification({
+        show: true,
+        message: 'Clip updated',
+        type: 'success',
+        icon: 'none',
+        duration: 2000
+      }));
+      props.setOpen(false);
+      props.refreshClips();
+    // Error occured during clip creation
+    } else {
+      dispatch(setNotification({ 
+        show: true,
+        message: "An error occured while updating the clip. Please try again",
+        type: 'error',
+        icon: 'none',
+        duration: 4000
+      }));
+    }
   }
 
   // Watch the current start and end time
@@ -159,16 +172,6 @@ export default (props: NewClipProps) => {
 
   return (
     <React.Fragment>
-      {/* Submission alert */}
-      <Snackbar
-        open={ snackOpen }
-        onClose={ () => setSnackOpen(false) }
-        anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } }
-        autoHideDuration={ 4000 }
-        TransitionComponent={ Slide }
-      >
-        <Alert variant='filled' severity={ snackSuccess ? 'success' : 'error' }>{ snackMessage }</Alert>
-      </Snackbar>
       {/* New clip dialog */}
       <Dialog
         open={ props.open }
@@ -178,12 +181,12 @@ export default (props: NewClipProps) => {
         aria-describedby="new-clip-dialog-description"
       >
         <DialogTitle>
-          Submit a new YouTube clip
+          { props.clipData ? 'Edit clip' : 'Submit a new YouTube clip' }
         </DialogTitle>
         <form onSubmit={ handleSubmit(onSubmit) }>
           <DialogContent>
             <DialogContentText>
-              Submit a new clip for the current room. Try to keep the clip short and contained within the room (a few seconds before and after is fine).
+              { props.clipData ? 'Edit a' : 'Submit a new' } clip for the current room. Try to keep the clip short and contained within the one room (a few seconds before and after is fine).
             </DialogContentText>
             <TextField
               inputRef={ register({ maxLength: 64 }) }
@@ -242,54 +245,14 @@ export default (props: NewClipProps) => {
               <VideoPicker videoId={ currentVideoId } setTimes={ setTimes }/>
             )}
 
-            {/* Tags. Hacky but it works */}
-            <Autocomplete
-              multiple
-              freeSolo
-              autoComplete
-              value={ tags }
-              options={ ['wavedash', 'golden', 'meme'] }
-              onChange={ handleAutocompleteChange }
-              renderInput={(params) =>
-                <TextField
-                  { ...params }
-                  name='tag'
-                  placeholder='Add tag'
-                  size='small'
-                  margin='normal'
-                  error={ !!tagError }
-                  helperText={ tagError }
-                  disabled={ tags.length >= TAG_LIMIT }
-                  InputProps={{
-                    ...params.InputProps,
-                    disableUnderline: true,
-                  }}
-                  inputProps={{
-                    ...params.inputProps,
-                    maxLength: 20,
-                    onKeyDown: handleKeyDown,
-                  }}
-                />
-              }
-              renderOption={(option, { selected }) => (
-                <React.Fragment>
-                  <Checkbox
-                    icon={ <CheckBoxOutlineBlankIcon fontSize='small'/> }
-                    checkedIcon={ <CheckboxIcon fontSize='small'/> }
-                    className={ classes.checkbox }
-                    checked={ selected }
-                    disabled={ tags.length >= TAG_LIMIT }
-                    color='default'
-                  />
-                  { option }
-                </React.Fragment>
-              )}
-            />
+            {/* Tags component */}
+            <TagSelector tags={ tags } setTags={ setTagsCallback }/>
+
           </DialogContent>
           <DialogActions>
             <Button
               variant='contained'
-              onClick={ handleClose }
+              onClick={ () => props.setOpen(false) }
             >
               Cancel
             </Button>
@@ -301,7 +264,7 @@ export default (props: NewClipProps) => {
                 variant='contained'
                 color='primary'
               >
-                Create Clip
+                { props.clipData ? 'Update Clip' : 'Create Clip' }
               </Button>
               { submitting && <CircularProgress size={ 24 } className={ classes.progress }/> }
             </div>

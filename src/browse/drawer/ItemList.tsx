@@ -5,7 +5,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { GlobalStore, NavActionProps } from 'redux/reducers';
-import { SetNavAction, ClearNavAction, setNav, clearNav } from 'redux/actions';
+import { setNav, clearNav } from 'redux/actions';
 import { DataTree } from 'api/data';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -56,12 +56,12 @@ export default (props: ItemsListProps) => {
 
   // Breadcrumb and item selection actions, manage the navigation and selected room in state
   const clearNavigation = () => {
-    dispatch<ClearNavAction>(clearNav());
+    dispatch(clearNav());
   }
 
   // Set the navigation
   const setNavigation = (nav: NavActionProps) => {
-    dispatch<SetNavAction>(setNav(nav));
+    dispatch(setNav(nav));
   }
 
   interface ChapterListProps {

@@ -1,4 +1,4 @@
-import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN } from './actionTypes';
+import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, SET_NOTIFICATION, CLEAR_NOTIFICATION } from './actionTypes';
 import { Actions } from "./actions";
 
 // Chapter navigation tree data
@@ -6,39 +6,56 @@ import { DataTree } from 'api/data';
 
 // Represents a position in the drawer navigation menu
 export interface Navigation {
-  chapterId: string;
-  sideNo: string;
-  checkpointNo: string;
-  roomNo: string;
+  chapterId: string,
+  sideNo: string,
+  checkpointNo: string,
+  roomNo: string,
+}
+
+// Notification message
+export interface Notification {
+  show: boolean,
+  message: string,
+  type: 'success' | 'info' | 'warning' | 'error',
+  icon: 'none' | 'file',
+  duration: number,
 }
 
 export interface NavActionProps {
-  chapterId?: string;
-  sideNo?: string;
-  checkpointNo?: string;
-  roomNo?: string;
+  chapterId?: string,
+  sideNo?: string,
+  checkpointNo?: string,
+  roomNo?: string,
 }
 
 // Define the redux store
 export interface GlobalStore {
-  data: DataTree | null;
-  nav: Navigation;
-  accessToken: string | null;
+  data?: DataTree,
+  nav: Navigation,
+  notification: Notification,
+  accessToken?: string,
 }
 
 // Define the default structure of Navigation structure
-export const defaultNav: Navigation = {
+const defaultNav: Navigation = {
   chapterId: '',
   sideNo: '',
   checkpointNo: '',
   roomNo: '',
 };
 
+const defaultNotification: Notification = {
+  show: false,
+  message: '',
+  type: 'info',
+  icon: 'none',
+  duration: 0,
+}
+
 // Define the default state of the store
 const defaultStore: GlobalStore = {
-  data: null,
   nav: defaultNav,
-  accessToken: null,
+  notification: defaultNotification,
 };
 
 // Main redux reducer
@@ -74,8 +91,23 @@ export default (store: GlobalStore = defaultStore, action: Actions): GlobalStore
     case CLEAR_ACCESS_TOKEN: {
       return {
         ...store,
-        accessToken: null,
+        accessToken: undefined,
       };
+    }
+    case SET_NOTIFICATION: {
+      return {
+        ...store,
+        notification: action.notification,
+      }
+    }
+    case CLEAR_NOTIFICATION: {
+      return {
+        ...store,
+        notification: {
+          ...store.notification,
+          show: false,
+        },
+      }
     }
     default: {
       return store;

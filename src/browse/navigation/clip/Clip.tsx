@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Dialog, Paper, Typography, Chip, Avatar, Slider } from '@material-ui/core';
+import { makeStyles, Dialog, Paper, Typography, Chip, Avatar, Slider, IconButton, Box } from '@material-ui/core';
 import { ClipData } from 'api/clip';
 import YouTube from 'react-youtube';
 import commonStyles from 'utils/common-styles';
 import { Link } from 'react-router-dom';
 import { formatSeconds } from 'utils/clip-time';
+import { CurrentUser } from 'api/authenticate';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   playerBox: {
@@ -72,8 +74,11 @@ const useStyles = makeStyles((theme) => ({
 
 interface ClipProps {
   clip: ClipData,
-  close: (clip?: ClipData) => void;
-  mute: boolean;
+  close: (clip?: ClipData) => void,
+  setEdit: () => void,
+  setDelete: (clip: ClipData) => void,
+  currentUser: CurrentUser | null,
+  mute: boolean,
 }
 
 /**
@@ -84,6 +89,9 @@ export default (props: ClipProps) => {
   const commonClasses = commonStyles();
 
   const createdDate = new Date(props.clip.created_at).toLocaleDateString();
+
+  const isModerator = props.currentUser && props.currentUser.moderator;
+  const isAuthor = props.currentUser && props.currentUser.username === props.clip.author?.username;
 
   // YouTube player reference
   const [player, setPlayer] = useState<YT.Player>();
@@ -200,6 +208,13 @@ export default (props: ClipProps) => {
         <Typography className={ classes.description }>
           { props.clip.description || 'No description' }
         </Typography>
+        {/* Owner actions */}
+        { (isModerator || isAuthor) && (
+          <Box display='flex' justifyContent='flex-end'>
+            <IconButton onClick={ props.setEdit }><EditIcon/></IconButton>
+            <IconButton onClick={ () => props.setDelete(props.clip) }><DeleteIcon/></IconButton>
+          </Box>
+        )}
       </Paper>
     </Dialog>
   );

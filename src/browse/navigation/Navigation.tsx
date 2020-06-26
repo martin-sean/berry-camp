@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Navigation, NavActionProps, GlobalStore } from 'redux/reducers';
-import { makeStyles, Paper, Grid, Typography, Fade, Button, Fab, CircularProgress, List } from '@material-ui/core';
+import { makeStyles, Paper, Grid, Typography, Fade, Button, Fab, CircularProgress, List, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { DataTree, Chapter, Side, Checkpoint } from 'api/data';
 import pluralize from 'utils/pluralize';
 import { Skeleton } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
-import { SetNavAction, setNav } from 'redux/actions';
+import { setNav, setNotification } from 'redux/actions';
 import Room from 'browse/navigation/room';
 import { AddToQueue } from '@material-ui/icons';
 import NewClip from './newclip';
 import RoomNav from './roomnav';
-import { getClips, ClipData } from 'api/clip';
+import { getClips, ClipData, deleteClip } from 'api/clip';
 import Clip from './clip/Clip';
 import commonStyles from 'utils/common-styles';
 import ClipItem from './clipitem';
+import { getCurrentUser } from 'api/authenticate';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -78,7 +79,8 @@ export default (props: NavigationProps) => {
 
   // Check if logged in
   const accessToken = useSelector((store: GlobalStore) => store.accessToken);
-
+  const currentUser = getCurrentUser(accessToken);
+  
   // Save clips from database
   // undefined = loading, [] = None found, null = error
   const [clips, setClips] = useState<ClipData[] | undefined | null>();
@@ -89,8 +91,12 @@ export default (props: NavigationProps) => {
   // Show the clip modal
   const [clip, setClip] = useState<ClipData>();
 
-  // Show the new clip modal
-  const [newClipOpen, setNewClipOpen] = useState<boolean>(false);
+  // Remember a clip for editing/deletion when selected
+  const [clipForEditing, setClipForEditing] = useState<ClipData>();
+  // Show the clip edit modal
+  const [editingClip, setEditingClip] = useState<boolean>(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   // Get the selected chapter, side and checkpoint if they exist
   const chapterId = props.nav.chapterId;
@@ -122,14 +128,24 @@ export default (props: NavigationProps) => {
 
   const roomNo = props.nav.roomNo ? parseInt(props.nav.roomNo) : undefined;
 
+  // Anchor the open menu
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  // Set the open clip
   const setClipCallback = useCallback((clip?: ClipData) => {
     setClip(clip);
   }, [setClip]);
 
   // Callback to set the NewClip dialog open status
-  const setNewClipOpenCallback = useCallback((open: boolean) => {
-    setNewClipOpen(open);
-  }, [setNewClipOpen]);
+  const setEditClipCallback = useCallback(() => {
+    setEditingClip(true);
+  }, [setEditingClip]);
+
+  // Callback to set the NewClip dialog open status
+  const stopEditCallback = useCallback(() => {
+    setClip(undefined);
+    setEditingClip(false);
+  }, [setClip, setEditingClip]);
 
   // Clear the clips and trigger a refresh
   const refreshClipsCallback = useCallback(() => {
@@ -138,9 +154,71 @@ export default (props: NavigationProps) => {
 
   // Set the current navigation in redux state
   const setNavigation = (nav: NavActionProps) => {
-    dispatch<SetNavAction>(setNav(nav));
+    dispatch(setNav(nav));
   }
 
+  // Set the current clip for editing
+  const handleEditClip = () => {
+    setAnchorEl(null);
+    setClip(clipForEditing);
+    setEditingClip(true);
+  }
+
+  // Set the clip for deletion
+  const setClipForDeletionCallback = useCallback((clip: ClipData) => {
+    setClipForEditing(clip);
+    setShowConfirmDelete(true);
+  }, [setClipForEditing, setShowConfirmDelete]);
+
+  /**
+   * Clip popup menu
+   */
+   
+  // Anchor the menu to the selected menu item and set the clip for editing
+  const setClipAndAnchorCallback = useCallback((element: HTMLElement, clip: ClipData) => {
+    setAnchorEl(element);
+    setClipForEditing(clip);
+  }, [setAnchorEl, setClipForEditing]);
+
+  // User selects delete from the menu
+  const handleSelectClipDelete = () => {
+    setAnchorEl(null);
+    setShowConfirmDelete(true);
+  }
+
+  // Delete clip
+  const handleClipDelete = useCallback(async (clip: ClipData | undefined) => {
+    // Don't bother if there is no access token or clip
+    if (!accessToken || !clip) return;
+    setSubmitting(true);
+    if (await deleteClip(clip.id, accessToken)) {
+      dispatch(setNotification({
+        show: true,
+        message: 'Clip deleted',
+        type: 'success',
+        icon: 'none',
+        duration: 3000
+      }));
+      setShowConfirmDelete(false);
+      refreshClipsCallback();
+    // Failure
+    } else {
+      dispatch(setNotification({
+        show: true,
+        message: 'Error deleting clip',
+        type: 'error',
+        icon: 'none',
+        duration: 4000
+      }));
+    }
+    setClipForEditing(undefined);
+    setSubmitting(false);
+  }, [accessToken, dispatch, refreshClipsCallback, setShowConfirmDelete]);
+
+  /**
+   * LOTTA USEEFFECT
+   */
+  
   // Track the scroll position for displaying the FAB
   const [hideFab, setHideFab] = useState<boolean>(false);
   useEffect(() => {
@@ -157,10 +235,19 @@ export default (props: NavigationProps) => {
     setChapterLoaded(false);
   }, [props.nav.chapterId, setChapterLoaded]);
 
+  // Clear the clips when the room is changed
+  useEffect(() => {
+    setClips(undefined);
+  }, [chapterId, sideNo, checkpointNo, roomNo])
+
   // Load clip data
   useEffect(() => {
+    // Ignore if clips are present
+    if (clips) return;
+
     let unmounted = false;
     // Clear the clips
+    setClip(undefined);
     setClips(undefined);
     // Declare function to set the clips
     const fetchClips = async () => {
@@ -174,7 +261,7 @@ export default (props: NavigationProps) => {
       clearTimeout(timeout);
       unmounted = true;
     }
-  }, [chapterId, sideNo, checkpointNo, roomNo, setClips]);
+  }, [chapterId, sideNo, checkpointNo, roomNo, clips, setClips]);
 
   // Check for server timeout
   useEffect(() => {
@@ -300,12 +387,43 @@ export default (props: NavigationProps) => {
   // Main Navigation Body
   return (
     <React.Fragment>
-      {/* Render Clip dialog */}
-      {/* TODO: Save mute in state */}
-      { clip && <Clip clip={ clip } close={ setClipCallback } mute={ false }/> }
-      
-      {/* Render the new clip dialog */}
-      <NewClip open={ newClipOpen } setOpen={ setNewClipOpenCallback } refreshClips={ refreshClipsCallback }/>
+      {/* Show the clip info */}
+      { clip && !editingClip ? (
+        <Clip
+          clip={ clip }
+          close={ setClipCallback }
+          setEdit={ setEditClipCallback }
+          setDelete={ setClipForDeletionCallback }
+          currentUser={ currentUser }
+          mute={ false }
+        />
+      // Edit a clip 
+      ) : clip && editingClip ? (
+        <NewClip open={ editingClip } setOpen={ stopEditCallback } refreshClips={ refreshClipsCallback } clipData={ clip }/>
+      // Create a new clip
+      ) : editingClip && (
+        <NewClip open={ editingClip } setOpen={ stopEditCallback } refreshClips={ refreshClipsCallback }/>
+      )}
+          
+      {/* Show clip deletion confirmation dialog */}
+      <Dialog
+        open={ showConfirmDelete }
+        onClose={ () => setShowConfirmDelete(false) }
+        aria-labelledby='clip-delete-dialog-title'
+        aria-describedby='clip-delete-dialog-description'
+      >
+        <DialogTitle id='clip-delete-dialog-title'>Confirm clip deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='clip-delete-dialog-description'>This will permanently delete this clip. Are you sure?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='contained' onClick={ () => setShowConfirmDelete(false) }>Cancel</Button>
+          <div className={ commonClasses.centerBox }>
+            <Button variant='contained' onClick={ () => handleClipDelete(clipForEditing)  } disabled={ submitting } color='secondary'>Delete Clip</Button>
+            { submitting && <CircularProgress className={ commonClasses.centerContent } size={ 24 }/> }
+          </div>
+        </DialogActions>
+      </Dialog>
 
       <Grid container spacing={ 3 }>
         {/* Left Side */}
@@ -356,9 +474,38 @@ export default (props: NavigationProps) => {
         <Grid item xs={ 12 } lg={ 7 }>
           {/* Loaded */}
           { clips && clips.length > 0 ? (
-            <List classes={{ root: commonClasses.noPadding }}>
-              { clips.map((clip, index) => <ClipItem key={ index } clip={ clip } handleSelect={ setClipCallback }/>) }
-            </List>
+            <React.Fragment>
+              <Menu
+                id="clip-actions-menu"
+                anchorEl={ anchorEl }
+                keepMounted
+                open={ Boolean(anchorEl) }
+                onClose={ () => setAnchorEl(null) }
+              >
+                <MenuItem
+                  onClick={ handleEditClip }
+                >
+                  Edit
+                </MenuItem>
+                <MenuItem
+                  onClick={ handleSelectClipDelete }
+                >
+                  Delete
+                </MenuItem>
+              </Menu>
+              <List classes={{ root: commonClasses.noPadding }}>
+                { clips.map((clip, index) => (
+                  <ClipItem
+                    key={ index }
+                    clip={ clip }
+                    handleSelect={ setClipCallback }
+                    anchorMenu={ setClipAndAnchorCallback }
+                    currentUser={ currentUser }
+                    refreshClips={ refreshClipsCallback }
+                  />
+                ))}
+              </List>
+            </React.Fragment>
           ) : (
             // No clips
             <div className={ classes.centeredWrapper }>
@@ -377,7 +524,7 @@ export default (props: NavigationProps) => {
       </Grid>
       {/* New clip button for current room */}
       { room && accessToken && (
-        <Fab disabled={ hideFab } variant="extended" className={ classes.newClipButton } onClick={ () => setNewClipOpen(true) }>
+        <Fab disabled={ hideFab } variant="extended" className={ classes.newClipButton } onClick={ () => setEditingClip(true) }>
           <AddToQueue className={ classes.newClipIcon } />
           Submit Clip
         </Fab>

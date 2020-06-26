@@ -27,7 +27,7 @@ export const login = async (idToken: string): Promise<string | null> => {
 }
 
 // Decode the JWT access token and get the current user
-export const getCurrentUser = (accessToken: string | null): CurrentUser | null => {
+export const getCurrentUser = (accessToken: string | undefined): CurrentUser | null => {
   if (!accessToken) return null;
   try {
     return JwtDecode(accessToken);
@@ -45,7 +45,7 @@ export const logout = async () => {
 }
 
 // Check if token has expired, issue a new one if it has
-export const getNewTokenIfRequired = async (accessToken: string | null): Promise<string | null> => {
+export const getNewTokenIfRequired = async (accessToken: string | undefined): Promise<string | null> => {
   // Return current access token if it's still valid
   if (accessToken && tokenStillValid(accessToken)) return accessToken;
   // Token needs refreshing

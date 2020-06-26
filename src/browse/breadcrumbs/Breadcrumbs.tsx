@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Navigation, NavActionProps } from 'redux/reducers';
-import { makeStyles, Typography, Breadcrumbs, Link, Tooltip, Snackbar, Slide, Button } from '@material-ui/core';
+import { makeStyles, Typography, Breadcrumbs, Link, Tooltip, Button } from '@material-ui/core';
 import { DataTree } from 'api/data';
 import { useDispatch } from 'react-redux';
-import { SetNavAction, ClearNavAction, setNav, clearNav } from 'redux/actions';
-import Alert from '@material-ui/lab/Alert';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+import { setNav, clearNav, setNotification } from 'redux/actions';
 
 const useStyles = makeStyles((theme) => ({
   wrapper:{
@@ -46,11 +44,8 @@ export default (props: BreadCrumbsProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // Show Snackbar
-  const [copied, setCopied] = useState(false);
-  
   const setNavigation = (nav: NavActionProps) => {
-    dispatch<SetNavAction>(setNav(nav));
+    dispatch(setNav(nav));
   }
 
   const copyUrl = () => {
@@ -61,7 +56,13 @@ export default (props: BreadCrumbsProps) => {
       `${ props.nav.checkpointNo ? `&checkpoint=${ props.nav.checkpointNo }` : '' }` +
       `${ props.nav.roomNo ? `&room=${ props.nav.roomNo }` : '' }`
     );
-    setCopied(true);
+    dispatch(setNotification({
+      show: true,
+      message: 'Link copied',
+      type: 'info',
+      icon: 'file',
+      duration: 2000
+    }));
   }
 
   const chapter = props.data[props.nav.chapterId];
@@ -72,22 +73,13 @@ export default (props: BreadCrumbsProps) => {
   return (
     <div className={ classes.wrapper }>
       <div>
-        <Snackbar
-          open={ copied }
-          onClose={ () => setCopied(false) }
-          anchorOrigin={ { vertical: 'bottom', horizontal: 'right' } }
-          autoHideDuration={ 2000 }
-          TransitionComponent={ Slide }
-        >
-          <Alert variant='filled' severity='info' icon={ <FileCopyIcon /> }>Link copied</Alert>
-        </Snackbar>
         <Breadcrumbs separator='>'>
           <Tooltip placement="top" title="Select another chapter">
             <Link
               className={ `${ classes.link } ${ classes.firstLink }` }
               component='button'
               color='inherit'
-              onClick={() => dispatch<ClearNavAction>(clearNav()) }
+              onClick={() => dispatch(clearNav()) }
             >
               Chapters
             </Link>

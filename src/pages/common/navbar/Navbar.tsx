@@ -4,7 +4,7 @@ import { AppBar, Fade, Hidden, Toolbar, Typography, IconButton, Theme, MenuList,
 import { ExpandLess, ExpandMore, AccountCircle } from '@material-ui/icons/';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { ClearNavAction, clearNav } from 'redux/actions';
+import { clearNav } from 'redux/actions';
 import SignIn from './SignIn';
 import { useHistory, Route, NavLink } from 'react-router-dom';
 import * as Path from 'pages/paths';
@@ -115,7 +115,7 @@ export default (props: NavbarProps) => {
   const [anchorAccEl, setAnchorAccEl] = useState<HTMLElement | null>(null);
 
   const handleTitleClick = () => {
-    dispatch<ClearNavAction>(clearNav());
+    dispatch(clearNav());
     history.push(Path.HOME);
   }
 

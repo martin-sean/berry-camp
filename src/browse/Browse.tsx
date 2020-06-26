@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import Drawer from './drawer';
 import { GlobalStore } from 'redux/reducers';
 import { useDispatch, useSelector } from 'react-redux';
-import { SetNavAction, SetDataAction, setData, setNav } from 'redux/actions';
+import { setData, setNav } from 'redux/actions';
 import fetchJson from 'utils/fetch-json';
 import Navigation from './navigation';
 import { DataTree } from 'api/data';
@@ -67,7 +67,7 @@ export default (props: BrowseProps) => {
     // Fetch chapter tree data
     if (!data) {
       fetchJson<DataTree>(dataURL).then((data: DataTree) => {
-        dispatch<SetDataAction>(setData(data));
+        dispatch(setData(data));
       });
     }
     
@@ -80,7 +80,7 @@ export default (props: BrowseProps) => {
 
     // Set nav if at least chapter is provided
     if (chapterId) {
-      dispatch<SetNavAction>(
+      dispatch(
         setNav({
           chapterId: chapterId,
           ...( sideNo && { sideNo: sideNo }),

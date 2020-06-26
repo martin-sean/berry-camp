@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface SignInProps {
-  accessToken: string | null;
+  accessToken?: string;
   closeParent?: () => void;
 }
 

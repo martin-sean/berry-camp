@@ -2,10 +2,10 @@ import urlSetter from 'api/url-setter';
 import { getNewTokenIfRequired } from 'api/authenticate';
 
 export interface NewClipData {
-  chapterId: string,
-  sideNo: number,
-  checkpointNo: number,
-  roomNo: number,
+  chapterId?: string,
+  sideNo?: number,
+  checkpointNo?: number,
+  roomNo?: number,
   name?: string,
   description?: string,
   videoId: string,
@@ -17,7 +17,7 @@ export interface NewClipData {
 /**
  * Create a new clip, return a promise containing a boolean indicating whether successful
  */ 
-export const createNewClip = async (clipData: NewClipData, accessToken: string | null): Promise<boolean> => {
+export const createNewClip = async (clipData: NewClipData, accessToken?: string): Promise<boolean> => {
   // Refresh access token if required
   const newAccessToken = await getNewTokenIfRequired(accessToken);
   if (!newAccessToken) return false;
@@ -27,7 +27,35 @@ export const createNewClip = async (clipData: NewClipData, accessToken: string |
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${ accessToken }`
+      'Authorization': `Bearer ${ newAccessToken }`
+    },
+    body: JSON.stringify(clipData),
+  });
+  return res.ok;
+}
+
+/**
+ * Edit an existing clip
+ * @param clipId Clip to update
+ * @param clipData Data to update with
+ * @param accessToken User access token
+ * @param updateTags Flag to indicate tags need updating
+ */
+export const editClip = async (
+  clipId: number,
+  clipData: NewClipData,
+  accessToken: string | undefined,
+  updateTags: boolean
+): Promise<boolean> => {
+  const newAccessToken = await getNewTokenIfRequired(accessToken);
+  if (!newAccessToken) return false;
+  // Fetch the response, flag if tags need updating
+  const res = await fetch(urlSetter(`/v1/clip/${ clipId }${ updateTags ? '?updateTags=true' : '' }`), {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ newAccessToken }`
     },
     body: JSON.stringify(clipData),
   });
@@ -92,8 +120,8 @@ export interface SingleClipData {
 /**
  * Get single clip
  */
-export const getClip = async (id: number): Promise<SingleClipData | null> => {
-  const res = await fetch(urlSetter(`/v1/clip/${ id }`), {
+export const getClip = async (clipId: number): Promise<SingleClipData | null> => {
+  const res = await fetch(urlSetter(`/v1/clip/${ clipId }`), {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -106,8 +134,8 @@ export const getClip = async (id: number): Promise<SingleClipData | null> => {
 /**
  * Delete a single clip
  */
- export const deleteClip = async (id: number, accessToken: string) => {
-   const res = await fetch(urlSetter(`/v1/clip/${ id }`), {
+ export const deleteClip = async (clipId: number, accessToken: string) => {
+   const res = await fetch(urlSetter(`/v1/clip/${ clipId }`), {
      method: 'DELETE',
      headers: {
       'Accept': 'application/json',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, makeStyles, Grid } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import { SetNavAction, setNav } from 'redux/actions';
+import { setNav } from 'redux/actions';
 import { DataTree } from 'api/data';
 import { Navigation } from 'redux/reducers';
 
@@ -43,7 +43,7 @@ export default (props: NavProps) => {
 
   // Set the new checkpoint when the bounds of a checkpoint are reached
   const setNavigation = (roomNo: StringNumber, checkpointNo: StringNumber = props.nav.checkpointNo) => {
-    dispatch<SetNavAction>(
+    dispatch(
       setNav({
         chapterId: props.nav.chapterId,
         sideNo: props.nav.sideNo,
