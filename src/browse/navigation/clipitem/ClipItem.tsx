@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ListItem, Paper, Typography, Chip, IconButton, Box } from '@material-ui/core';
-import commonStyles from 'utils/common-styles';
 import { makeStyles } from '@material-ui/core/styles';
+import commonStyles from 'utils/common-styles';
 import { ClipData } from 'api/clip';
 import { formatSecondsWords } from 'utils/clip-time';
 import { Skeleton } from '@material-ui/lab';

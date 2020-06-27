@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Paper, Typography, makeStyles, Fade } from '@material-ui/core';
+import commonStyles from 'utils/common-styles';
 import fetchJson from 'utils/fetch-json';
 import Skeleton from '@material-ui/lab/Skeleton';
-import commonStyles from 'utils/common-styles';
 
 const welcomeUrl = 'https://cdn.berrycamp.com/file/berrycamp/static/welcome/';
 const contentUrl = `${ welcomeUrl }content.json`;

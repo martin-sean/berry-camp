@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Navigation, NavActionProps, GlobalStore } from 'redux/reducers';
 import { Paper, Grid, Typography, Fade, Button, Fab, CircularProgress, List, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles'; 
+import { makeStyles } from '@material-ui/core/styles';
+import commonStyles from 'utils/common-styles';
 import { DataTree, Chapter, Side, Checkpoint } from 'api/chapterdata';
 import pluralize from 'utils/pluralize';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,7 +14,6 @@ import NewClip from './newclip';
 import RoomNav from './roomnav';
 import { getClips, ClipData, deleteClip } from 'api/clip';
 import Clip from './clip/Clip';
-import commonStyles from 'utils/common-styles';
 import ClipItem from './clipitem';
 import { getCurrentUser } from 'api/authenticate';
 
