@@ -1,4 +1,4 @@
-import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, CLEAR_NOTIFICATION, SET_NOTIFICATION } from './actionTypes';
+import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, CLEAR_NOTIFICATION, SET_NOTIFICATION, TOGGLE_DARK_THEME, TOGGLE_MUTE } from './actionTypes';
 import { DataTree } from 'api/chapterdata'
 import { NavActionProps, Notification } from './reducers';
 
@@ -35,6 +35,14 @@ interface ClearNotificationAction {
   type: typeof CLEAR_NOTIFICATION,
 }
 
+interface ToggleDarkThemeAction {
+  type: typeof TOGGLE_DARK_THEME,
+}
+
+interface ToggleMuteAction {
+  type: typeof TOGGLE_MUTE,
+}
+
 // All redux actions
 export type Actions = SetDataAction | 
   SetNavAction | 
@@ -42,7 +50,9 @@ export type Actions = SetDataAction |
   SetAccessTokenAction | 
   ClearAccessTokenAction | 
   SetNotificationAction | 
-  ClearNotificationAction;
+  ClearNotificationAction |
+  ToggleDarkThemeAction |
+  ToggleMuteAction;
 
 // Actions
 export const setData = (data: DataTree): SetDataAction => {
@@ -71,4 +81,12 @@ export const setNotification = (notification: Notification): SetNotificationActi
 
 export const clearNotification = (): ClearNotificationAction => {
   return { type: CLEAR_NOTIFICATION };
+}
+
+export const toggleDarkTheme = (): ToggleDarkThemeAction => {
+  return { type: TOGGLE_DARK_THEME };
+}
+
+export const toggleMute = (): ToggleMuteAction => {
+  return { type: TOGGLE_MUTE };
 }

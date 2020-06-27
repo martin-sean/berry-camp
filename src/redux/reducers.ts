@@ -1,4 +1,4 @@
-import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, SET_NOTIFICATION, CLEAR_NOTIFICATION } from './actionTypes';
+import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, SET_NOTIFICATION, CLEAR_NOTIFICATION, TOGGLE_DARK_THEME, TOGGLE_MUTE } from './actionTypes';
 import { Actions } from "./actions";
 
 // Chapter navigation tree data
@@ -34,6 +34,8 @@ export interface GlobalStore {
   nav: Navigation,
   notification: Notification,
   accessToken?: string,
+  mute: boolean,
+  dark: boolean,
 }
 
 // Define the default structure of Navigation structure
@@ -56,6 +58,8 @@ const defaultNotification: Notification = {
 const defaultStore: GlobalStore = {
   nav: defaultNav,
   notification: defaultNotification,
+  mute: true,
+  dark: true,
 };
 
 // Main redux reducer
@@ -106,8 +110,20 @@ export default (store: GlobalStore = defaultStore, action: Actions): GlobalStore
         notification: {
           ...store.notification,
           show: false,
-        },
-      }
+        }
+      };
+    }
+    case TOGGLE_DARK_THEME: {
+      return {
+        ...store,
+        dark: !store.dark
+      };
+    }
+    case TOGGLE_MUTE: {
+      return {
+        ...store,
+        mute: !store.mute
+      };
     }
     default: {
       return store;
