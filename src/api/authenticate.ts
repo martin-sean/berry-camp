@@ -19,6 +19,7 @@ export const login = async (idToken: string): Promise<string | null> => {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
+    credentials: 'same-origin',
     body: JSON.stringify({
       idToken: idToken,
     })
