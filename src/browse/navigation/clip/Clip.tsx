@@ -10,6 +10,7 @@ import { formatSeconds } from 'utils/clip-time';
 import { CurrentUser } from 'api/authenticate';
 
 const useStyles = makeStyles((theme) => ({
+  ...commonStyles,  
   playerBox: {
 
   },
@@ -87,7 +88,6 @@ interface ClipProps {
  */
 export default (props: ClipProps) => {
   const classes = useStyles();
-  const commonClasses = commonStyles();
 
   const createdDate = new Date(props.clip.created_at).toLocaleDateString();
 
@@ -146,9 +146,9 @@ export default (props: ClipProps) => {
         className={ classes.wrapper }
       >
         {/* Video player */}
-        <div className={ `${ commonClasses.aspectBox } ${ classes.playerBox }`}>
+        <div className={ `${ classes.aspectBox } ${ classes.playerBox }`}>
           <YouTube
-            className={ commonClasses.aspectContent }
+            className={ classes.aspectContent }
             videoId={ props.clip.video_id }
             onReady={ handleReady }
             opts={{

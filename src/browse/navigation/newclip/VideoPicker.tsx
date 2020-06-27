@@ -5,6 +5,7 @@ import commonStyles from 'utils/common-styles';
 import { formatSeconds } from 'utils/clip-time';
 
 const useStyles = makeStyles((theme) => ({
+  ...commonStyles,
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
@@ -23,7 +24,6 @@ interface VideoPickerProps {
 
 export default (props: VideoPickerProps) => {
   const classes = useStyles();
-  const commonClasses = commonStyles();
 
   // Set the default selected clip times
   const defaultStartTime = props.startTime || 0;
@@ -119,9 +119,9 @@ export default (props: VideoPickerProps) => {
 
   return (
     <div className={ classes.wrapper }>
-      <div className={ commonClasses.aspectBox }>
+      <div className={ classes.aspectBox }>
         <YouTube
-          className={ commonClasses.aspectContent }
+          className={ classes.aspectContent }
           videoId={ props.videoId }
           onReady={ handleReady }
           opts={{

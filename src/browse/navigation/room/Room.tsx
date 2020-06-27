@@ -11,6 +11,7 @@ import { Navigation } from 'redux/reducers';
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
 
 const useStyles = makeStyles((theme: Theme) => ({
+  ...commonStyles,
   wrapper: {
     width: '100%',
     height: '100%',
@@ -71,7 +72,6 @@ interface RoomProps {
 
 export default React.memo((props: RoomProps) => {
   const classes = useStyles();
-  const commonClasses = commonStyles();
 
   // Breakpoints for showing large image on click
   const theme = useTheme();
@@ -124,8 +124,8 @@ export default React.memo((props: RoomProps) => {
       <div className={ classes.imageWrapper }>
         {
           !loaded &&
-          <div className={ commonClasses.aspectBox }>
-            <Skeleton variant="rect" className={ commonClasses.aspectContent } />
+          <div className={ classes.aspectBox }>
+            <Skeleton variant="rect" className={ classes.aspectContent } />
           </div>
         }
         <Fade in={ loaded }>

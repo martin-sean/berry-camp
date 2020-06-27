@@ -19,6 +19,7 @@ import { getCurrentUser } from 'api/authenticate';
 
 
 const useStyles = makeStyles((theme) => ({
+  ...commonStyles,
   paper: {
     padding: theme.spacing(3),
   },
@@ -75,7 +76,6 @@ const chapterImageUrl = 'https://f002.backblazeb2.com/file/berrycamp/static/navi
 
 export default (props: NavigationProps) => {
   const classes = useStyles();
-  const commonClasses = commonStyles();
 
   const dispatch = useDispatch();
 
@@ -323,8 +323,8 @@ export default (props: NavigationProps) => {
         <Typography className={ classes.chapterDesc } color='textSecondary'>{ chapter.desc }</Typography>
         {/* Render a placeholder while the chapter image loads */}
         { !chapterLoaded && (
-          <div className={ commonClasses.aspectBox }>
-            <Skeleton className={ commonClasses.aspectContent } variant='rect' />
+          <div className={ classes.aspectBox }>
+            <Skeleton className={ classes.aspectContent } variant='rect' />
           </div>
         )}
         <Fade in={ chapterLoaded }>
@@ -420,9 +420,9 @@ export default (props: NavigationProps) => {
         </DialogContent>
         <DialogActions>
           <Button variant='contained' onClick={ () => setShowConfirmDelete(false) }>Cancel</Button>
-          <div className={ commonClasses.centerBox }>
+          <div className={ classes.centerBox }>
             <Button variant='contained' onClick={ () => handleClipDelete(clipForEditing)  } disabled={ submitting } color='secondary'>Delete Clip</Button>
-            { submitting && <CircularProgress className={ commonClasses.centerContent } size={ 24 }/> }
+            { submitting && <CircularProgress className={ classes.centerContent } size={ 24 }/> }
           </div>
         </DialogActions>
       </Dialog>
@@ -495,7 +495,7 @@ export default (props: NavigationProps) => {
                   Delete
                 </MenuItem>
               </Menu>
-              <List classes={{ root: commonClasses.noPadding }}>
+              <List classes={{ root: classes.noPadding }}>
                 { clips.map((clip, index) => (
                   <ClipItem
                     key={ index }

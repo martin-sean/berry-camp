@@ -11,6 +11,7 @@ const imagesUrl = `${ welcomeUrl }images/`;
 const imageCount = 7; // Number of welcome images (1 - n)
 
 const useStyles = makeStyles((theme) => ({
+  ...commonStyles,
   paper: {
     width: '100%',
     marginTop: theme.spacing(3),
@@ -55,7 +56,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default React.memo(() => {
   const classes = useStyles();
-  const commonClasses = commonStyles();
 
   const [content, setContent] = useState<string[]>([]);
   const [image, setImage] = useState<string>('');
@@ -103,8 +103,8 @@ export default React.memo(() => {
           )}
 
           { !loaded && (
-            <div className={ commonClasses.aspectBox }>
-              <Skeleton className={ commonClasses.aspectContent } variant="rect" />
+            <div className={ classes.aspectBox }>
+              <Skeleton className={ classes.aspectContent } variant="rect" />
             </div>
           )}
           <Fade in={ loaded }>

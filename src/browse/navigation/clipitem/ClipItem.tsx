@@ -9,6 +9,7 @@ import { MoreVert } from '@material-ui/icons';
 import { CurrentUser } from 'api/authenticate';
 
 const useStyles = makeStyles(theme => ({
+  ...commonStyles,
   clipItem: {
     marginBottom: theme.spacing(2),
   },
@@ -47,7 +48,6 @@ interface ClipItemProps {
 
 export default (props: ClipItemProps) => {
   const classes = useStyles();
-  const commonClasses = commonStyles();
 
   const [thumbnailLoaded, setThumbnailLoaded] = useState<boolean>(false);
 
@@ -71,17 +71,17 @@ export default (props: ClipItemProps) => {
       <ListItem
         className={ classes.clipItem }
         button
-        classes={{ gutters: commonClasses.noPadding }}
+        classes={{ gutters: classes.noPadding }}
         onClick={ handleSelect }
       >
         <Paper className={ classes.clipPaper }>
           {/* Left Side */}
           <Box display='flex' flexDirection='row' alignItems='center'>
             <div className={ classes.thumbnailWrapper }>
-              <div className={ commonClasses.aspectBox }>
-                { thumbnailLoaded && <Skeleton className={ commonClasses.aspectContent }/>}
+              <div className={ classes.aspectBox }>
+                { thumbnailLoaded && <Skeleton className={ classes.aspectContent }/>}
                 <img
-                  className={ `${ commonClasses.aspectContent } ${ classes.thumbnail }` }
+                  className={ `${ classes.aspectContent } ${ classes.thumbnail }` }
                   src={ `https://i3.ytimg.com/vi/${ props.clip.video_id }/default.jpg` }
                   style={ thumbnailLoaded ? {} : { display: 'none' } }
                   alt='Clip youtube thumbnail'

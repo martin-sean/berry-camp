@@ -1,8 +1,7 @@
-import { makeStyles } from "@material-ui/core";
+import { createStyles } from "@material-ui/core";
 
 // Common classes for styling
-export default makeStyles(theme => ({
-  // Centered
+export default createStyles({
   centerBox: {
     position: 'relative',
   },
@@ -13,7 +12,6 @@ export default makeStyles(theme => ({
     marginTop: -12,
     marginLeft: -12,
   },
-  // Create 16:9 aspect ratio box that fills parent container
   aspectBox: {
     width: '100%',
     paddingTop: '56.25%',
@@ -29,4 +27,4 @@ export default makeStyles(theme => ({
   noPadding: {
     padding: 0,
   },
-}));
+});
