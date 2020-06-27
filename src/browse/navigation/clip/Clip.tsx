@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Dialog, Paper, Typography, Chip, Avatar, Slider, IconButton, Box } from '@material-ui/core';
+import { Dialog, Paper, Typography, Chip, Avatar, Slider, IconButton, Box } from '@material-ui/core';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
 import { ClipData } from 'api/clip';
 import YouTube from 'react-youtube';
 import commonStyles from 'utils/common-styles';
 import { Link } from 'react-router-dom';
 import { formatSeconds } from 'utils/clip-time';
 import { CurrentUser } from 'api/authenticate';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   playerBox: {

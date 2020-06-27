@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Navigation, NavActionProps, GlobalStore } from 'redux/reducers';
-import { makeStyles, Paper, Grid, Typography, Fade, Button, Fab, CircularProgress, List, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { Paper, Grid, Typography, Fade, Button, Fab, CircularProgress, List, Menu, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles'; 
 import { DataTree, Chapter, Side, Checkpoint } from 'api/chapterdata';
 import pluralize from 'utils/pluralize';
-import { Skeleton } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNav, setNotification } from 'redux/actions';
 import Room from 'browse/navigation/room';
@@ -15,6 +16,7 @@ import Clip from './clip/Clip';
 import commonStyles from 'utils/common-styles';
 import ClipItem from './clipitem';
 import { getCurrentUser } from 'api/authenticate';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
