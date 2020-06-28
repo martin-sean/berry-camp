@@ -41,6 +41,7 @@ export const getCurrentUser = (accessToken: string | undefined): CurrentUser | n
 export const logout = async () => {
   const res = await fetch(logoutUrl, {
     method: 'GET',
+    credentials: 'include',
   });
   return res.ok;
 }
