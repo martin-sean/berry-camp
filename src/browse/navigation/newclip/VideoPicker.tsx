@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import YouTube from 'react-youtube';
-import { Slider, makeStyles, Mark } from '@material-ui/core';
+import { Slider, makeStyles, Box, Typography } from '@material-ui/core';
 import commonStyles from 'utils/common-styles';
 import { formatSeconds } from 'utils/clip-time';
+import { useSelector } from 'react-redux';
+import { GlobalStore } from 'redux/reducers';
 
 const useStyles = makeStyles((theme) => ({
   ...commonStyles,
@@ -10,9 +12,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  slider: {
-    width: '80%',
   },
 }));
 
@@ -34,7 +33,10 @@ export default (props: VideoPickerProps) => {
   const [startTime, setStartTime] = useState<number>(defaultStartTime);
   const [endTime, setEndTime] = useState<number>(defaultEndTime);
   const [player, setPlayer] = useState<YT.Player>();
-  const [marks, setMarks] = useState<Mark[]>([]);
+  const [marks, setMarks] = useState<number[]>([]);
+
+  // Current volume
+  const volume = useSelector((store: GlobalStore) => store.volume);
 
   // Set the new range values
   const handleTimesChange = (event: any, newValue: number | number[]) => {
@@ -55,10 +57,7 @@ export default (props: VideoPickerProps) => {
     endRange = endRange < duration ? endRange : duration;
 
     // Set the slider marks
-    setMarks([
-      { value: startRange, label: formatSeconds(startRange) },
-      { value: endRange, label: `${ formatSeconds(endRange) } (${ formatSeconds(duration)})` }
-    ]);
+    setMarks([startRange, endRange]);
   }, [startTime, endTime])
 
   // Set the length of the video
@@ -78,10 +77,7 @@ export default (props: VideoPickerProps) => {
     // Use full range otherwise
     } else {
       setEndTime(duration);
-      setMarks([
-        { value: 0, label: formatSeconds(startTime) },
-        { value: duration, label: formatSeconds(duration) }
-      ]);
+      setMarks([0, duration]);
       props.setTimes(0, duration);
     }
   }
@@ -92,6 +88,13 @@ export default (props: VideoPickerProps) => {
     props.setTimes(startTime, endTime);
   }
   
+  // Set the volume on change
+  useEffect(() => {
+    if (!player) return;
+    volume === 0 ? player.mute() : player.unMute();
+    player.setVolume(volume);
+  }, [volume, player])
+
   // Restart the youtube video when time update
   useEffect(() => {
     player && player.seekTo(startTime, true);
@@ -141,18 +144,22 @@ export default (props: VideoPickerProps) => {
       </div>
       {/* Render slider when player is ready */}
       { player && marks.length > 0 && (
-        <Slider
-          className={ classes.slider }
-          value={ [startTime, endTime] }
-          valueLabelDisplay='on'
-          min={ marks[0].value }
-          max={ marks[1].value }
-          marks={ marks }
-          valueLabelFormat={ formatSeconds }
-          onChange={ handleTimesChange }
-          onChangeCommitted={ handleCommited }
-        />
-      )} 
+        <React.Fragment>
+          <Slider
+            value={ [startTime, endTime] }
+            valueLabelDisplay='on'
+            min={ marks[0] }
+            max={ marks[1] }
+            valueLabelFormat={ formatSeconds }
+            onChange={ handleTimesChange }
+            onChangeCommitted={ handleCommited }
+          />
+          <Box style={{ width: '100%' }} display='flex' flexDirection='row' justifyContent='space-between'>
+            <Typography>{ formatSeconds(marks[0]) }</Typography>
+            <Typography>{ formatSeconds(marks[1]) }</Typography>
+          </Box>
+        </React.Fragment>
+      )}
     </div>
   );
 }

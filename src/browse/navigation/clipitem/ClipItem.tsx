@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ListItem, Paper, Typography, Chip, IconButton, Box } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { ListItem, Paper, Typography, Chip, IconButton, useMediaQuery } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import commonStyles from 'utils/common-styles';
 import { ClipData } from 'api/clip';
 import { formatSecondsWords } from 'utils/clip-time';
@@ -18,21 +18,36 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+  },
+  leftSide: {
+    display: 'flex',
+    alignItems: 'center',
+    flex: 1,
+    minWidth: 0,
   },
   thumbnailWrapper: {
-    minWidth: '120px',
+    minWidth: 120,
     marginRight: theme.spacing(2),
   },
   thumbnail: {
     objectFit: 'cover',
   },
+  title: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  rightSide: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   tag: {
     margin: theme.spacing(0.5),
-    maxWidth: 100,
+    maxWidth: 125,
     textOverflow: 'ellipsis',
   },
   duration: {
+    textAlign: 'right',
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
   },
@@ -53,6 +68,10 @@ export default (props: ClipItemProps) => {
 
   const isModerator = props.currentUser && props.currentUser.moderator;
   const isAuthor = props.currentUser && props.currentUser.username === props.clip.author?.username;
+
+  // Render nicer
+  const theme = useTheme();
+  const medium = useMediaQuery(theme.breakpoints.up('sm'));
 
   // Handle opening the options menu on a clip item
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -76,7 +95,7 @@ export default (props: ClipItemProps) => {
       >
         <Paper className={ classes.clipPaper }>
           {/* Left Side */}
-          <Box display='flex' flexDirection='row' alignItems='center'>
+          <div className={ classes.leftSide }>
             <div className={ classes.thumbnailWrapper }>
               <div className={ classes.aspectBox }>
                 { thumbnailLoaded && <Skeleton className={ classes.aspectContent }/>}
@@ -89,16 +108,14 @@ export default (props: ClipItemProps) => {
                 />
               </div>
             </div>
-            <Typography variant='h6'>{ props.clip.name || 'Untitled' }</Typography>
-          </Box>
+            <Typography className={ classes.title }>{ props.clip.name || 'Untitled' }</Typography>
+          </div>
           {/* Right side */}
-          <Box display='flex' flexDirection='row' alignItems='center'>
-            {/* Render first two tags */}
-            <Box display='flex' flexDirection='row' flexWrap='wrap' justifyContent='flex-end'>
-              { props.clip.tags.slice(0, 2).map((tag, index) => (
-                <Chip key={ index } className={ classes.tag } label={ tag.name }/>
-              ))}
-            </Box>
+          <div className={ classes.rightSide }>
+            {/* Tag */}
+            { medium && props.clip.tags.length > 0 && (
+              <Chip className={ classes.tag } label={ props.clip.tags[0].name }/>
+            )}
             {/* Clip Length */}
             <Typography
               className={ classes.duration } 
@@ -119,7 +136,7 @@ export default (props: ClipItemProps) => {
                 <MoreVert/>
               </IconButton>
             )}
-          </Box>
+          </div>
         </Paper>
       </ListItem>
     </React.Fragment>

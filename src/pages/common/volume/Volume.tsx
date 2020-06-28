@@ -8,6 +8,7 @@ import { setVolume } from 'redux/actions';
 const useStyles = makeStyles(theme => ({
   slider: {
     width: 75,
+    marginLeft: theme.spacing(1),
     marginRight: theme.spacing(2),
   },
   popup: {
@@ -20,7 +21,11 @@ const useStyles = makeStyles(theme => ({
 /**
  * Clip volume control
  */
-export default () => {
+interface VolumeProps {
+  showSlider: boolean,
+}
+
+export default (props: VolumeProps) => {
   const classes = useStyles();
   const volume = useSelector((store: GlobalStore) => store.volume);
   
@@ -44,15 +49,17 @@ export default () => {
           { volume === 0 ? <VolumnDownIcon/> : <VolumeUpIcon/> }
         </React.Fragment>
       </IconButton>
-      <Slider
-        className={ classes.slider }
-        value={ volume }
-        defaultValue={ volume }
-        step={ 10 }
-        min={ 0 }
-        max={ 100 } 
-        onChange={ handleSliderChange }
-      />
+      { props.showSlider && (
+        <Slider
+          className={ classes.slider }
+          value={ volume }
+          defaultValue={ volume }
+          step={ 10 }
+          min={ 0 }
+          max={ 100 } 
+          onChange={ handleSliderChange }
+        />
+      )}
     </React.Fragment>
   );
 }

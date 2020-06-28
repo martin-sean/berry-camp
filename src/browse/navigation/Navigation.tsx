@@ -17,11 +17,11 @@ import Clip from './clip/Clip';
 import ClipItem from './clipitem';
 import { getCurrentUser } from 'api/authenticate';
 
-
 const useStyles = makeStyles((theme) => ({
   ...commonStyles,
   paper: {
     padding: theme.spacing(3),
+    marginBottom: theme.spacing(3),    
   },
   rightSide: {
     display: 'flex',
@@ -301,7 +301,7 @@ export default (props: NavigationProps) => {
     <Fade in={ !!chapter }>
       <Paper className={ classes.paper }>
         {/* Heading / Navigation buttons inner grid */}
-        <Grid container spacing={ 3 }>
+        <Grid container spacing={ 2 }>
           {/* Heading and side count */}
           <Grid item xs={ 12 } sm={ 6 }>
             <Typography variant='h5'>
@@ -446,28 +446,24 @@ export default (props: NavigationProps) => {
               </Grid>
             </React.Fragment> 
           ) : (
-            // Inner column grid
-            <Grid container spacing={ 3 } direction='column'>
-              {/* Chapter */}
+            // Chapter. side, checkpoint info
+            <React.Fragment>
               { chapter && (
                 <Grid item>
                   { ChapterView(chapter) }
                 </Grid>
               )}
-              {/* Side */}
               { side && (
                 <Grid item>
                   { SideView(side) }
                 </Grid>
               )}
-              {/* Checkpoint */}
               { checkpoint && (
                 <Grid item>
                   { CheckpointView(checkpoint) }
                 </Grid>
               )}
-            </Grid>
-            // End of inner grid
+            </React.Fragment>
           )}
         </Grid>
 

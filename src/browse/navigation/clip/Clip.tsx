@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
       minWidth: 800,
     },
     [theme.breakpoints.up('lg')]: {
-      minWidth: 1000,
+      minWidth: 900,
     },
   },
   wrapper: {
@@ -100,7 +100,7 @@ export default (props: ClipProps) => {
   const [player, setPlayer] = useState<YT.Player>();
   // Remember current clip time 
   const [sliderValue, setSliderValue] = useState<number>(props.clip.start_time);
-    
+  // Current volume  
   const volume = useSelector((store: GlobalStore) => store.volume);
 
   // YouTube player is ready
@@ -165,8 +165,7 @@ export default (props: ClipProps) => {
                 loop: 1,
                 playlist: props.clip.video_id,
                 enablejsapi: 1,
-                showinfo: 0,
-                fs: 1,
+                fs: 0,
               }}
             }
           />
@@ -216,7 +215,7 @@ export default (props: ClipProps) => {
         </Typography>
 
         <Box display='flex' justifyContent='flex-end' alignItems='center'>
-          <Volume />
+          <Volume showSlider/>
           {/* Owner actions */}
           { (isModerator || isAuthor) && (
             <React.Fragment>

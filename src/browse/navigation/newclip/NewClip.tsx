@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { Dialog, DialogContentText, DialogContent, DialogTitle, DialogActions, Button,
-  TextField, CircularProgress, makeStyles } from '@material-ui/core';
+  TextField, CircularProgress, makeStyles, Box } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
 import VideoPicker from './VideoPicker';
@@ -9,6 +9,7 @@ import YTLinkParser from 'utils/yt-link-parser';
 import { createNewClip, NewClipData, ClipData, editClip } from 'api/clip';
 import TagSelector from './TagSelector';
 import { setNotification } from 'redux/actions';
+import Volume from 'pages/common/volume';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -20,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     left: '50%',
     marginTop: -12,
     marginLeft: -12,
+  },
+  content: {
+    overflow: 'hidden',
   },
 }));
 
@@ -174,6 +178,7 @@ export default (props: NewClipProps) => {
     <React.Fragment>
       {/* New clip dialog */}
       <Dialog
+        style={{ overflow: 'hidden' }}
         open={ props.open }
         disableBackdropClick
         onClose={ () => props.setOpen(false) }
@@ -181,10 +186,13 @@ export default (props: NewClipProps) => {
         aria-describedby="new-clip-dialog-description"
       >
         <DialogTitle>
-          { props.clipData ? 'Edit clip' : 'Submit a new YouTube clip' }
+          <Box display='flex' justifyContent='space-between' alignItems='center' style={{ width: '100%' }}>
+            { props.clipData ? 'Edit clip' : 'Submit a new YouTube clip' }
+            <Volume showSlider={ false }/>
+          </Box>
         </DialogTitle>
         <form onSubmit={ handleSubmit(onSubmit) }>
-          <DialogContent>
+          <DialogContent className={ classes.content }>
             <DialogContentText>
               { props.clipData ? 'Edit a' : 'Submit a new' } clip for the current room. Try to keep the clip short and contained within the one room (a few seconds before and after is fine).
             </DialogContentText>

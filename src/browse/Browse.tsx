@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { makeStyles, Typography, Paper } from '@material-ui/core';
+import { makeStyles, Typography, Paper, Box } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Drawer from './drawer';
 import { GlobalStore } from 'redux/reducers';
@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    minHeight: 0,
+    overflow: 'hidden',
   },
   toolbar: {
     height: theme.mixins.toolbar.minHeight,
@@ -40,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   welcomePaper: {
     marginTop: theme.spacing(3),
     padding: theme.spacing(3),
+    marginBottom: theme.spacing(3),
   },
 }));
 
@@ -103,7 +106,7 @@ export default (props: BrowseProps) => {
           setTitle={ props.setTitle }
         />
         {/* Right side content */}
-        <div className={ classes.wrapper }>
+        <Box className={ classes.wrapper }>
           <div className={ classes.toolbar }/>
           <div className={ classes.content }>
             {/* Render welcome page if data and nav chapter not set */}
@@ -120,7 +123,7 @@ export default (props: BrowseProps) => {
               </Paper>
             )}
           </div>
-        </div>
+        </Box>
       </div>
     </React.Fragment>
   );
