@@ -79,7 +79,7 @@ export default () => {
   // Refresh the access token
   useEffect(() => {
     const refresh = async () => {
-      const newAccessToken = await getNewTokenIfRequired(accessToken);
+      const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
       newAccessToken && dispatch(setAccessToken(newAccessToken));
     }
     refresh();

@@ -1,14 +1,24 @@
 import urlSetter from "./url-setter";
+import { Dispatch } from "redux";
+import { Actions } from "redux/actions";
+import { getNewTokenIfRequired } from "./authenticate";
 
 const currentUserUrl = urlSetter('/v1/user/current');
 
-export const validateUsername = async (username: string, accessToken: string) => {
+export const validateUsername = async (
+  username: string,
+  accessToken: string,
+  dispatch: Dispatch<Actions>
+): Promise<boolean> => {
+  const newAccessToken = getNewTokenIfRequired(accessToken, dispatch);
+  if (!newAccessToken) throw new Error("Could not check username");
+
   const res = await fetch(urlSetter(`/v1/auth/checkusername/${ username }`), {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${ accessToken }` 
+      'Authorization': `Bearer ${ newAccessToken }` 
     }
   });
   if (res.ok) {
@@ -19,14 +29,21 @@ export const validateUsername = async (username: string, accessToken: string) =>
   throw new Error("Could not check username.");
 }
 
-// Update account username
-export const setNewUsername = async (username: string, accessToken: string): Promise<string | null> => {
+// Update account username. Successful response returns a new access token
+export const setNewUsername = async (
+  username: string,
+  accessToken: string,
+  dispatch: Dispatch<Actions>
+): Promise<string | null> => {
+  const newAccessToken = getNewTokenIfRequired(accessToken, dispatch);
+  if (!newAccessToken) return null;
+
   const res = await fetch(currentUserUrl, {
     method: 'PATCH',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${ accessToken }`
+      'Authorization': `Bearer ${ newAccessToken }`
     },
     body: JSON.stringify({
       username: username,
@@ -52,13 +69,16 @@ export const getUser = async (username: string): Promise<{ username: string, mod
 }
 
 // Delete user account
-export const deleteAccount = async (deleteClips: boolean, accessToken: string) => {
+export const deleteAccount = async (deleteClips: boolean, accessToken: string, dispatch: Dispatch<Actions>) => {
+  const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
+  if (!newAccessToken) return false;
+
   const res = await fetch(currentUserUrl, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${ accessToken }`
+      'Authorization': `Bearer ${ newAccessToken }`
     },
     body: JSON.stringify({
       'deleteAccount': true,

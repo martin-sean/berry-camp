@@ -81,10 +81,10 @@ export default (props: AccountProps) => {
   const handleDelete = async () => {
     // Don't bother if there is no access token
     if (!accessToken) return;
-
+    
     setSubmitting(true);
     // Await successful deletion response
-    if (await deleteAccount(deleteClips, accessToken)) {
+    if (await deleteAccount(deleteClips, accessToken, dispatch)) {
       setSubmitting(false);
       // Sign out of google
       signOut();

@@ -1,5 +1,7 @@
 import urlSetter from 'api/url-setter';
 import { getNewTokenIfRequired } from 'api/authenticate';
+import { Dispatch } from 'redux';
+import { Actions } from 'redux/actions';
 
 export interface NewClipData {
   chapterId?: string,
@@ -17,9 +19,9 @@ export interface NewClipData {
 /**
  * Create a new clip, return a promise containing a boolean indicating whether successful
  */ 
-export const createNewClip = async (clipData: NewClipData, accessToken?: string): Promise<boolean> => {
+export const createNewClip = async (clipData: NewClipData, dispatch: Dispatch<Actions>, accessToken?: string): Promise<boolean> => {
   // Refresh access token if required
-  const newAccessToken = await getNewTokenIfRequired(accessToken);
+  const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
   if (!newAccessToken) return false;
   // Fetch the response
   const res = await fetch(urlSetter('/v1/clip'), {
@@ -45,9 +47,10 @@ export const editClip = async (
   clipId: number,
   clipData: NewClipData,
   accessToken: string | undefined,
-  updateTags: boolean
+  updateTags: boolean,
+  dispatch: Dispatch<Actions>
 ): Promise<boolean> => {
-  const newAccessToken = await getNewTokenIfRequired(accessToken);
+  const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
   if (!newAccessToken) return false;
   // Fetch the response, flag if tags need updating
   const res = await fetch(urlSetter(`/v1/clip/${ clipId }${ updateTags ? '?updateTags=true' : '' }`), {

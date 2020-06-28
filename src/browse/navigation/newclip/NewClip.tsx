@@ -105,7 +105,7 @@ export default (props: NewClipProps) => {
   // Submit a new clip
   const handleNewClip = async (submitData: NewClipData) => {
     // Check for successful clip creation
-    if (await createNewClip(submitData, accessToken)) {
+    if (await createNewClip(submitData, dispatch, accessToken)) {
       dispatch(setNotification({
         show: true,
         message: 'Clip submitted',
@@ -145,7 +145,7 @@ export default (props: NewClipProps) => {
     }
 
     // Check for successful clip creation
-    if (await editClip(props.clipData.id, submitData, accessToken, updateTags)) {
+    if (await editClip(props.clipData.id, submitData, accessToken, updateTags, dispatch)) {
       dispatch(setNotification({
         show: true,
         message: 'Clip updated',

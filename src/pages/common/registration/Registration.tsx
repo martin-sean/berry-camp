@@ -61,7 +61,7 @@ export default (props: RegistrationProps) => {
     // If valid, check if the username is available
     if (valid) {
       try {
-        const available = await validateUsername(username, props.accessToken);
+        const available = await validateUsername(username, props.accessToken, dispatch);
         setError(!available);
         setErrorMessage(`'${ username }' ${ available ? 'is available' : 'is already taken' }`);
         // Save for submission if available
@@ -82,7 +82,7 @@ export default (props: RegistrationProps) => {
     // Username must be present
     if (!username) return;
     setSubmitting(true);
-    const newAccessToken = await setNewUsername(username, props.accessToken);
+    const newAccessToken = await setNewUsername(username, props.accessToken, dispatch);
     setSubmitting(false);
     newAccessToken && dispatch(setAccessToken(newAccessToken));
     props.setShowUsernameDialog(false);

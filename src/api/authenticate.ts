@@ -1,5 +1,7 @@
 import JwtDecode from 'jwt-decode';
 import UrlSetter from 'api/url-setter';
+import { Dispatch } from 'redux';
+import { setAccessToken, Actions } from 'redux/actions';
 
 const loginUrl = UrlSetter('/v1/auth/login');
 const refreshUrl = UrlSetter('/v1/auth/refresh');
@@ -47,10 +49,12 @@ export const logout = async () => {
 }
 
 // Check if token has expired, issue a new one if it has
-export const getNewTokenIfRequired = async (accessToken: string | undefined): Promise<string | null> => {
+export const getNewTokenIfRequired = async (accessToken: string | undefined, dispatch: Dispatch<Actions>): Promise<string | null> => {
   // Return current access token if it's still valid
   if (accessToken && tokenStillValid(accessToken)) return accessToken;
   // Token needs refreshing
+  const newAccessToken = await issueNewAccessToken();
+  newAccessToken && dispatch(setAccessToken(newAccessToken));
   return issueNewAccessToken();
 }
 
