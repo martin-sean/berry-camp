@@ -137,13 +137,16 @@ export const getClip = async (clipId: number): Promise<SingleClipData | null> =>
 /**
  * Delete a single clip
  */
- export const deleteClip = async (clipId: number, accessToken: string) => {
+ export const deleteClip = async (clipId: number, accessToken: string, dispatch: Dispatch<Actions>) => {
+   const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
+   if (!newAccessToken) return false;
+
    const res = await fetch(urlSetter(`/v1/clip/${ clipId }`), {
      method: 'DELETE',
      headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${ accessToken }`
+      'Authorization': `Bearer ${ newAccessToken }`
      }
    });
    return res.ok;
