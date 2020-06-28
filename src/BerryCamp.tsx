@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 
-import { createMuiTheme, CssBaseline, ThemeProvider, Snackbar, Slide } from '@material-ui/core';
+import { CssBaseline, Snackbar, Slide } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core/styles';
 
 import { Switch, Route } from 'react-router-dom';
 import * as Path from 'pages/paths';
@@ -18,28 +19,10 @@ import { getNewTokenIfRequired, getCurrentUser } from 'api/authenticate';
 import { useDispatch, useSelector } from 'react-redux';
 import Registration from 'pages/common/registration';
 import { GlobalStore } from 'redux/reducers';
-import { setAccessToken, clearNotification } from 'redux/actions';
+import { clearNotification } from 'redux/actions';
 import { Alert } from '@material-ui/lab';
 import { FileCopy as FileCopyIcon } from '@material-ui/icons';
-
-const theme = (dark: boolean) => createMuiTheme({
-  palette: {
-    type: dark ? 'dark' : 'light',
-    primary: {
-      main: '#c800c8',
-    },
-    secondary: {
-      main: '#F64D3A',
-    },
-  },
-  overrides: {
-    MuiTooltip: {
-      tooltip: {
-        fontSize: "1em",
-      },
-    },
-  },
-});
+import defaultTheme from 'utils/theme';
 
 export default () => {
   // Remember the drawer state
@@ -93,7 +76,7 @@ export default () => {
   }
 
   return ( 
-    <ThemeProvider theme={ theme(dark) }>
+    <ThemeProvider theme={ defaultTheme(dark) }>
       <CssBaseline />
       
       {/* Snackbar message alerts */}

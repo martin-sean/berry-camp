@@ -48,7 +48,7 @@ export const logout = async () => {
   return res.ok;
 }
 
-// Check if token has expired, issue a new one if it has
+// Check if token has expired, issue a new one if it has and set it in redux store
 export const getNewTokenIfRequired = async (accessToken: string | undefined, dispatch: Dispatch<Actions>): Promise<string | null> => {
   // Return current access token if it's still valid
   if (accessToken && tokenStillValid(accessToken)) return accessToken;
