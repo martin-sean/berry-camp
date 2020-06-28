@@ -4,6 +4,8 @@ import { Actions } from "./actions";
 
 // Chapter navigation tree data
 import { DataTree } from 'api/chapterdata';
+import { userPrefersDark, setThemeInLocalStorage } from 'settings/dark-mode';
+import { getVolumeOrMute, setVolumeInLocalStorage } from 'settings/volume';
 
 // Represents a position in the drawer navigation menu
 export interface Navigation {
@@ -59,8 +61,8 @@ const defaultNotification: Notification = {
 const defaultStore: GlobalStore = {
   nav: defaultNav,
   notification: defaultNotification,
-  volume: 0,
-  dark: true,
+  volume: getVolumeOrMute(),
+  dark: userPrefersDark(),
 };
 
 // Main redux reducer
@@ -115,12 +117,14 @@ export default (store: GlobalStore = defaultStore, action: Actions): GlobalStore
       };
     }
     case TOGGLE_DARK_THEME: {
+      setThemeInLocalStorage(!store.dark);
       return {
         ...store,
         dark: !store.dark
       };
     }
     case SET_VOLUME: {
+      setVolumeInLocalStorage(action.volume);
       return {
         ...store,
         volume: action.volume
