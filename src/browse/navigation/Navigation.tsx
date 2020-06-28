@@ -193,7 +193,7 @@ export default (props: NavigationProps) => {
     // Don't bother if there is no access token or clip
     if (!accessToken || !clip) return;
     setSubmitting(true);
-    if (await deleteClip(clip.id, accessToken)) {
+    if (await deleteClip(clip.id, accessToken, dispatch)) {
       dispatch(setNotification({
         show: true,
         message: 'Clip deleted',
