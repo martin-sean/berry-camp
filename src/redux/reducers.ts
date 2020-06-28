@@ -1,4 +1,5 @@
-import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, SET_NOTIFICATION, CLEAR_NOTIFICATION, TOGGLE_DARK_THEME, TOGGLE_MUTE } from './actionTypes';
+import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN,
+  SET_NOTIFICATION, CLEAR_NOTIFICATION, TOGGLE_DARK_THEME, SET_VOLUME } from './actionTypes';
 import { Actions } from "./actions";
 
 // Chapter navigation tree data
@@ -34,7 +35,7 @@ export interface GlobalStore {
   nav: Navigation,
   notification: Notification,
   accessToken?: string,
-  mute: boolean,
+  volume: number,
   dark: boolean,
 }
 
@@ -58,7 +59,7 @@ const defaultNotification: Notification = {
 const defaultStore: GlobalStore = {
   nav: defaultNav,
   notification: defaultNotification,
-  mute: true,
+  volume: 0,
   dark: true,
 };
 
@@ -119,10 +120,10 @@ export default (store: GlobalStore = defaultStore, action: Actions): GlobalStore
         dark: !store.dark
       };
     }
-    case TOGGLE_MUTE: {
+    case SET_VOLUME: {
       return {
         ...store,
-        mute: !store.mute
+        volume: action.volume
       };
     }
     default: {

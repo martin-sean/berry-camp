@@ -8,6 +8,9 @@ import YouTube from 'react-youtube';
 import { Link } from 'react-router-dom';
 import { formatSeconds } from 'utils/clip-time';
 import { CurrentUser } from 'api/authenticate';
+import { useSelector } from 'react-redux';
+import { GlobalStore } from 'redux/reducers';
+import Volume from 'pages/common/volume';
 
 const useStyles = makeStyles((theme) => ({
   ...commonStyles,  
@@ -80,7 +83,6 @@ interface ClipProps {
   setEdit: () => void,
   setDelete: (clip: ClipData) => void,
   currentUser: CurrentUser | null,
-  mute: boolean,
 }
 
 /**
@@ -98,6 +100,8 @@ export default (props: ClipProps) => {
   const [player, setPlayer] = useState<YT.Player>();
   // Remember current clip time 
   const [sliderValue, setSliderValue] = useState<number>(props.clip.start_time);
+    
+  const volume = useSelector((store: GlobalStore) => store.volume);
 
   // YouTube player is ready
   const handleReady = (event: { target: YT.Player }) => {
@@ -112,34 +116,35 @@ export default (props: ClipProps) => {
     player.seekTo(time, true);
   }
 
-  const handleClose = () => {
-    // TODO: Cleanup
-    props.close();
-  }
+  // Set the volume on change
+  useEffect(() => {
+    if (!player) return;
+    volume === 0 ? player.mute() : player.unMute();
+    player.setVolume(volume);
+  }, [volume, player])
 
   // Loop youtube video
   useEffect(() => {
+    if (!player) return;
     let interval: NodeJS.Timeout;
-    if (player) {
-      interval = setInterval(() => {
-        if (player.getPlayerState() === YouTube.PlayerState.PLAYING) {
-          const currentTime = player.getCurrentTime();
-          if (currentTime > props.clip.end_time || currentTime < props.clip.start_time ) {
-            player.seekTo(props.clip.start_time, true);
-            setSliderValue(props.clip.start_time);
-          } else {
-            setSliderValue(currentTime);
-          }
+    interval = setInterval(() => {
+      if (player.getPlayerState() === YouTube.PlayerState.PLAYING) {
+        const currentTime = player.getCurrentTime();
+        if (currentTime > props.clip.end_time || currentTime < props.clip.start_time ) {
+          player.seekTo(props.clip.start_time, true);
+          setSliderValue(props.clip.start_time);
+        } else {
+          setSliderValue(currentTime);
         }
-      }, 1000);
-    }
+      }
+    }, 1000);
     return () => clearInterval(interval);
   }, [player, props.clip.start_time, props.clip.end_time, setSliderValue])
 
   return (
     <Dialog
       open={ true }
-      onClose={ handleClose }
+      onClose={ () => props.close() }
       classes={{ paper: classes.dialogPaper }}
     >
       <Paper
@@ -154,7 +159,7 @@ export default (props: ClipProps) => {
             opts={{
               playerVars: {
                 start: props.clip.start_time,
-                mute: props.mute ? 1 : 0,
+                mute: 1,
                 controls: 0,
                 autoplay: 1,
                 loop: 1,
@@ -209,13 +214,17 @@ export default (props: ClipProps) => {
         <Typography className={ classes.description }>
           { props.clip.description || 'No description' }
         </Typography>
-        {/* Owner actions */}
-        { (isModerator || isAuthor) && (
-          <Box display='flex' justifyContent='flex-end'>
-            <IconButton onClick={ props.setEdit }><EditIcon/></IconButton>
-            <IconButton onClick={ () => props.setDelete(props.clip) }><DeleteIcon/></IconButton>
-          </Box>
-        )}
+
+        <Box display='flex' justifyContent='flex-end' alignItems='center'>
+          <Volume />
+          {/* Owner actions */}
+          { (isModerator || isAuthor) && (
+            <React.Fragment>
+              <IconButton onClick={ props.setEdit }><EditIcon/></IconButton>
+              <IconButton onClick={ () => props.setDelete(props.clip) }><DeleteIcon/></IconButton>
+            </React.Fragment>
+          )}
+        </Box>
       </Paper>
     </Dialog>
   );

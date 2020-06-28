@@ -22,9 +22,9 @@ import { setAccessToken, clearNotification } from 'redux/actions';
 import { Alert } from '@material-ui/lab';
 import { FileCopy as FileCopyIcon } from '@material-ui/icons';
 
-const theme = createMuiTheme({
+const theme = (dark: boolean) => createMuiTheme({
   palette: {
-    type: 'dark',
+    type: dark ? 'dark' : 'light',
     primary: {
       main: '#c800c8',
     },
@@ -54,7 +54,10 @@ export default () => {
 
   // Accept redux actions
   const dispatch = useDispatch();
-    
+
+  // Theme
+  const dark = useSelector((store: GlobalStore) => store.dark);
+
   // Messages
   const notification = useSelector((store: GlobalStore) => store.notification);
 
@@ -91,7 +94,7 @@ export default () => {
   }
 
   return ( 
-    <ThemeProvider theme={ theme }>
+    <ThemeProvider theme={ theme(dark) }>
       <CssBaseline />
       
       {/* Snackbar message alerts */}

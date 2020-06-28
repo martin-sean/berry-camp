@@ -397,7 +397,6 @@ export default (props: NavigationProps) => {
           setEdit={ setEditClipCallback }
           setDelete={ setClipForDeletionCallback }
           currentUser={ currentUser }
-          mute={ false }
         />
       // Edit a clip 
       ) : clip && editingClip ? (

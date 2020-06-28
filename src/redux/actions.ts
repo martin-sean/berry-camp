@@ -1,4 +1,4 @@
-import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, CLEAR_NOTIFICATION, SET_NOTIFICATION, TOGGLE_DARK_THEME, TOGGLE_MUTE } from './actionTypes';
+import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN, CLEAR_NOTIFICATION, SET_NOTIFICATION, TOGGLE_DARK_THEME, SET_VOLUME } from './actionTypes';
 import { DataTree } from 'api/chapterdata'
 import { NavActionProps, Notification } from './reducers';
 
@@ -39,8 +39,9 @@ interface ToggleDarkThemeAction {
   type: typeof TOGGLE_DARK_THEME,
 }
 
-interface ToggleMuteAction {
-  type: typeof TOGGLE_MUTE,
+interface SetVolumeAction {
+  type: typeof SET_VOLUME,
+  volume: number,
 }
 
 // All redux actions
@@ -52,7 +53,7 @@ export type Actions = SetDataAction |
   SetNotificationAction | 
   ClearNotificationAction |
   ToggleDarkThemeAction |
-  ToggleMuteAction;
+  SetVolumeAction;
 
 // Actions
 export const setData = (data: DataTree): SetDataAction => {
@@ -87,6 +88,6 @@ export const toggleDarkTheme = (): ToggleDarkThemeAction => {
   return { type: TOGGLE_DARK_THEME };
 }
 
-export const toggleMute = (): ToggleMuteAction => {
-  return { type: TOGGLE_MUTE };
+export const setVolume = (volume: number): SetVolumeAction => {
+  return { type: SET_VOLUME, volume };
 }

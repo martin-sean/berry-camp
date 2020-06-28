@@ -10,6 +10,7 @@ import { useHistory, Route, NavLink } from 'react-router-dom';
 import * as Path from 'pages/paths';
 import { GlobalStore } from 'redux/reducers';
 import MenuIcon from '@material-ui/icons/Menu';
+import ThemeControl from '../themecontrol';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -170,6 +171,7 @@ export default (props: NavbarProps) => {
           {/* Sign in button and account dropdown */}
           {/* Right side content */}
           <div className={ classes.rightSide }>
+            <ThemeControl />
             <Hidden smDown>
               <MenuList className={ classes.menuList } >
                 <PageLinks />
