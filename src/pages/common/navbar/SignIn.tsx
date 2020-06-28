@@ -4,7 +4,7 @@ import GoogleLogin, { GoogleLoginResponseOffline, GoogleLoginResponse, useGoogle
 import clientId from 'api/client';
 import { login, logout, getCurrentUser } from 'api/authenticate';
 import { useDispatch } from 'react-redux';
-import { clearAccessToken, setAccessToken } from 'redux/actions';
+import { clearAccessToken, setAccessToken, setNotification } from 'redux/actions';
 import { Button, Menu, MenuItem, makeStyles, CircularProgress, Backdrop, Typography } from '@material-ui/core';
 import { Person, SupervisorAccount } from '@material-ui/icons';
 import { Link, useHistory } from 'react-router-dom';
@@ -88,14 +88,23 @@ export default (props: SignInProps) => {
     setAnchorEl(null);
     props.closeParent && props.closeParent();
     
-    // Sign out of Google
-    signOut();
     // Logout of app and delete refresh cookie
-    await logout();
-    // Clear the access token
-    dispatch(clearAccessToken());
-    // Navigate home
-    history.push(Path.HOME);
+    if (await logout()) {
+      // Clear the access token
+      dispatch(clearAccessToken());
+      // Sign out of Google
+      signOut();
+      // Navigate home
+      history.push(Path.HOME);
+    } else {
+      dispatch(setNotification({
+        message: 'Error reaching the server. Could not logout',
+        show: true,
+        type: 'error',
+        icon: 'none',
+        duration: 3000,
+      }));
+    }
   }
 
   // Handle opening the account menu
