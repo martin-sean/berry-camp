@@ -51,7 +51,7 @@ export const logout = async () => {
 // Check if token has expired, issue a new one if it has and set it in redux store
 export const getNewTokenIfRequired = async (accessToken: string | undefined, dispatch: Dispatch<Actions>): Promise<string | null> => {
   // Return current access token if it's still valid
-  if (accessToken && tokenStillValid(accessToken)) return accessToken;
+  if (accessToken && tokenStillValid(accessToken)) return accessToken;  
   // Token needs refreshing
   const newAccessToken = await issueNewAccessToken();
   newAccessToken && dispatch(setAccessToken(newAccessToken));
@@ -62,7 +62,7 @@ export const getNewTokenIfRequired = async (accessToken: string | undefined, dis
 export const tokenStillValid = (accessToken: string): boolean => {
   try {
     const { exp } = JwtDecode(accessToken);
-    return Date.now.valueOf() < exp * 1000;
+    return Date.now() < exp * 1000;
   } catch (error) {
     return false;
   }

@@ -10,7 +10,7 @@ export const validateUsername = async (
   accessToken: string,
   dispatch: Dispatch<Actions>
 ): Promise<boolean> => {
-  const newAccessToken = getNewTokenIfRequired(accessToken, dispatch);
+  const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
   if (!newAccessToken) throw new Error("Could not check username");
 
   const res = await fetch(urlSetter(`/v1/auth/checkusername/${ username }`), {
@@ -35,7 +35,7 @@ export const setNewUsername = async (
   accessToken: string,
   dispatch: Dispatch<Actions>
 ): Promise<string | null> => {
-  const newAccessToken = getNewTokenIfRequired(accessToken, dispatch);
+  const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
   if (!newAccessToken) return null;
 
   const res = await fetch(currentUserUrl, {
