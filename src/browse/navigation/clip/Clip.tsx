@@ -198,10 +198,10 @@ export default (props: ClipProps) => {
               label={ props.clip.author.username }
               variant='outlined'
             />
-            <Typography color='textSecondary' component='span'>posted on { createdDate }</Typography>
+            <Typography color='textSecondary' component='span'>clipped on { createdDate }</Typography>
           </div>
         ) : (
-          <Typography color='textSecondary' component='span'>Posted on { createdDate }</Typography>
+          <Typography color='textSecondary' component='span'>Clipped on { createdDate }</Typography>
         )}
         {/* Tags */}
         <div className={ classes.tags }>

@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 interface VideoPickerProps {
   videoId: string,
   startTime?: number,
+  endTime?: number,
   setTimes: (startTime: number, endTime: number) => void,
 }
 
@@ -26,7 +27,7 @@ export default (props: VideoPickerProps) => {
 
   // Set the default selected clip times
   const defaultStartTime = props.startTime || 0;
-  const defaultEndTime = defaultStartTime + 20;
+  const defaultEndTime = props.endTime || defaultStartTime + 20;
 
   // Remember the duration of the video
   const [duration, setDuration] = useState<number>();
@@ -69,11 +70,11 @@ export default (props: VideoPickerProps) => {
     
     setDuration(duration);
     setPlayer(event.target);
-    event.target.getIframe().focus();
-    // If start time provided limit the range
-    if (startTime !== 0) {
+
+    // If editing or if start time provided limit the range
+    if (props.endTime || startTime !== 0) {
       updateRange(duration);
-      props.setTimes(startTime, duration);
+      props.setTimes(startTime, endTime);
     // Use full range otherwise
     } else {
       setEndTime(duration);

@@ -41,8 +41,8 @@ export default (props: NewClipProps) => {
   // Current room navigation
   const nav = useSelector((store: GlobalStore) => store.nav);
   // Selected video times and tags, load values if editing clip
-  const [startTime, setStartTime] = useState<number | null>(props.clipData?.start_time || null);
-  const [endTime, setEndTime] = useState<number | null>(props.clipData?.end_time || null);
+  const [startTime, setStartTime] = useState<number | undefined>(props.clipData?.start_time);
+  const [endTime, setEndTime] = useState<number | undefined>(props.clipData?.end_time);
   const [tags, setTags] = useState<string[]>(props.clipData?.tags.map(tag => tag.name) || []);
 
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -247,7 +247,9 @@ export default (props: NewClipProps) => {
             />
             
             {/* Video picker */}
-            { currentVideoId && currentVideoId.length === 11 && startTime ? (
+            { props.clipData ? (
+              <VideoPicker videoId={ currentVideoId } startTime={ startTime } endTime={ endTime } setTimes={ setTimes }/>
+            ) : currentVideoId && currentVideoId.length === 11 && startTime ? (
               <VideoPicker videoId={ currentVideoId } startTime={ startTime } setTimes={ setTimes }/>
             ) : currentVideoId && currentVideoId.length === 11 && (
               <VideoPicker videoId={ currentVideoId } setTimes={ setTimes }/>
@@ -267,7 +269,7 @@ export default (props: NewClipProps) => {
             <div className={ classes.wrapper }>
               <Button
                 // Disable if awaiting response or missing a start and end time 
-                disabled={ submitting || startTime === null || endTime === null }
+                disabled={ submitting || startTime === undefined || endTime === undefined }
                 type='submit'
                 variant='contained'
                 color='primary'
