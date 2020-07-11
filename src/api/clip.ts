@@ -75,7 +75,7 @@ export interface ClipData {
   tags: Tag[],
   author?: Author,
   created_at: Date,
-  likes?: number,
+  likes: number,
   userLikes?: boolean
 }
 
@@ -109,7 +109,10 @@ export const getClips = async (
       'Content-Type': 'application/json',
     },
   });
-  return res.ok ? res.json() : undefined;
+  // Cheeky conversion of string to number
+  const clips = await res.json() as any[];
+  clips.map(clip => clip.likes = parseInt(clip.likes));
+  return res.ok ? clips : undefined;
 }
 
 /**

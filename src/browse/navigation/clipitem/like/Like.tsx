@@ -11,6 +11,14 @@ const useStyles = makeStyles(theme => ({
     minWidth: 0,
     height: '100%',
   },
+  buttonRoot: {
+    '&.Mui-disabled': {
+      color: 'inherit',
+    }
+  },
+  disabled : {
+    color: 'inherit',
+  },
   buttonLabel: {
     display: 'flex',
     flexDirection: 'column',
@@ -41,6 +49,9 @@ export default (props: LikeProps) => {
 
   // Handle a user liking/unliking a clip
   const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    // Ignore likes if not logged in
+    if (!accessToken) return;
+
     stopPropagation(event)
     // Simulate likes
     setLikesOffset(props.liked !== liked ? 0 : props.liked ? -1 : 1);
@@ -65,7 +76,8 @@ export default (props: LikeProps) => {
   return (
     <Button
       className={ classes.button }
-      classes={{ label: classes.buttonLabel }}
+      classes={{ root: classes.buttonRoot, label: classes.buttonLabel, disabled: classes.disabled }}
+      disabled={ !Boolean(accessToken) }
       onClick={ handleClick }
       onMouseDown={ stopPropagation }
     >
