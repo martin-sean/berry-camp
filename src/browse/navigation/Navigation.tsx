@@ -12,7 +12,7 @@ import Room from 'browse/navigation/room';
 import { AddToQueue } from '@material-ui/icons';
 import NewClip from './newclip';
 import RoomNav from './roomnav';
-import { getClips, ClipData, deleteClip } from 'api/clip';
+import { getClips, ClipData, deleteClip, getClipsAuth } from 'api/clip';
 import Clip from './clip/Clip';
 import ClipItem from './clipitem';
 import { getCurrentUser } from 'api/authenticate';
@@ -253,7 +253,10 @@ export default (props: NavigationProps) => {
     setClips(undefined);
     // Declare function to set the clips
     const fetchClips = async () => {
-      const clips = await getClips(chapterId, sideNo, checkpointNo, roomNo);
+      const clips = accessToken ?
+        await getClipsAuth(accessToken, dispatch, chapterId, sideNo, checkpointNo, roomNo) : 
+        await getClips(chapterId, sideNo, checkpointNo, roomNo);
+
       if (!unmounted) setClips(clips);
     }
     // Wait before fetching clips
@@ -263,7 +266,7 @@ export default (props: NavigationProps) => {
       clearTimeout(timeout);
       unmounted = true;
     }
-  }, [chapterId, sideNo, checkpointNo, roomNo, clips, setClips]);
+  }, [chapterId, sideNo, checkpointNo, roomNo, clips, setClips, accessToken, dispatch]);
 
   // Check for server timeout
   useEffect(() => {

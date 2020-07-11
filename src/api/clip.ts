@@ -75,16 +75,27 @@ export interface ClipData {
   tags: Tag[],
   author?: Author,
   created_at: Date,
+  likes?: number,
+  userLikes?: boolean
 }
 
 interface Tag {
   name: string,
 }
 
+interface Author {
+  username: string,
+}
+
 /**
  * Search for clips
  */
-export const getClips = async (chapterId?: string, sideNo?: number, checkpointNo?: number, roomNo?: number): Promise<ClipData[] | undefined> => {
+export const getClips = async (
+  chapterId?: string,
+  sideNo?: number,
+  checkpointNo?: number,
+  roomNo?: number,
+): Promise<ClipData[] | undefined> => {
   const url = '/v1/clip' +
     `${ chapterId ? `?chapterId=${ chapterId }` : '' }` +
     `${ sideNo ? `&sideNo=${ sideNo }` : '' }` +
@@ -101,8 +112,38 @@ export const getClips = async (chapterId?: string, sideNo?: number, checkpointNo
   return res.ok ? res.json() : undefined;
 }
 
-interface Author {
-  username: string,
+/**
+ * Search for clips while authorized
+ */
+export const getClipsAuth = async (
+  accessToken: string,
+  dispatch: Dispatch<Actions>,
+  chapterId?: string,
+  sideNo?: number,
+  checkpointNo?: number,
+  roomNo?: number,
+): Promise<ClipData[] | undefined> => {
+  const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
+  
+  const url = '/v1/clip/auth' +
+    `${ chapterId ? `?chapterId=${ chapterId }` : '' }` +
+    `${ sideNo ? `&sideNo=${ sideNo }` : '' }` +
+    `${ checkpointNo ? `&checkpointNo=${ checkpointNo }` : '' }` +
+    `${ roomNo ? `&roomNo=${ roomNo }` : '' }`;
+
+  const res = await fetch(urlSetter(url), {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ newAccessToken }`
+    },
+    credentials: 'include',
+  });
+  // Cheeky conversion of string to number
+  const clips = await res.json() as any[];
+  clips.map(clip => clip.likes = parseInt(clip.likes));
+  return res.ok ? clips : undefined;
 }
 
 export interface SingleClipData {
@@ -150,4 +191,35 @@ export const getClip = async (clipId: number): Promise<SingleClipData | null> =>
      }
    });
    return res.ok;
+ }
+
+ /**
+  * Like a clip
+  */
+ export const likeClip = async (clipId: number, accessToken: string, dispatch: Dispatch<Actions>) => {
+   const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
+   
+   const res = await fetch(urlSetter(`/v1/clip/${ clipId }/like`), {
+    method:'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ newAccessToken }`
+    }
+   });
+   return res.ok;
+ }
+
+ export const unlikeClip = async (clipId: number, accessToken: string, dispatch: Dispatch<Actions>) => {
+  const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
+   
+  const res = await fetch(urlSetter(`/v1/clip/${ clipId }/like`), {
+   method:'DELETE',
+   headers: {
+     'Accept': 'application/json',
+     'Content-Type': 'application/json',
+     'Authorization': `Bearer ${ newAccessToken }`
+   }
+  });
+  return res.ok;
  }

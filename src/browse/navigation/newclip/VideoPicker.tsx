@@ -71,7 +71,8 @@ export default (props: VideoPickerProps) => {
     setDuration(duration);
     setPlayer(event.target);
 
-    // If editing or if start time provided limit the range
+    // If a start/end time is provided when editing, set them OR
+    // If a new clip and a start time is provided, set the default range of 20seconds
     if (props.endTime || startTime !== 0) {
       updateRange(duration);
       props.setTimes(startTime, endTime);

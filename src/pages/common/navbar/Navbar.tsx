@@ -141,7 +141,7 @@ export default (props: NavbarProps) => {
   }
 
   // Common page links in desktop and mobile
-  const PageLinks = () => (
+  const pageLinks = (
     <List className={ classes.menuList }>
       <ListItem button className={ classes.menuItem } component={ NavLink } onClick={ handleMenuClose } to={ Path.BROWSE }>Browse</ListItem>
       <ListItem button className={ classes.menuItem } component={ NavLink } onClick={ handleMenuClose } to={ Path.ABOUT }>About</ListItem>
@@ -174,7 +174,7 @@ export default (props: NavbarProps) => {
             <ThemeControl />
             <Hidden smDown>
               <MenuList className={ classes.menuList } >
-                <PageLinks />
+                { pageLinks }
               </MenuList>
               <SignIn accessToken={ accessToken } />
             </Hidden>
@@ -208,7 +208,7 @@ export default (props: NavbarProps) => {
                 open={ Boolean(anchorEl) }
                 onClose={ handleMenuClose }
               >
-                <PageLinks />
+                { pageLinks }
               </Menu>
               <IconButton
                 color='inherit'

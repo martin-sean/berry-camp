@@ -7,6 +7,7 @@ import { formatSecondsWords } from 'utils/clip-time';
 import { Skeleton } from '@material-ui/lab';
 import { MoreVert } from '@material-ui/icons';
 import { CurrentUser } from 'api/authenticate';
+import Like from './like';
 
 const useStyles = makeStyles(theme => ({
   ...commonStyles,
@@ -96,6 +97,9 @@ export default (props: ClipItemProps) => {
         <Paper className={ classes.clipPaper }>
           {/* Left Side */}
           <div className={ classes.leftSide }>
+            {/* Like button */}
+            <Like clipId={ props.clip.id } likes={ props.clip.likes || 0 } liked={ props.clip.userLikes || false } />
+            {/* Thumbnail */}
             <div className={ classes.thumbnailWrapper }>
               <div className={ classes.aspectBox }>
                 { thumbnailLoaded && <Skeleton className={ classes.aspectContent }/>}
@@ -108,6 +112,7 @@ export default (props: ClipItemProps) => {
                 />
               </div>
             </div>
+            {/* Clip Name */}
             <Typography className={ classes.title }>{ props.clip.name || 'Untitled' }</Typography>
           </div>
           {/* Right side */}
