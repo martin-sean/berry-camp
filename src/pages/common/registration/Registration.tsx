@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, makeStyles, debounce, CircularProgress } from '@material-ui/core';
 import { Check as CheckIcon, ErrorOutline as ErrorIcon } from '@material-ui/icons';
 import { useDispatch } from 'react-redux';
-import { setNewUsername, validateUsername } from 'api/user';
+import { setNewUsername, validateUsername } from 'fetch/user';
 import { setAccessToken } from 'redux/actions';
 
 const usernamePattern = new RegExp('^\\w+$');

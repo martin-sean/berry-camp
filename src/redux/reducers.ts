@@ -3,7 +3,7 @@ import { SET_DATA, SET_NAV, CLEAR_NAV, SET_ACCESS_TOKEN, CLEAR_ACCESS_TOKEN,
 import { Actions } from "./actions";
 
 // Chapter navigation tree data
-import { DataTree } from 'api/chapterdata';
+import { DataTree } from 'fetch/chapterdata';
 import { userPrefersDark, setThemeInLocalStorage } from 'settings/dark-mode';
 import { getVolumeOrMute, setVolumeInLocalStorage } from 'settings/volume';
 

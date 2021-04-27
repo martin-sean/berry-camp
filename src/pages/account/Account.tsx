@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { makeStyles, Paper, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, FormControlLabel, Checkbox, Container, CircularProgress } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
-import { logout } from 'api/authenticate';
+import { logout } from 'fetch/authenticate';
 import { useGoogleLogout } from 'react-google-login';
-import clientId from 'api/client';
+import clientId from 'fetch/client';
 import { clearAccessToken } from 'redux/actions';
 import { useHistory } from 'react-router-dom';
 import * as Path from 'pages/paths';
 import NavbarSpacer from 'pages/common/navbarspacer';
-import { deleteAccount } from 'api/user';
+import { deleteAccount } from 'fetch/user';
  
 const useStyles = makeStyles((theme) => ({
   root: {

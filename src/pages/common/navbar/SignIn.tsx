@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import GoogleLogin, { GoogleLoginResponseOffline, GoogleLoginResponse, useGoogleLogout } from 'react-google-login';
-import clientId from 'api/client';
-import { login, logout, getCurrentUser } from 'api/authenticate';
+import clientId from 'fetch/client';
+import { login, logout, getCurrentUser } from 'fetch/authenticate';
 import { useDispatch } from 'react-redux';
 import { clearAccessToken, setAccessToken, setNotification } from 'redux/actions';
 import { Button, Menu, MenuItem, makeStyles, CircularProgress, Backdrop, Typography } from '@material-ui/core';

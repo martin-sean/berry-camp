@@ -3,7 +3,7 @@ import { makeStyles, Paper, Typography, Container, Chip } from '@material-ui/cor
 import { useParams } from 'react-router-dom';
 import { Skeleton } from '@material-ui/lab';
 import NavbarSpacer from 'pages/common/navbarspacer';
-import { getUser } from 'api/user';
+import { getUser } from 'fetch/user';
 
 const useStyles = makeStyles((theme) => ({
   paper: {

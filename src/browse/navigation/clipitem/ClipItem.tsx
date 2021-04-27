@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { ListItem, Paper, Typography, Chip, IconButton, useMediaQuery } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import commonStyles from 'utils/common-styles';
-import { ClipData } from 'api/clip';
+import { ClipData } from 'fetch/clip';
 import { formatSecondsWords } from 'utils/clip-time';
 import { Skeleton } from '@material-ui/lab';
 import { MoreVert } from '@material-ui/icons';
-import { CurrentUser } from 'api/authenticate';
+import { CurrentUser } from 'fetch/authenticate';
 import Like from './like';
 
 const useStyles = makeStyles(theme => ({

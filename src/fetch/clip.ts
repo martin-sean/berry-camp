@@ -1,5 +1,5 @@
-import urlSetter from 'api/url-setter';
-import { getNewTokenIfRequired } from 'api/authenticate';
+import urlSetter from 'fetch/url-setter';
+import { getNewTokenIfRequired } from 'fetch/authenticate';
 import { Dispatch } from 'redux';
 import { Actions } from 'redux/actions';
 

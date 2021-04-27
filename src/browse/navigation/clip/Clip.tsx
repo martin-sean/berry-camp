@@ -3,11 +3,11 @@ import { Dialog, Paper, Typography, Chip, Avatar, Slider, IconButton, Box } from
 import { Edit as EditIcon, Delete as DeleteIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import commonStyles from 'utils/common-styles';
-import { ClipData } from 'api/clip';
+import { ClipData } from 'fetch/clip';
 import YouTube from 'react-youtube';
 import { Link } from 'react-router-dom';
 import { formatSeconds } from 'utils/clip-time';
-import { CurrentUser } from 'api/authenticate';
+import { CurrentUser } from 'fetch/authenticate';
 import { useSelector } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
 import Volume from 'pages/common/volume';

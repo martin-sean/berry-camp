@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
 import VideoPicker from './VideoPicker';
 import YTLinkParser from 'utils/yt-link-parser';
-import { createNewClip, NewClipData, ClipData, editClip } from 'api/clip';
+import { createNewClip, NewClipData, ClipData, editClip } from 'fetch/clip';
 import TagSelector from './TagSelector';
 import { setNotification } from 'redux/actions';
 import Volume from 'pages/common/volume';

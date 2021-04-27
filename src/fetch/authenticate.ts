@@ -1,5 +1,5 @@
 import JwtDecode from 'jwt-decode';
-import UrlSetter from 'api/url-setter';
+import UrlSetter from 'fetch/url-setter';
 import { Dispatch } from 'redux';
 import { setAccessToken, Actions } from 'redux/actions';
 

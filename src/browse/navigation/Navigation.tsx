@@ -4,7 +4,7 @@ import { Paper, Grid, Typography, Fade, Button, Fab, CircularProgress, List, Men
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import commonStyles from 'utils/common-styles';
-import { DataTree, Chapter, Side, Checkpoint } from 'api/chapterdata';
+import { DataTree, Chapter, Side, Checkpoint } from 'fetch/chapterdata';
 import pluralize from 'utils/pluralize';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNav, setNotification } from 'redux/actions';
@@ -12,10 +12,10 @@ import Room from 'browse/navigation/room';
 import { AddToQueue } from '@material-ui/icons';
 import NewClip from './newclip';
 import RoomNav from './roomnav';
-import { getClips, ClipData, deleteClip, getClipsAuth } from 'api/clip';
+import { getClips, ClipData, deleteClip, getClipsAuth } from 'fetch/clip';
 import Clip from './clip/Clip';
 import ClipItem from './clipitem';
-import { getCurrentUser } from 'api/authenticate';
+import { getCurrentUser } from 'fetch/authenticate';
 
 const useStyles = makeStyles((theme) => ({
   ...commonStyles,

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Favorite as FavoriteIcon, FavoriteBorder as FavoriteBorderIcon } from '@material-ui/icons';
 import { Typography, makeStyles, Button, debounce } from '@material-ui/core';
-import { likeClip, unlikeClip } from 'api/clip';
+import { likeClip, unlikeClip } from 'fetch/clip';
 import { useDispatch, useSelector } from 'react-redux';
 import { GlobalStore } from 'redux/reducers';
 

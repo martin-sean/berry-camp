@@ -5,7 +5,7 @@ import  './Room.css';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { makeStyles, Fade, Theme, Typography, Divider, Modal, Backdrop, useTheme, useMediaQuery } from '@material-ui/core'
 import commonStyles from 'utils/common-styles';
-import { DataTree } from 'api/chapterdata';
+import { DataTree } from 'fetch/chapterdata';
 import { Navigation } from 'redux/reducers';
 
 const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
@@ -89,11 +89,10 @@ export default React.memo((props: RoomProps) => {
 
   props.setDocTitle(room?.name);
 
-  const image = imageHost + props.nav.chapterId + 
-    '/' + props.nav.sideNo +
-    '/' + props.nav.checkpointNo +
-    '/' + props.nav.roomNo + 
-    '.png'
+  const image = `${imageHost}${props.nav.chapterId}/
+    ${props.nav.sideNo}/
+    ${props.nav.checkpointNo}/
+    ${props.nav.roomNo}.png`;
 
   const errorImage = '/img/error.jpg';
 
