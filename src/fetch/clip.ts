@@ -24,7 +24,7 @@ export const createNewClip = async (clipData: NewClipData, dispatch: Dispatch<Ac
   const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
   if (!newAccessToken) return false;
   // Fetch the response
-  const res = await fetch(urlSetter('/v1/clip'), {
+  const res = await fetch(urlSetter('/clip'), {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -53,7 +53,7 @@ export const editClip = async (
   const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
   if (!newAccessToken) return false;
   // Fetch the response, flag if tags need updating
-  const res = await fetch(urlSetter(`/v1/clip/${ clipId }${ updateTags ? '?updateTags=true' : '' }`), {
+  const res = await fetch(urlSetter(`/clip/${ clipId }${ updateTags ? '?updateTags=true' : '' }`), {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
@@ -96,7 +96,7 @@ export const getClips = async (
   checkpointNo?: number,
   roomNo?: number,
 ): Promise<ClipData[] | undefined> => {
-  const url = '/v1/clip' +
+  const url = '/clip' +
     `${ chapterId ? `?chapterId=${ chapterId }` : '' }` +
     `${ sideNo ? `&sideNo=${ sideNo }` : '' }` +
     `${ checkpointNo ? `&checkpointNo=${ checkpointNo }` : '' }` +
@@ -128,7 +128,7 @@ export const getClipsAuth = async (
 ): Promise<ClipData[] | undefined> => {
   const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
   
-  const url = '/v1/clip/auth' +
+  const url = '/clip/auth' +
     `${ chapterId ? `?chapterId=${ chapterId }` : '' }` +
     `${ sideNo ? `&sideNo=${ sideNo }` : '' }` +
     `${ checkpointNo ? `&checkpointNo=${ checkpointNo }` : '' }` +
@@ -168,7 +168,7 @@ export interface SingleClipData {
  * Get single clip
  */
 export const getClip = async (clipId: number): Promise<SingleClipData | null> => {
-  const res = await fetch(urlSetter(`/v1/clip/${ clipId }`), {
+  const res = await fetch(urlSetter(`/clip/${ clipId }`), {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -185,7 +185,7 @@ export const getClip = async (clipId: number): Promise<SingleClipData | null> =>
    const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
    if (!newAccessToken) return false;
 
-   const res = await fetch(urlSetter(`/v1/clip/${ clipId }`), {
+   const res = await fetch(urlSetter(`/clip/${ clipId }`), {
      method: 'DELETE',
      headers: {
       'Accept': 'application/json',
@@ -202,7 +202,7 @@ export const getClip = async (clipId: number): Promise<SingleClipData | null> =>
  export const likeClip = async (clipId: number, accessToken: string, dispatch: Dispatch<Actions>) => {
    const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
    
-   const res = await fetch(urlSetter(`/v1/clip/${ clipId }/like`), {
+   const res = await fetch(urlSetter(`/clip/${ clipId }/like`), {
     method:'POST',
     headers: {
       'Accept': 'application/json',
@@ -216,7 +216,7 @@ export const getClip = async (clipId: number): Promise<SingleClipData | null> =>
  export const unlikeClip = async (clipId: number, accessToken: string, dispatch: Dispatch<Actions>) => {
   const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
    
-  const res = await fetch(urlSetter(`/v1/clip/${ clipId }/like`), {
+  const res = await fetch(urlSetter(`/clip/${ clipId }/like`), {
    method:'DELETE',
    headers: {
      'Accept': 'application/json',

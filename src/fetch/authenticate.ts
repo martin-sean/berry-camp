@@ -3,9 +3,9 @@ import UrlSetter from 'fetch/url-setter';
 import { Dispatch } from 'redux';
 import { setAccessToken, Actions } from 'redux/actions';
 
-const loginUrl = UrlSetter('/v1/auth/login');
-const refreshUrl = UrlSetter('/v1/auth/refresh');
-const logoutUrl = UrlSetter('/v1/auth/logout');
+const loginUrl = UrlSetter('/auth/login');
+const refreshUrl = UrlSetter('/auth/refresh');
+const logoutUrl = UrlSetter('/auth/logout');
 
 export interface CurrentUser {
   userId: number,

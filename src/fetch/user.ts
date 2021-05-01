@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { Actions } from "redux/actions";
 import { getNewTokenIfRequired } from "./authenticate";
 
-const currentUserUrl = urlSetter('/v1/user/current');
+const currentUserUrl = urlSetter('/user/current');
 
 export const validateUsername = async (
   username: string,
@@ -13,7 +13,7 @@ export const validateUsername = async (
   const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
   if (!newAccessToken) throw new Error("Could not check username");
 
-  const res = await fetch(urlSetter(`/v1/auth/checkusername/${ username }`), {
+  const res = await fetch(urlSetter(`/auth/checkusername/${ username }`), {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -54,7 +54,7 @@ export const setNewUsername = async (
 
 // Get a user by username
 export const getUser = async (username: string): Promise<{ username: string, moderator: boolean } | null> => {
-  const res = await fetch(urlSetter(`/v1/user/username/${ username }`), {
+  const res = await fetch(urlSetter(`/user/username/${ username }`), {
     method: 'GET',
     headers: {
       'Accept': 'application/json',

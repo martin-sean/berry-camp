@@ -23,5 +23,5 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
    knex.destroy();
 }
 
-export default chain(cors(corsOptions)), isAuth)(handler);
+export default chain(cors(corsOptions), isAuth)(handler);
 
