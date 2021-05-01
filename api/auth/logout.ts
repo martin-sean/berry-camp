@@ -1,6 +1,10 @@
+import { chain } from "@amaurym/now-middleware";
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import cors from 'cors';
 import { clearRefreshToken } from "../../src/api/utils/auth";
 
-export default async (req: VercelRequest, res: VercelResponse) => {
+const handler = async (req: VercelRequest, res: VercelResponse) => {
   return clearRefreshToken(res);
 }
+
+export default chain(cors)(handler);

@@ -1,5 +1,6 @@
 import { chain, NowFunction } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import cors from 'cors';
 import Knex from 'knex';
 import Account from "../../src/api/data/models/Account";
 import isAuth from '../../src/api/middleware/isAuth';
@@ -94,4 +95,4 @@ const handlers: Record<string, RequestHandler> = {
   'DELETE': deleteRequest,
 }
 
-export default chain(isAuth)(handler);
+export default chain(cors, isAuth)(handler);

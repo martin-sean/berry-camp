@@ -1,11 +1,13 @@
+import { chain } from "@amaurym/now-middleware";
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import cors from 'cors';
 import Clip from "../src/api/data/models/Clip";
 import {connectToDatabase} from '../src/api/utils/database';
 
 /**
  * Get clips by room for users not logged in
  */
-export default async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   try {
     let {chapterId, sideNo, checkpointNo, roomNo} = req.query;
     if (Array.isArray(chapterId) || Array.isArray(sideNo) || Array.isArray(checkpointNo) || Array.isArray(roomNo)) {
@@ -59,3 +61,5 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<void> =>
     res.status(400).send({});
   }
 }
+
+export default chain(cors)(handler);

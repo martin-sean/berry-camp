@@ -1,5 +1,6 @@
 import { chain } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import cors from 'cors';
 import isAuth from '../../../src/api/middleware/isAuth';
 import isMod from '../../../src/api/middleware/isMod';
 import { modDeleteClipById } from '../../../src/api/actions/clip';
@@ -25,4 +26,4 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
   knex.destroy();
 }
 
-export default chain(isAuth, isMod)(handler)
+export default chain(cors, isAuth, isMod)(handler)
