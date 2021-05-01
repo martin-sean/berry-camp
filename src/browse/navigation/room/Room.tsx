@@ -8,7 +8,7 @@ import commonStyles from 'utils/common-styles';
 import { DataTree } from 'fetch/chapterdata';
 import { Navigation } from 'redux/reducers';
 
-const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens/'
+const imageHost = 'https://cdn.berrycamp.com/file/strawberry-house/screens'
 
 const useStyles = makeStyles((theme: Theme) => ({
   ...commonStyles,
@@ -89,10 +89,11 @@ export default React.memo((props: RoomProps) => {
 
   props.setDocTitle(room?.name);
 
-  const image = `${imageHost}${props.nav.chapterId}/
-    ${props.nav.sideNo}/
-    ${props.nav.checkpointNo}/
-    ${props.nav.roomNo}.png`;
+  const image: string = imageHost +
+    '/' + props.nav.chapterId +
+    '/' + props.nav.sideNo +
+    '/' + props.nav.checkpointNo +
+    '/' + props.nav.roomNo + '.png';
 
   const errorImage = '/img/error.jpg';
 
@@ -114,7 +115,7 @@ export default React.memo((props: RoomProps) => {
           <img
             className={ `${ classes.largeImage } pixelated` }
             src={ image }
-            alt="Large screemshot of current room"
+            alt="Large screenshot of current room"
             onClick={ () => setOpen(false) }
           />
         </Fade>
