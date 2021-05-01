@@ -1,7 +1,6 @@
 import { Model } from 'objection'
 import Clip from './Clip';
 import Comment from './Comment';
-import NicknameSuggestion from './NicknameSuggestion';
 
 // TODO: Secure authentication
 
@@ -66,28 +65,6 @@ export default class Account extends Model {
       join: {
         from: 'account.id',
         to: 'comment.account_id',
-      },
-    },
-    // Nicknames this account has suggested
-    nicknameSuggestions: {
-      relation: Model.HasManyRelation,
-      modelClass: NicknameSuggestion,
-      join: {
-        from: 'account.id',
-        to: 'nickname_suggestion.account_id'
-      },
-    },
-    // Nickname suggestions this account has liked
-    nicknameSuggestionsLiked: {
-      relation: Model.ManyToManyRelation,
-      modelClass: NicknameSuggestion,
-      join: {
-        from: 'account.id',
-        through: {
-          from: 'nickname_suggestion_likes.account_id',
-          to: 'nickname_suggestion_likes.nickname_suggestion_id',
-        },
-        to: 'nickname_suggestion.id',
       },
     },
   });
