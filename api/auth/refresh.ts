@@ -4,6 +4,7 @@ import cors from 'cors';
 import { verify } from "jsonwebtoken";
 import Account from "../../src/api/data/models/Account";
 import { createAccessToken, RefreshToken } from "../../src/api/utils/auth";
+import { corsOptions } from "../../src/api/utils/cors";
 import { connectToDatabase } from '../../src/api/utils/database';
 
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
@@ -31,4 +32,4 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
   knex.destroy();
 }
 
-export default chain(cors)(handler);
+export default chain(cors(corsOptions))(handler);
