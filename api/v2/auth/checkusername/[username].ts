@@ -1,8 +1,8 @@
 import { chain } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import Account from '../../../src/api/data/models/Account';
-import isAuth from './../../../src/api/middleware/isAuth';
-import { connectToDatabase } from '../../../src/api/utils/database';
+import Account from '../../../../src/api/data/models/Account';
+import isAuth from './../../../../src/api/middleware/isAuth';
+import { connectToDatabase } from '../../../../src/api/utils/database';
 import { cors } from '../../../../src/api/middleware/cors';
 
 const knex = connectToDatabase();
