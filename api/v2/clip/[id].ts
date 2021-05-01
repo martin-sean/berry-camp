@@ -1,8 +1,8 @@
 import { chain } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import Clip from '../../src/api/data/models/Clip';
-import isAuth from '../../src/api/middleware/isAuth';
-import {connectToDatabase} from '../../src/api/utils/database';
+import Clip from '../../../src/api/data/models/Clip';
+import isAuth from '../../../src/api/middleware/isAuth';
+import {connectToDatabase} from '../../../src/api/utils/database';
 
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const knex = connectToDatabase();

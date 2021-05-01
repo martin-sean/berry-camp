@@ -1,9 +1,9 @@
 import { chain } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import isAuth from '../../../src/api/middleware/isAuth';
-import isMod from '../../../src/api/middleware/isMod';
-import { modDeleteClipById } from '../../../src/api/actions/clip';
-import { connectToDatabase } from '../../../src/api/utils/database';
+import isAuth from '../../../../src/api/middleware/isAuth';
+import isMod from '../../../../src/api/middleware/isMod';
+import { modDeleteClipById } from '../../../../src/api/actions/clip';
+import { connectToDatabase } from '../../../../src/api/utils/database';
 
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const knex = connectToDatabase();
