@@ -1,7 +1,7 @@
 import { chain } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { OAuth2Client } from 'google-auth-library';
-import { createAccessToken, sendRefreshToken } from '../../../src/api/utils/auth';
+import { createAccessToken, setRefreshToken } from '../../../src/api/utils/auth';
 import Account from '../../../src/api/data/models/Account';
 import {connectToDatabase} from '../../../src/api/utils/database';
 import { cors } from '../../../src/api/middleware/cors';
@@ -37,7 +37,7 @@ const handler = async (req: VercelRequest, res: VercelResponse) => {
       account = await Account.query(knexClient).insert({ external_id: exteralId });
     }
     // Issue a new refresh token in a httponly cookie
-    sendRefreshToken(res, account);
+    setRefreshToken(res, account);
     // Issue a new access token
     res.status(200).send(createAccessToken(account));
     knexClient.destroy();
@@ -45,7 +45,6 @@ const handler = async (req: VercelRequest, res: VercelResponse) => {
     console.error(error.message);
     res.status(400).send(undefined);
   }
-
 };
 
 export default chain(cors)(handler);

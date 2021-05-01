@@ -30,10 +30,10 @@ const createRefreshToken = (account: Account) => {
   )
 }
 
-export const sendRefreshToken = (res: VercelResponse, account: Account): void => {
-  return res.status(200).setHeader('Set-Cookie', `${refreshTokenName}=${createRefreshToken(account)}; Expires=${new Date(Date.now() + (7 * 24 * 60 * 60 * 1000))}; Secure; HttpOnly; SameSite:Strict`)
+export const setRefreshToken = (res: VercelResponse, account: Account): void => {
+  res.status(200).setHeader('Set-Cookie', `${refreshTokenName}=${createRefreshToken(account)}; Expires=${new Date(Date.now() + (7 * 24 * 60 * 60 * 1000))}; Secure; HttpOnly; SameSite:Strict`)
 }
 
 export const clearRefreshToken = (res: VercelResponse): void => {
-  return res.status(200).setHeader('Set-Cookie', `${refreshTokenName}=deleted; Expires=${new Date(0)}`);
+  res.status(200).setHeader('Set-Cookie', `${refreshTokenName}=deleted; Expires=${new Date(0)}`);
 }
