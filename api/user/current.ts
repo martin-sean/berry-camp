@@ -1,6 +1,6 @@
 import { chain, NowFunction } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { Knex } from 'knex';
+import Knex from 'knex';
 import Account from "../../src/api/data/models/Account";
 import isAuth from '../../src/api/middleware/isAuth';
 import { createAccessToken } from '../../src/api/utils/auth';

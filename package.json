@@ -22,6 +22,7 @@
     "jwt-decode": "^2.2.0",
     "knex": "~0.21.17",
     "objection": "^2.2.15",
+    "pg": "^8.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-google-login": "^5.1.19",
