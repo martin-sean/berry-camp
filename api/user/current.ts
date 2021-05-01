@@ -10,8 +10,11 @@ import {connectToDatabase} from '../../src/api/utils/database';
 
 const usernamePattern = new RegExp('^\\w+$');
 
+type RequestHandler = (req: VercelRequest, res: VercelResponse, knex: Knex) => Promise<void>;
+
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
-  const requestHandler: ((req: VercelRequest, res: VercelResponse, knex: Knex) => Promise<void>) | undefined = handlers[req.method];
+  const method: string = req.method ?? 'GET';
+  const requestHandler: RequestHandler = handlers[method];
   const knex = connectToDatabase();
   if (requestHandler) {
     await requestHandler(req, res, knex);
@@ -85,7 +88,7 @@ const deleteRequest = async (req: VercelRequest, res: VercelResponse, knex: Knex
   }
 }
 
-const handlers = {
+const handlers: Record<string, RequestHandler> = {
   'GET': getRequest,
   'PATCH': patchRequest,
   'DELETE': deleteRequest,
