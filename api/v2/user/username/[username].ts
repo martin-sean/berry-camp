@@ -1,7 +1,8 @@
 import { chain } from "@amaurym/now-middleware";
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import Account from "../../../src/api/data/models/Account";
-import { connectToDatabase } from "../../../src/api/utils/database";
+import Account from "../../../../src/api/data/models/Account";
+import { cors } from "../../../../src/api/middleware/cors";
+import { connectToDatabase } from "../../../../src/api/utils/database";
 
 const handler = async (req: VercelRequest, res: VercelResponse) => {
   const knex = connectToDatabase();
@@ -23,4 +24,4 @@ const handler = async (req: VercelRequest, res: VercelResponse) => {
   knex.destroy();
 };
 
-export default chain()(handler);
+export default chain(cors)(handler);

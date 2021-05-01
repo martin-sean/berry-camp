@@ -1,9 +1,10 @@
 import { chain } from "@amaurym/now-middleware";
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { verify } from "jsonwebtoken";
-import Account from "../../src/api/data/models/Account";
-import { createAccessToken, RefreshToken } from "../../src/api/utils/auth";
-import { connectToDatabase } from '../../src/api/utils/database';
+import { cors } from "../../../src/api/middleware/cors";
+import Account from "../../../src/api/data/models/Account";
+import { createAccessToken, RefreshToken } from "../../../src/api/utils/auth";
+import { connectToDatabase } from '../../../src/api/utils/database';
 
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const refreshToken: string | undefined = req.cookies.rid;
@@ -30,4 +31,4 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
   knex.destroy();
 }
 
-export default chain()(handler);
+export default chain(cors)(handler);

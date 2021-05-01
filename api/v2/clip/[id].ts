@@ -1,6 +1,7 @@
 import { chain } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import Clip from '../../../src/api/data/models/Clip';
+import { cors } from '../../../src/api/middleware/cors';
 import isAuth from '../../../src/api/middleware/isAuth';
 import {connectToDatabase} from '../../../src/api/utils/database';
 
@@ -48,4 +49,4 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
   knex.destroy();
 }
 
-export default chain(isAuth)(handler)
+export default chain(cors, isAuth)(handler)

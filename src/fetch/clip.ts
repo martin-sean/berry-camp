@@ -141,7 +141,7 @@ export const getClipsAuth = async (
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${ newAccessToken }`
     },
-    credentials: 'include',
+    credentials: 'same-origin',
   });
   // Cheeky conversion of string to number
   const clips = await res.json() as any[];

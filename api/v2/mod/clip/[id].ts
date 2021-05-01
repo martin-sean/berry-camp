@@ -4,6 +4,7 @@ import isAuth from '../../../../src/api/middleware/isAuth';
 import isMod from '../../../../src/api/middleware/isMod';
 import { modDeleteClipById } from '../../../../src/api/actions/clip';
 import { connectToDatabase } from '../../../../src/api/utils/database';
+import { cors } from '../../../../src/api/middleware/cors';
 
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const knex = connectToDatabase();
@@ -25,4 +26,4 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
   knex.destroy();
 }
 
-export default chain(isAuth, isMod)(handler)
+export default chain(cors, isAuth, isMod)(handler)

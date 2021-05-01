@@ -21,7 +21,7 @@ export const login = async (idToken: string): Promise<string | null> => {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    credentials: 'include',
+    credentials: 'same-origin',
     body: JSON.stringify({
       idToken: idToken,
     })
@@ -43,7 +43,7 @@ export const getCurrentUser = (accessToken: string | undefined): CurrentUser | n
 export const logout = async () => {
   const res = await fetch(logoutUrl, {
     method: 'GET',
-    credentials: 'include',
+    credentials: 'same-origin',
   });
   return res.ok;
 }
@@ -72,7 +72,7 @@ export const tokenStillValid = (accessToken: string): boolean => {
 export const issueNewAccessToken = async (): Promise<string | null> => {
   const res = await fetch(refreshUrl, {
     method: 'post',
-    credentials: 'include',
+    credentials: 'same-origin',
   });
   return res.ok ? await res.text() : null;
 }

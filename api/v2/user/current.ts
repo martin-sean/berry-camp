@@ -7,6 +7,7 @@ import { createAccessToken } from '../../../src/api/utils/auth';
 import { deleteClipById } from '../../../src/api/actions/clip';
 import Clip from '../../../src/api/data/models/Clip';
 import {connectToDatabase} from '../../../src/api/utils/database';
+import { cors } from '../../../src/api/middleware/cors';
 
 const usernamePattern = new RegExp('^\\w+$');
 
@@ -94,4 +95,4 @@ const handlers: Record<string, RequestHandler> = {
   'DELETE': deleteRequest,
 }
 
-export default chain(isAuth)(handler);
+export default chain(cors, isAuth)(handler);
