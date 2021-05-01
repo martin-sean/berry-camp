@@ -1,11 +1,9 @@
 import { chain } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import cors from 'cors';
 import { OAuth2Client } from 'google-auth-library';
 import { createAccessToken, sendRefreshToken } from '../../src/api/utils/auth';
 import Account from '../../src/api/data/models/Account';
 import {connectToDatabase} from '../../src/api/utils/database';
-import { corsOptions } from '../../src/api/utils/cors';
 
 export const CLIENT_ID = "904880187886-fb07d8trdb3p6btl9009p6mbekclkh6a.apps.googleusercontent.com";
 
@@ -49,4 +47,4 @@ const handler = async (req: VercelRequest, res: VercelResponse) => {
 
 };
 
-export default chain(cors(corsOptions))(handler);
+export default chain()(handler);

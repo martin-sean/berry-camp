@@ -1,6 +1,5 @@
 import { chain } from "@amaurym/now-middleware";
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import cors from 'cors';
 import Clip from "../src/api/data/models/Clip";
 import {connectToDatabase} from '../src/api/utils/database';
 
@@ -62,4 +61,4 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
   }
 }
 
-export default chain(cors)(handler);
+export default chain()(handler);

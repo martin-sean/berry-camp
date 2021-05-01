@@ -1,6 +1,5 @@
 import { chain, NowFunction } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import cors from 'cors';
 import Knex from 'knex';
 import Account from "../../src/api/data/models/Account";
 import isAuth from '../../src/api/middleware/isAuth';
@@ -8,7 +7,6 @@ import { createAccessToken } from '../../src/api/utils/auth';
 import { deleteClipById } from '../../src/api/actions/clip';
 import Clip from '../../src/api/data/models/Clip';
 import {connectToDatabase} from '../../src/api/utils/database';
-import { corsOptions } from '../../src/api/utils/cors';
 
 const usernamePattern = new RegExp('^\\w+$');
 
@@ -96,4 +94,4 @@ const handlers: Record<string, RequestHandler> = {
   'DELETE': deleteRequest,
 }
 
-export default chain(cors(corsOptions), isAuth)(handler);
+export default chain(isAuth)(handler);
