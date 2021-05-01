@@ -1,6 +1,6 @@
-import knex, {Knex} from 'knex';
+import knex from 'knex';
 
-export const connectToDatabase = (): Knex => {
+export const connectToDatabase = (): knex => {
   return knex({
     client: 'pg',
     connection: process.env.DATABASE_URL,

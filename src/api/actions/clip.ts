@@ -1,5 +1,5 @@
 import Clip from "../data/models/Clip";
-import {Knex} from 'knex';
+import Knex from 'knex';
 import { Transaction } from 'objection';
 import { NewClipData, UpdateClipData } from "../data/request/clip";
 import { deleteOrphanTags, createAndRelateTags } from "./tag";
