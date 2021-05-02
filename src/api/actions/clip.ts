@@ -18,8 +18,8 @@ export const createClip = async (data: NewClipData, userId: number, knex: Knex) 
       side_no: data.sideNo,
       checkpoint_no: data.checkpointNo,
       room_no: data.roomNo,
-      name: data.name || undefined,
-      description: data.description || undefined,
+      name: data.name,
+      description: data.description,
       video_id: data.videoId,
       start_time: data.startTime,
       end_time: data.endTime
@@ -39,8 +39,8 @@ export const updateClip = async (id: number, userId: number, data: UpdateClipDat
     // Update the clip
     const clip = await Clip.query(trx).patchAndFetchById(id, {
       account_id: userId,
-      name: data.name || undefined,
-      description: data.description || undefined,
+      name: data.name,
+      description: data.description,
       video_id: data.videoId,
       start_time: data.startTime,
       end_time: data.endTime

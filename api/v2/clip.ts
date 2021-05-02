@@ -88,7 +88,7 @@ const createClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: Ve
 
   try {
     const knex: Knex = initialiseKnex();
-    createClip(data, userId, knex);
+    await createClip(data, userId, knex);
     res.status(200).send({});
   } catch (error) {
     console.error(error.message);
