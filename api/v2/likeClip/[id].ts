@@ -8,16 +8,16 @@ import { connectToDatabase } from "../../../src/api/utils/database";
 export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
   switch (req.method) {
     case 'POST':
-      return () => likeClipRequest(req, res);
+      return likeClipRequest(req, res);
     case 'DELETE':
-      return () => unlikeClipRequest(req, res);
+      return unlikeClipRequest(req, res);
   }
   
   throw new Error('bad method');
 }
 
 // Like a clip
-const likeClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+const likeClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
   const id: string | string[] = req.query.id;
   const userId: number = (res as any).locals.userId;
 
@@ -35,7 +35,7 @@ const likeClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: Verc
 });
 
 // Unlike a clip
-const unlikeClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+const unlikeClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
   const id: string | string[] = req.query.id;
   const userId: number = (res as any).locals.userId;
 
@@ -51,8 +51,3 @@ const unlikeClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: Ve
     res.status(400).send({});
   }
 });
-
-const handlers: Record<string, NowFunction<VercelRequest, VercelResponse>> = {
-  'POST': likeClipRequest,
-  'DELETE': unlikeClipRequest,
-}

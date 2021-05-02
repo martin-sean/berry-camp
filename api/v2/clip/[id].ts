@@ -10,11 +10,11 @@ import { updateClip, deleteClipById } from '../../../src/api/actions/clip';
 export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
   switch (req.method) {
     case 'GET':
-      return () => getClipRequest(req, res);
+      return getClipRequest(req, res);
     case 'PUT':
-      return () => editClipRequest(req, res);
+      return editClipRequest(req, res);
     case 'DELETE':
-      return () => deleteClipRequest(req, res);
+      return deleteClipRequest(req, res);
   }
 
   throw new Error('bad method');
@@ -23,7 +23,7 @@ export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequ
 /**
  * Get a clip by id
  */
-const getClipRequest = chain(cors)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+const getClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors)(async (): Promise<void> => {
   const knex = connectToDatabase();
 
   const id: string | string[] = req.query.id;
@@ -71,7 +71,7 @@ const getClipRequest = chain(cors)(async (req: VercelRequest, res: VercelRespons
 /**
  * Edit existing clip
  */
- const editClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+ const editClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
   const id: string | string[] = req.query.id;
   const userId: number = (res as any).locals.userId;
   const data: UpdateClipData = req.body;
@@ -94,7 +94,7 @@ const getClipRequest = chain(cors)(async (req: VercelRequest, res: VercelRespons
 });
 
 // Delete a clip for a given id
-const deleteClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+const deleteClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
   const id: string | string[] = req.query.id;
   const userId: number = (res as any).locals.userId;
 

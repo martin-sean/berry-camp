@@ -16,17 +16,17 @@ type RequestHandler = (req: VercelRequest, res: VercelResponse, knex: Knex) => P
 export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
   switch (req.method) {
     case 'GET':
-      return () => getRequest(req, res);
+      return getRequest(req, res);
     case 'PATCH':
-      return () => patchRequest(req, res);
+      return patchRequest(req, res);
     case 'DELETE':
-      return () => deleteRequest(req, res);
+      return deleteRequest(req, res);
   }
 
   throw new Error('bad method');
 }
 
-const getRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+const getRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
   try {
     const knex = connectToDatabase();
     const account = Account.query(knex).findById((res as any).locals.userId);
@@ -37,7 +37,7 @@ const getRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelRes
   }
 });
 
-const patchRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+const patchRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
   type PatchRequest = { username: string }
   const username = (req.body as PatchRequest).username;
 
@@ -61,7 +61,7 @@ const patchRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelR
   }
 });
 
-const deleteRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+const deleteRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
   type DeleteRequest = { 'deleteAccount': boolean, 'deleteClips': boolean };
   const deleteRequest = req.body as DeleteRequest;
   const userId: number = (res as any).locals.userId;

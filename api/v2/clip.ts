@@ -2,19 +2,18 @@ import { chain, NowFunction } from "@amaurym/now-middleware";
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import Knex from "knex";
 import Clip from "../../src/api/data/models/Clip";
-import {connectToDatabase} from '../../src/api/utils/database';
+import { connectToDatabase } from '../../src/api/utils/database';
 import {cors} from "../../src/api/middleware/cors";
 import isAuth from "../../src/api/middleware/isAuth";
 import { createClip } from '../../src/api/actions/clip';
-import {clipDataValid, NewClipData} from '../../src/api/data/request/clip';
+import { clipDataValid, NewClipData } from '../../src/api/data/request/clip';
 
 export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
-  console.log("method", req.method);
   switch (req.method) {
     case 'GET':
-      return () => getClipsByRoomRequest(req, res);
+      return getClipsByRoomRequest(req, res);
     case 'POST':
-      return () => createClipRequest(req, res);
+      return createClipRequest(req, res);
   }
 
   throw new Error('bad method');
@@ -23,11 +22,10 @@ export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequ
 /**
  * Get clips by room for users not logged in
  */
-const getClipsByRoomRequest = chain(cors)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+const getClipsByRoomRequest = (req: VercelRequest, res: VercelResponse) => chain(cors)(async (): Promise<void> => {
   try {
     let {chapterId, sideNo, checkpointNo, roomNo} = req.query;
     if (Array.isArray(chapterId) || Array.isArray(sideNo) || Array.isArray(checkpointNo) || Array.isArray(roomNo)) {
-      console.error("Array found.");
       res.status(400).send({});
       return;
     }
@@ -80,15 +78,13 @@ const getClipsByRoomRequest = chain(cors)(async (req: VercelRequest, res: Vercel
 });
 
 // Create a new clip
-const createClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
-  console.log("entered create clip");
+const createClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
   const userId: number = (res as any).locals.userId;
   const data: NewClipData = req.body;
 
   // Validate clip data
   if(!clipDataValid(data)) {
     res.status(400).send({});
-    console.log("not valid");
     return;
   }
 
