@@ -5,7 +5,7 @@ import { cors } from "../../../src/api/middleware/cors";
 import isAuth from "../../../src/api/middleware/isAuth";
 import { connectToDatabase } from "../../../src/api/utils/database";
 
-export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
+export default (req: VercelRequest, res: VercelResponse): void | Promise<void> => {
   switch (req.method) {
     case 'POST':
       return likeClipRequest(req, res);
@@ -17,7 +17,7 @@ export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequ
 }
 
 // Like a clip
-const likeClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
+const likeClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const id: string | string[] = req.query.id;
   const userId: number = (res as any).locals.userId;
 
@@ -35,7 +35,7 @@ const likeClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors,
 });
 
 // Unlike a clip
-const unlikeClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
+const unlikeClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const id: string | string[] = req.query.id;
   const userId: number = (res as any).locals.userId;
 

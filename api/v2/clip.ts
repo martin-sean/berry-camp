@@ -8,7 +8,7 @@ import isAuth from "../../src/api/middleware/isAuth";
 import { createClip } from '../../src/api/actions/clip';
 import { clipDataValid, NewClipData } from '../../src/api/data/request/clip';
 
-export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
+export default (req: VercelRequest, res: VercelResponse): void | Promise<void> => {
   switch (req.method) {
     case 'GET':
       return getClipsByRoomRequest(req, res);
@@ -22,7 +22,7 @@ export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequ
 /**
  * Get clips by room for users not logged in
  */
-const getClipsByRoomRequest = (req: VercelRequest, res: VercelResponse) => chain(cors)(async (): Promise<void> => {
+const getClipsByRoomRequest = chain(cors)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   try {
     let {chapterId, sideNo, checkpointNo, roomNo} = req.query;
     if (Array.isArray(chapterId) || Array.isArray(sideNo) || Array.isArray(checkpointNo) || Array.isArray(roomNo)) {
@@ -78,7 +78,7 @@ const getClipsByRoomRequest = (req: VercelRequest, res: VercelResponse) => chain
 });
 
 // Create a new clip
-const createClipRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
+const createClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const userId: number = (res as any).locals.userId;
   const data: NewClipData = req.body;
 

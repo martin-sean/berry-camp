@@ -11,9 +11,7 @@ import { cors } from '../../../src/api/middleware/cors';
 
 const usernamePattern = new RegExp('^\\w+$');
 
-type RequestHandler = (req: VercelRequest, res: VercelResponse, knex: Knex) => Promise<void>;
-
-export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
+export default (req: VercelRequest, res: VercelResponse): void | Promise<void> => {
   switch (req.method) {
     case 'GET':
       return getRequest(req, res);
@@ -26,9 +24,9 @@ export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequ
   throw new Error('bad method');
 }
 
-const getRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
+const getRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   try {
-    const knex = connectToDatabase();
+    const knex: Knex = connectToDatabase();
     const account = Account.query(knex).findById((res as any).locals.userId);
     res.status(200).json(account);
     knex.destroy();
@@ -37,7 +35,7 @@ const getRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAu
   }
 });
 
-const patchRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
+const patchRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   type PatchRequest = { username: string }
   const username = (req.body as PatchRequest).username;
 
@@ -47,7 +45,7 @@ const patchRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, is
   }
     
   try {
-    const knex = connectToDatabase();
+    const knex: Knex = connectToDatabase();
     const updatedAccount = await Account.query(knex)
       .findById((res as any).locals.userId)
       .patch({ username: username })
@@ -61,7 +59,7 @@ const patchRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, is
   }
 });
 
-const deleteRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, isAuth)(async (): Promise<void> => {
+const deleteRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   type DeleteRequest = { 'deleteAccount': boolean, 'deleteClips': boolean };
   const deleteRequest = req.body as DeleteRequest;
   const userId: number = (res as any).locals.userId;
@@ -72,7 +70,7 @@ const deleteRequest = (req: VercelRequest, res: VercelResponse) => chain(cors, i
   }
 
   try {
-    const knex = connectToDatabase();
+    const knex: Knex = connectToDatabase();
 
     // Create a new transaction to delete account and update related clips
     await Account.transaction(knex, async trx => {
