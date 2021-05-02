@@ -202,7 +202,7 @@ export const getClip = async (clipId: number): Promise<SingleClipData | null> =>
  export const likeClip = async (clipId: number, accessToken: string, dispatch: Dispatch<Actions>) => {
    const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
    
-   const res = await fetch(urlSetter(`/clip/${ clipId }/like`), {
+   const res = await fetch(urlSetter(`/likeClip/${ clipId }`), {
     method:'POST',
     headers: {
       'Accept': 'application/json',
@@ -216,7 +216,7 @@ export const getClip = async (clipId: number): Promise<SingleClipData | null> =>
  export const unlikeClip = async (clipId: number, accessToken: string, dispatch: Dispatch<Actions>) => {
   const newAccessToken = await getNewTokenIfRequired(accessToken, dispatch);
    
-  const res = await fetch(urlSetter(`/clip/${ clipId }/like`), {
+  const res = await fetch(urlSetter(`/likeClip/${ clipId }`), {
    method:'DELETE',
    headers: {
      'Accept': 'application/json',

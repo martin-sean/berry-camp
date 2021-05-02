@@ -6,9 +6,10 @@ import { cors } from '../../../src/api/middleware/cors';
 import isAuth from '../../../src/api/middleware/isAuth';
 import { connectToDatabase } from '../../../src/api/utils/database';
 
+/**
+ * Get the current clips if the user is authorized and like information
+ */
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
-  const knex = connectToDatabase();
-
   const userId: number = (res as any).locals.userId;
   try {
     let {chapterId, sideNo, checkpointNo, roomNo} = req.query;
@@ -24,6 +25,8 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
     if (roomNo !== undefined) {
       roomNo = parseInt(roomNo) as any;
     }
+
+    const knex = connectToDatabase();
 
     const clips = await Clip.query(knex)
       .select(
@@ -56,12 +59,11 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
         },
       });
     res.status(200).json(clips);
+    knex.destroy();
   } catch (error) {
     console.log(error.message);
     res.status(400).send({});
   }
-
-  knex.destroy();
 }
 
 export default chain(cors, isAuth)(handler)

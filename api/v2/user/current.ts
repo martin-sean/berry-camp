@@ -16,11 +16,11 @@ type RequestHandler = (req: VercelRequest, res: VercelResponse, knex: Knex) => P
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const method: string = req.method ?? 'GET';
   const requestHandler: RequestHandler = handlers[method];
-  const knex = connectToDatabase();
   if (requestHandler) {
+    const knex = connectToDatabase();
     await requestHandler(req, res, knex);
+    knex.destroy();
   }
-  knex.destroy();
 }
 
 const getRequest = async (req: VercelRequest, res: VercelResponse, knex: Knex): Promise<void> => {

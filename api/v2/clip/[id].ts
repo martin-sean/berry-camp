@@ -1,11 +1,22 @@
-import { chain } from '@amaurym/now-middleware';
+import { chain, NowFunction } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import Clip from '../../../src/api/data/models/Clip';
 import { cors } from '../../../src/api/middleware/cors';
 import isAuth from '../../../src/api/middleware/isAuth';
 import {connectToDatabase} from '../../../src/api/utils/database';
+import {UpdateClipData, updateClipDataValid} from '../../../src/api/data/request/clip';
+import { updateClip, deleteClipById } from '../../../src/api/actions/clip';
 
-const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+export default (req: VercelRequest, res: VercelResponse): void => {
+  const method: string = req.method ?? 'GET';
+  const requestHandler = handlers[method];
+  requestHandler && requestHandler(req, res);
+}
+
+/**
+ * Get a clip by id
+ */
+const getClipRequest = chain(cors)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const knex = connectToDatabase();
 
   const id: string | string[] = req.query.id;
@@ -47,6 +58,53 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
   }
 
   knex.destroy();
-}
+});
 
-export default chain(cors, isAuth)(handler)
+
+/**
+ * Edit existing clip
+ */
+ const editClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+  const id: string | string[] = req.query.id;
+  const userId: number = (res as any).locals.userId;
+  const data: UpdateClipData = req.body;
+  const updateTags = req.query.updateTags as string;
+  // Validate update clip data
+  if(!updateClipDataValid(data)) {
+    res.status(400).send({});
+    return;
+  } 
+  try {
+    const knex = connectToDatabase();
+    if (isNaN(id as any)) throw new Error("id must be a number");
+    await updateClip(parseInt(id as string), userId, data, updateTags === 'true', knex);
+    res.status(200).send({});
+    knex.destroy();
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).send({});
+  }
+});
+
+// Delete a clip for a given id
+const deleteClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+  const id: string | string[] = req.query.id;
+  const userId: number = (res as any).locals.userId;
+
+  try {
+    if (isNaN(id as any)) throw new Error("Can't delete clip, id must be a number");
+    await Clip.transaction(async (trx) => {
+      await deleteClipById(parseInt(id as string), userId, trx);
+    });
+    res.status(200).send({});
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).send({});
+  }
+});
+
+const handlers: Record<string, NowFunction<VercelRequest, VercelResponse>> = {
+  'GET': getClipRequest,
+  'PUT': editClipRequest,
+  'DELETE': deleteClipRequest,
+}

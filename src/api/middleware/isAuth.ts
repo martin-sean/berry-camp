@@ -12,10 +12,9 @@ export default async (req: Request, res: Response, next: NextFunction): Promise<
   try {
     const token = authorization.split(" ")[1];
     const tokenData = verify(token, process.env.JWT_SECRET!) as AccessToken;
-    res.locals = {};
-    res.locals.userId = tokenData.userId;
-    res.locals.username = tokenData.username;
-    res.locals.isMod = tokenData.moderator;
+
+    const {userId, username, moderator} = tokenData;
+    res.locals = {userId, username, moderator};
     next();
   } catch (error) {
     console.error(error);

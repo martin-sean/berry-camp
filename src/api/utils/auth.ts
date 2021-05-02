@@ -1,6 +1,6 @@
 import { sign } from 'jsonwebtoken';
 import Account from '../data/models/Account';
-import { VercelResponse } from '@vercel/node';
+import { VercelRequest, VercelResponse } from '@vercel/node';
 
 const refreshTokenName = 'rid';
 
