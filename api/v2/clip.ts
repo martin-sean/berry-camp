@@ -8,10 +8,15 @@ import isAuth from "../../src/api/middleware/isAuth";
 import { createClip } from '../../src/api/actions/clip';
 import {clipDataValid, NewClipData} from '../../src/api/data/request/clip';
 
-export default (req: VercelRequest, res: VercelResponse): void => {
-  const method: string = req.method ?? 'GET';
-  const requestHandler = handlers[method];
-  requestHandler && requestHandler(req, res);
+export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
+  switch (req.method) {
+    case 'GET':
+      return getClipsByRoomRequest;
+    case 'POST':
+      return createClipRequest;
+  }
+
+  throw new Error('bad method');
 }
 
 /**
@@ -94,8 +99,3 @@ const createClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: Ve
     res.status(400).send({});
   }
 });
-
-const handlers: Record<string, NowFunction<VercelRequest, VercelResponse>> = {
-  'GET': getClipsByRoomRequest,
-  'POST': createClipRequest,
-}

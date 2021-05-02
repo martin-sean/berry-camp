@@ -7,10 +7,17 @@ import {connectToDatabase} from '../../../src/api/utils/database';
 import {UpdateClipData, updateClipDataValid} from '../../../src/api/data/request/clip';
 import { updateClip, deleteClipById } from '../../../src/api/actions/clip';
 
-export default (req: VercelRequest, res: VercelResponse): void => {
-  const method: string = req.method ?? 'GET';
-  const requestHandler = handlers[method];
-  requestHandler && requestHandler(req, res);
+export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
+  switch (req.method) {
+    case 'GET':
+      return getClipRequest;
+    case 'PUT':
+      return editClipRequest;
+    case 'DELETE':
+      return deleteClipRequest;
+  }
+
+  throw new Error('bad method');
 }
 
 /**
@@ -102,9 +109,3 @@ const deleteClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: Ve
     res.status(400).send({});
   }
 });
-
-const handlers: Record<string, NowFunction<VercelRequest, VercelResponse>> = {
-  'GET': getClipRequest,
-  'PUT': editClipRequest,
-  'DELETE': deleteClipRequest,
-}

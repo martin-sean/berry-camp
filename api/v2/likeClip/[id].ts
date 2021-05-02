@@ -5,10 +5,15 @@ import { cors } from "../../../src/api/middleware/cors";
 import isAuth from "../../../src/api/middleware/isAuth";
 import { connectToDatabase } from "../../../src/api/utils/database";
 
-export default (req: VercelRequest, res: VercelResponse): void => {
-  const method: string = req.method ?? 'GET';
-  const requestHandler = handlers[method];
-  requestHandler && requestHandler(req, res);
+export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
+  switch (req.method) {
+    case 'POST':
+      return likeClipRequest;
+    case 'DELETE':
+      return unlikeClipRequest;
+  }
+  
+  throw new Error('bad method');
 }
 
 // Like a clip

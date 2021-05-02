@@ -13,26 +13,31 @@ const usernamePattern = new RegExp('^\\w+$');
 
 type RequestHandler = (req: VercelRequest, res: VercelResponse, knex: Knex) => Promise<void>;
 
-const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
-  const method: string = req.method ?? 'GET';
-  const requestHandler: RequestHandler = handlers[method];
-  if (requestHandler) {
-    const knex = connectToDatabase();
-    await requestHandler(req, res, knex);
-    knex.destroy();
+export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
+  switch (req.method) {
+    case 'GET':
+      return getRequest;
+    case 'PATCH':
+      return patchRequest;
+    case 'DELETE':
+      return deleteRequest;
   }
+
+  throw new Error('bad method');
 }
 
-const getRequest = async (req: VercelRequest, res: VercelResponse, knex: Knex): Promise<void> => {
+const getRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   try {
+    const knex = connectToDatabase();
     const account = Account.query(knex).findById((res as any).locals.userId);
     res.status(200).json(account);
+    knex.destroy();
   } catch (error) {
     res.status(404).send({});
   }
-}
+});
 
-const patchRequest = async (req: VercelRequest, res: VercelResponse, knex: Knex): Promise<void> => {
+const patchRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   type PatchRequest = { username: string }
   const username = (req.body as PatchRequest).username;
 
@@ -42,19 +47,21 @@ const patchRequest = async (req: VercelRequest, res: VercelResponse, knex: Knex)
   }
     
   try {
+    const knex = connectToDatabase();
     const updatedAccount = await Account.query(knex)
       .findById((res as any).locals.userId)
       .patch({ username: username })
       .returning('*');
     // Small hack, typescript appears to be wrong, updatedAccount should not be an array
     res.status(200).send(createAccessToken(updatedAccount as any));
+    knex.destroy();
   } catch (error) {
     console.log(error.message);
     res.status(400).send({});
   }
-}
+});
 
-const deleteRequest = async (req: VercelRequest, res: VercelResponse, knex: Knex): Promise<void> => {
+const deleteRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   type DeleteRequest = { 'deleteAccount': boolean, 'deleteClips': boolean };
   const deleteRequest = req.body as DeleteRequest;
   const userId: number = (res as any).locals.userId;
@@ -65,6 +72,8 @@ const deleteRequest = async (req: VercelRequest, res: VercelResponse, knex: Knex
   }
 
   try {
+    const knex = connectToDatabase();
+
     // Create a new transaction to delete account and update related clips
     await Account.transaction(knex, async trx => {
       // Check if clip deleting was requested
@@ -82,17 +91,11 @@ const deleteRequest = async (req: VercelRequest, res: VercelResponse, knex: Knex
     // Account successfully deleted
     console.info(`Deleted account #${ userId }`);
     res.status(204).send({});
+    knex.destroy();
+    
   // Error occured during deletion, account doesn't exist or connection is broken
   } catch (error) {
     console.error(error.message);
     res.status(500).send({});
   }
-}
-
-const handlers: Record<string, RequestHandler> = {
-  'GET': getRequest,
-  'PATCH': patchRequest,
-  'DELETE': deleteRequest,
-}
-
-export default chain(cors, isAuth)(handler);
+});
