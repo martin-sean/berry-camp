@@ -9,6 +9,7 @@ import { createClip } from '../../src/api/actions/clip';
 import {clipDataValid, NewClipData} from '../../src/api/data/request/clip';
 
 export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
+  console.log("method", req.method);
   switch (req.method) {
     case 'GET':
       return () => getClipsByRoomRequest(req, res);
@@ -80,12 +81,14 @@ const getClipsByRoomRequest = chain(cors)(async (req: VercelRequest, res: Vercel
 
 // Create a new clip
 const createClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+  console.log("entered create clip");
   const userId: number = (res as any).locals.userId;
   const data: NewClipData = req.body;
 
   // Validate clip data
   if(!clipDataValid(data)) {
     res.status(400).send({});
+    console.log("not valid");
     return;
   }
 
