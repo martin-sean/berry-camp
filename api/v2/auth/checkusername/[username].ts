@@ -5,11 +5,13 @@ import isAuth from './../../../../src/api/middleware/isAuth';
 import { connectToDatabase } from '../../../../src/api/utils/database';
 import { cors } from '../../../../src/api/middleware/cors';
 
-const knex = connectToDatabase();
+
 
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const username: string | string[] = req.query.username;
   try {
+    const knex = connectToDatabase();
+    
     const account = await Account.query(knex)
       .select('username', 'moderator', 'created_at')
       .findOne('username', username);
