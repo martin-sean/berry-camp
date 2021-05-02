@@ -31,6 +31,7 @@ const getRequest = chain(cors, isAuth)(async (req: VercelRequest, res: VercelRes
     res.status(200).json(account);
     knex.destroy();
   } catch (error) {
+    console.log(error.message);
     res.status(404).send({});
   }
 });

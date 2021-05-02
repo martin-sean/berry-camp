@@ -16,6 +16,7 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
 
     res.status(200).json({ available: !Boolean(account) });
   } catch (error) {
+    console.log(error.message);
     res.status(422).send(undefined);
    }
 
