@@ -4,7 +4,8 @@ import { verify } from "jsonwebtoken";
 import { cors } from "../../../src/api/middleware/cors";
 import Account from "../../../src/api/data/models/Account";
 import { createAccessToken, RefreshToken } from "../../../src/api/utils/auth";
-import { connectToDatabase } from '../../../src/api/utils/database';
+import { initialiseKnex } from '../../../src/api/utils/database';
+import Knex from "knex";
 
 const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   const refreshToken: string | undefined = req.cookies.rid;
@@ -13,7 +14,7 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
     return;
   }
 
-  const knex = connectToDatabase();
+  const knex: Knex = initialiseKnex();
 
   try {
     const payload: RefreshToken = verify(refreshToken, process.env.RT_SECRET!) as RefreshToken;
@@ -27,8 +28,6 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
     console.error(error);
     res.status(401).send({});
   }
-
-  knex.destroy();
 }
 
 export default chain(cors)(handler);

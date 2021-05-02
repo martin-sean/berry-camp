@@ -2,7 +2,7 @@ import { chain, NowFunction } from "@amaurym/now-middleware";
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import Knex from "knex";
 import Clip from "../../src/api/data/models/Clip";
-import { connectToDatabase } from '../../src/api/utils/database';
+import { initialiseKnex } from '../../src/api/utils/database';
 import {cors} from "../../src/api/middleware/cors";
 import isAuth from "../../src/api/middleware/isAuth";
 import { createClip } from '../../src/api/actions/clip';
@@ -38,7 +38,7 @@ const getClipsByRoomRequest = chain(cors)(async (req: VercelRequest, res: Vercel
       roomNo = parseInt(roomNo) as any;
     }
 
-    const knex = connectToDatabase();
+    const knex: Knex = initKnex();
 
     const clips = await Clip.query(knex)
       .select(
@@ -69,8 +69,6 @@ const getClipsByRoomRequest = chain(cors)(async (req: VercelRequest, res: Vercel
         },
       });
     res.status(200).json(clips);
-
-    knex.destroy();
   } catch (error) {
     console.log(error.message);
     res.status(400).send({});
@@ -89,10 +87,9 @@ const createClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: Ve
   }
 
   try {
-    const knex: Knex = connectToDatabase();
+    const knex: Knex = initialiseKnex();
     createClip(data, userId, knex);
     res.status(200).send({});
-    knex.destroy();
   } catch (error) {
     console.error(error.message);
     res.status(400).send({});

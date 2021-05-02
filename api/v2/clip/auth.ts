@@ -1,10 +1,11 @@
 import { chain } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import Knex from 'knex';
 import { raw } from 'objection';
 import Clip from '../../../src/api/data/models/Clip';
 import { cors } from '../../../src/api/middleware/cors';
 import isAuth from '../../../src/api/middleware/isAuth';
-import { connectToDatabase } from '../../../src/api/utils/database';
+import { initialiseKnex } from '../../../src/api/utils/database';
 
 /**
  * Get the current clips if the user is authorized and like information
@@ -26,7 +27,7 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
       roomNo = parseInt(roomNo) as any;
     }
 
-    const knex = connectToDatabase();
+    const knex: Knex = initialiseKnex();
 
     const clips = await Clip.query(knex)
       .select(
@@ -59,7 +60,6 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
         },
       });
     res.status(200).json(clips);
-    knex.destroy();
   } catch (error) {
     console.log(error.message);
     res.status(400).send({});

@@ -3,9 +3,10 @@ import { VercelRequest, VercelResponse } from "@vercel/node";
 import Clip from '../../../src/api/data/models/Clip';
 import { cors } from '../../../src/api/middleware/cors';
 import isAuth from '../../../src/api/middleware/isAuth';
-import {connectToDatabase} from '../../../src/api/utils/database';
-import {UpdateClipData, updateClipDataValid} from '../../../src/api/data/request/clip';
+import { initialiseKnex } from '../../../src/api/utils/database';
+import { UpdateClipData, updateClipDataValid } from '../../../src/api/data/request/clip';
 import { updateClip, deleteClipById } from '../../../src/api/actions/clip';
+import Knex from 'knex';
 
 export default (req: VercelRequest, res: VercelResponse): void | Promise<void> => {
   switch (req.method) {
@@ -24,11 +25,11 @@ export default (req: VercelRequest, res: VercelResponse): void | Promise<void> =
  * Get a clip by id
  */
 const getClipRequest = chain(cors)(async (req: VercelRequest, res: VercelResponse): Promise<void> => {
-  const knex = connectToDatabase();
-
   const id: string | string[] = req.query.id;
   try {
     if (isNaN(id as any)) throw new Error("id must be a number");
+
+    const knex = initialiseKnex();
 
     const clip = await Clip.query(knex)
       .select(
@@ -63,8 +64,6 @@ const getClipRequest = chain(cors)(async (req: VercelRequest, res: VercelRespons
     console.log(error.message);
     res.status(400).send({});
   }
-
-  knex.destroy();
 });
 
 
@@ -76,17 +75,18 @@ const getClipRequest = chain(cors)(async (req: VercelRequest, res: VercelRespons
   const userId: number = (res as any).locals.userId;
   const data: UpdateClipData = req.body;
   const updateTags = req.query.updateTags as string;
+  
   // Validate update clip data
   if(!updateClipDataValid(data)) {
     res.status(400).send({});
     return;
   } 
+
   try {
-    const knex = connectToDatabase();
+    const knex: Knex = initialiseKnex();
     if (isNaN(id as any)) throw new Error("id must be a number");
     await updateClip(parseInt(id as string), userId, data, updateTags === 'true', knex);
     res.status(200).send({});
-    knex.destroy();
   } catch (error) {
     console.log(error.message);
     res.status(400).send({});
@@ -99,8 +99,13 @@ const deleteClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: Ve
   const userId: number = (res as any).locals.userId;
 
   try {
-    if (isNaN(id as any)) throw new Error("Can't delete clip, id must be a number");
-    await Clip.transaction(async (trx) => {
+    if (isNaN(id as any)) {
+      throw new Error("Can't delete clip, id must be a number");
+    }
+
+    const knex = initialiseKnex();
+
+    await Clip.transaction(knex, async (trx) => {
       await deleteClipById(parseInt(id as string), userId, trx);
     });
     res.status(200).send({});
