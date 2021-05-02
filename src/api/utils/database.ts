@@ -5,7 +5,7 @@ interface GlobalWithKnex extends NodeJS.Global {
 }
 
 /**
- * Initialise a new knex connection pool if one doesn't globally exist.
+ * Initialise a new knex connection if one doesn't globally exist.
  * @returns Knex instance.
  */
 export const initialiseKnex = (): Knex => {
@@ -14,10 +14,10 @@ export const initialiseKnex = (): Knex => {
     knex = Knex({
       client: 'pg',
       connection: process.env.DATABASE_URL,
-      pool: { min: 0, max: 5 }
+      pool: { min: 0, max: 1 }
     });
     (global as GlobalWithKnex).knex = knex;
-    console.info("Initialised new knex connection pool");
+    console.info("Initialised new knex connection");
   }
   return knex;
 }

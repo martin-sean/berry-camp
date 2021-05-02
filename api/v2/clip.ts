@@ -38,7 +38,7 @@ const getClipsByRoomRequest = chain(cors)(async (req: VercelRequest, res: Vercel
       roomNo = parseInt(roomNo) as any;
     }
 
-    const knex: Knex = initKnex();
+    const knex: Knex = initialiseKnex();
 
     const clips = await Clip.query(knex)
       .select(
