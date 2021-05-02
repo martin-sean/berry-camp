@@ -16,11 +16,11 @@ type RequestHandler = (req: VercelRequest, res: VercelResponse, knex: Knex) => P
 export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
   switch (req.method) {
     case 'GET':
-      return getRequest;
+      return () => getRequest(req, res);
     case 'PATCH':
-      return patchRequest;
+      return () => patchRequest(req, res);
     case 'DELETE':
-      return deleteRequest;
+      return () => deleteRequest(req, res);
   }
 
   throw new Error('bad method');

@@ -10,11 +10,11 @@ import { updateClip, deleteClipById } from '../../../src/api/actions/clip';
 export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
   switch (req.method) {
     case 'GET':
-      return getClipRequest;
+      return () => getClipRequest(req, res);
     case 'PUT':
-      return editClipRequest;
+      return () => editClipRequest(req, res);
     case 'DELETE':
-      return deleteClipRequest;
+      return () => deleteClipRequest(req, res);
   }
 
   throw new Error('bad method');

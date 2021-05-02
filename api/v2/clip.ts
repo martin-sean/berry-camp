@@ -11,9 +11,9 @@ import {clipDataValid, NewClipData} from '../../src/api/data/request/clip';
 export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
   switch (req.method) {
     case 'GET':
-      return getClipsByRoomRequest;
+      return () => getClipsByRoomRequest(req, res);
     case 'POST':
-      return createClipRequest;
+      return () => createClipRequest(req, res);
   }
 
   throw new Error('bad method');

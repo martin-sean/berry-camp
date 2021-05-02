@@ -8,9 +8,9 @@ import { connectToDatabase } from "../../../src/api/utils/database";
 export default (req: VercelRequest, res: VercelResponse): NowFunction<VercelRequest, VercelResponse> => {
   switch (req.method) {
     case 'POST':
-      return likeClipRequest;
+      return () => likeClipRequest(req, res);
     case 'DELETE':
-      return unlikeClipRequest;
+      return () => unlikeClipRequest(req, res);
   }
   
   throw new Error('bad method');
