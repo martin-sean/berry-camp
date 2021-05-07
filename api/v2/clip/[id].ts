@@ -60,6 +60,7 @@ const getClipRequest = chain(cors)(async (req: VercelRequest, res: VercelRespons
         }
       });
     res.status(200).json(clip);
+    knex.destroy();
   } catch (error) {
     console.log(error.message);
     res.status(400).send({});
@@ -87,6 +88,7 @@ const getClipRequest = chain(cors)(async (req: VercelRequest, res: VercelRespons
     if (isNaN(id as any)) throw new Error("id must be a number");
     await updateClip(parseInt(id as string), userId, data, updateTags === 'true', knex);
     res.status(200).send({});
+    knex.destroy();
   } catch (error) {
     console.log(error.message);
     res.status(400).send({});
@@ -109,6 +111,7 @@ const deleteClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: Ve
       await deleteClipById(parseInt(id as string), userId, trx);
     });
     res.status(200).send({});
+    knex.destroy();
   } catch (error) {
     console.error(error.message);
     res.status(400).send({});

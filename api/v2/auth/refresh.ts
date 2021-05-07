@@ -24,6 +24,7 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
     }
 
     res.status(200).send(createAccessToken(account));
+    knex.destroy();
   } catch (error) {
     console.error(error);
     res.status(401).send({});

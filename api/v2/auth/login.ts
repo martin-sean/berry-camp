@@ -40,6 +40,7 @@ const handler = async (req: VercelRequest, res: VercelResponse) => {
     setRefreshToken(res, account);
     // Issue a new access token
     res.status(200).send(createAccessToken(account));
+    knex.destroy();
   } catch (error) {
     console.error(error.message);
     res.status(400).send(undefined);

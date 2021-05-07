@@ -69,6 +69,7 @@ const getClipsByRoomRequest = chain(cors)(async (req: VercelRequest, res: Vercel
         },
       });
     res.status(200).json(clips);
+    knex.destroy();
   } catch (error) {
     console.log(error.message);
     res.status(400).send({});
@@ -90,6 +91,7 @@ const createClipRequest = chain(cors, isAuth)(async (req: VercelRequest, res: Ve
     const knex: Knex = initialiseKnex();
     await createClip(data, userId, knex);
     res.status(200).send({});
+    knex.destroy();
   } catch (error) {
     console.error(error.message);
     res.status(400).send({});

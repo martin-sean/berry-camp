@@ -60,6 +60,7 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
         },
       });
     res.status(200).json(clips);
+    knex.destroy();
   } catch (error) {
     console.log(error.message);
     res.status(400).send({});

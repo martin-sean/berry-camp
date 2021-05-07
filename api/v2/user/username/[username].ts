@@ -20,6 +20,7 @@ const handler = async (req: VercelRequest, res: VercelResponse) => {
   } else {
     res.status(404).send({});
   }
+  knex.destroy();
 };
 
 export default chain(cors)(handler);

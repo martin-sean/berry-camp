@@ -18,6 +18,7 @@ const handler = async (req: VercelRequest, res: VercelResponse): Promise<void> =
     const knex: Knex = initialiseKnex();
     modDeleteClipById(parseInt(id), knex);
     res.status(200).send({});
+    knex.destroy();
   } catch (error) {
     console.error(error.message);
     res.status(400).send({});
