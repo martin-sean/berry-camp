@@ -7,7 +7,7 @@ import {initialiseKnex} from '../../../src/api/utils/database';
 import { cors } from '../../../src/api/middleware/cors';
 import Knex from 'knex';
 
-export const CLIENT_ID = "904880187886-fb07d8trdb3p6btl9009p6mbekclkh6a.apps.googleusercontent.com";
+export const CLIENT_ID = "426047810377-r5kkueiimbb0ntgflo1vr7rrv2bmi10a.apps.googleusercontent.com";
 
 // Login or create an account when user clicks the google sign in button
 const handler = async (req: VercelRequest, res: VercelResponse) => {
