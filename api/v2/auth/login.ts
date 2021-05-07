@@ -1,13 +1,12 @@
 import { chain } from '@amaurym/now-middleware';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { OAuth2Client } from 'google-auth-library';
+import Knex from 'knex';
 import { createAccessToken, setRefreshToken } from '../../../src/api/utils/auth';
 import Account from '../../../src/api/data/models/Account';
 import {initialiseKnex} from '../../../src/api/utils/database';
 import { cors } from '../../../src/api/middleware/cors';
-import Knex from 'knex';
-
-export const CLIENT_ID = "426047810377-r5kkueiimbb0ntgflo1vr7rrv2bmi10a.apps.googleusercontent.com";
+import clientId from '../../../src/fetch/client';
 
 // Login or create an account when user clicks the google sign in button
 const handler = async (req: VercelRequest, res: VercelResponse) => {
@@ -15,10 +14,10 @@ const handler = async (req: VercelRequest, res: VercelResponse) => {
   const authRequest: AuthRequest = req.body;
 
   try {
-    const client = new OAuth2Client(CLIENT_ID);
+    const client = new OAuth2Client(clientId);
     const ticket = await client.verifyIdToken({
       idToken: authRequest.idToken,
-      audience: CLIENT_ID,
+      audience: clientId,
     });
     const payload = ticket.getPayload();
     const exteralId = payload && payload['sub'];
